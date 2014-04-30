@@ -1,0 +1,50 @@
+<%- model_class = Employer -%>
+<%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li class="active"><%= model_class.model_name.human.titleize.pluralize %></li>
+  </ul>
+
+  <div class="row">
+    <div class="col-md-8">
+      <%= link_to "New", new_employer_path, class: "btn btn-primary" %>
+    </div>
+    <div class="col-md-4">
+      <%= render 'employer_search', q: @q %>
+    </div>
+  </div>
+</div>
+
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:employee_count) %></th>
+      <th><%= model_class.human_attribute_name(:last_820_date) %></th>
+      <th><%= model_class.human_attribute_name(:coverage_through) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @employers.each do |employer| %>
+      <tr>
+        <td><%= link_to employer.name, employer_path(employer) %></td>
+        <td><%= number_with_delimiter(employer.members.count) %></td>
+        <td><%= employer.premium_payments.last.paid_at unless 
+                employer.premium_payments.last.nil? %></td>
+        <td><%= employer.premium_payments.last.end_date unless 
+                employer.premium_payments.last.nil? %></td>
+       </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="row">
+  <div class="col-md-8">
+    <%= paginate @employers, theme: "twitter-bootstrap", pagination_class: "pagination-plain" %>
+  </div>
+  <div class="rol-md-4">
+    <p><%= "#{number_with_delimiter(@employers.count)} / #{number_with_delimiter(Employer.count)} " %><small>(employers selected / total)</small></p>
+  </div>
+</div>
+
+

@@ -1,0 +1,38 @@
+<fieldset >
+	<div class="row">
+		<div class="row">
+			<div class="col-md-3">
+				<%= f.input :address_type, as: :select, collection: ["home", "work", "billing"], include_blank: "Type", input_html: {class: 'dropdown-auto-width' } %>
+			</div>
+			<div class="col-md-3">
+				<%= link_to '<span class="fui-cross-inverted"> Delete</span>'.html_safe, '#', :class => "remove_fields btn btn-small btn-danger" %>
+			</div>
+		</div>
+
+		<div class="col-md-10">
+			<div class="row">
+				<div class="col-md-7">
+					<%= f.input :address_1, placeholder: 'Street', :required => true %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-7">
+					<%= f.input :address_2, placeholder: "Apt, Suite, Bldg (optional)" %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+				  <%= f.input :city, placeholder: "City", required: true %>
+				</div>
+				<div class="col-md-offset-1 col-md-4">
+				  <%= f.input :state, as: :select, collection: State::NAME_IDS, include_blank: 'State', required: true %>
+				</div>
+				<div class="col-md-2">
+				  <%= f.input_field :zip, :placeholder => "Zip code", :required => true %>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+</fieldset>

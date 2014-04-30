@@ -1,0 +1,39 @@
+<%= simple_form_for(@policy) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+  	<div class="row">
+			<div class="col-md-2">
+				<%= f.input :applied_aptc, :placeholder => 'APTC', :required => true %>
+			</div>
+			<div class="col-md-2">
+				<%= f.input :csr_amt, :placeholder => 'CSR', :required => true %>
+			</div>
+			<div class="col-md-2">
+				<%= f.input :carrier_to_bill, :placeholder => 'Carrier to Bill?', :required => true %>
+			</div>
+			<div class="col-md-2">
+				<%= f.input :employer, collection: @employers, prompt: "Choose Employer" %>
+			</div>
+			<div class="col-md-2">
+				<%= f.association :carrier, collection: @carriers, prompt: "Choose a Carrier", :required => true %>
+			</div>
+			<div class="col-md-2">
+				<%= f.association :plan, collection: Plan.all, prompt: "Choose a plan", :required => true %>
+			</div>
+			<div class="col-md-2">
+				<%= f.association :broker, collection: @brokers, prompt: "Choose a Broker" %>
+			</div>
+
+		  <h4>Enrollees</h4>
+				<%= f.simple_fields_for :enrollees do |enrollee|  %>
+					<%= render 'enrollee_fields', e: enrollee %>
+			  <% end %>
+		</div>
+  </div>
+
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,0 +1,26 @@
+<%= form_for @carrier, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :abbrev, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :abbrev, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :hbx_carrier_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :hbx_carrier_id, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                carriers_path, :class => 'btn' %>
+  </div>
+<% end %>

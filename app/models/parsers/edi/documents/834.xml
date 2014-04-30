@@ -1,0 +1,331 @@
+<Definition>
+	<Loop name="834" required="y">
+		<Segment name="ISA" max="1" min="1">
+				<Field name="ISA01"/>
+				<Field name="ISA02"/>
+				<Field name="ISA03"/>
+				<Field name="ISA04"/>
+				<Field name="ISA05"/>
+				<Field name="ISA06"/>
+				<Field name="ISA07"/>
+				<Field name="ISA08"/>
+				<Field name="ISA09"/>
+				<Field name="ISA10"/>
+				<Field name="ISA11"/>
+				<Field name="ISA12"/>
+				<Field name="ISA13"/>
+				<Field name="ISA14"/>
+				<Field name="ISA15"/>
+				<Field name="ISA16"/>
+		</Segment>
+		<Segment name="GS"  max="1" min="1">
+				<Field name="GS01"/>
+				<Field name="GS02"/>
+				<Field name="GS03"/>
+				<Field name="GS04"/>
+				<Field name="GS05"/>
+				<Field name="GS06"/>
+				<Field name="GS07"/>
+				<Field name="GS08"/>
+		</Segment>
+		<Loop name="L834" max="inf" required="y">
+			<Segment name="ST"  max="1" required="y">
+				<Field name="ST01"/>
+				<Field name="ST02"/>
+				<Field name="ST03"/>
+			</Segment>
+			<Segment name="BGN" max="1" required="y">
+				<Field name="BGN01"/>
+				<Field name="BGN02"/>
+				<Field name="BGN03"/>
+				<Field name="BGN04"/>
+				<Field name="BGN05"/>
+				<Field name="BGN06"/>
+				<Field name="BGN07"/>
+				<Field name="BGN08"/>
+				<Field name="BGN09"/>
+			</Segment>
+			<Segment name="DTP" max="1" required="y">
+				<Field name="DTP01"/>
+				<Field name="DTP02"/>
+				<Field name="DTP03"/>
+			</Segment>
+			<Segment name="QTY" max="3" required="y">
+				<Field name="QTY01"/>
+				<Field name="QTY02"/>
+				<Field name="QTY03"/>
+				<Field name="QTY04"/>
+			</Segment>
+			<Loop name="L1000A" max="1" required="y">
+				<Segment name="N1" max="1" required="y">
+					<Field name="N101"/>
+					<Field name="N102"/>
+					<Field name="N103"/>
+					<Field name="N104"/>
+					<Field name="N105"/>
+					<Field name="N106"/>
+				</Segment>
+			</Loop>
+			<Loop name="L1000B" max="1" required="y">
+				<Segment name="N1" max="1" required="y">
+					<Field name="N101"/>
+					<Field name="N102"/>
+					<Field name="N103"/>
+					<Field name="N104"/>
+					<Field name="N105"/>
+					<Field name="N106"/>
+				</Segment>
+			</Loop>
+			<Loop name="L1000C" max="1" required="n">
+				<Segment name="N1" max="1" required="y">
+					<Field name="N101"/>
+					<Field name="N102"/>
+					<Field name="N103"/>
+					<Field name="N104"/>
+					<Field name="N105"/>
+					<Field name="N106"/>
+				</Segment>
+			</Loop>
+			<Loop name="L2000" max="inf" required="y">
+				<Segment name="INS" max="1" required="y">
+					<Field name="INS01"/>
+					<Field name="INS02"/>
+					<Field name="INS03"/>
+					<Field name="INS04"/>
+					<Field name="INS05"/>
+					<Field name="INS06"/>
+					<Field name="INS07"/>
+					<Field name="INS08"/>
+					<Field name="INS09"/>
+					<Field name="INS010"/>
+					<Field name="INS011"/>
+					<Field name="INS012"/>
+					<Field name="INS013"/>
+					<Field name="INS014"/>
+					<Field name="INS015"/>
+					<Field name="INS016"/>
+					<Field name="INS017"/>
+				</Segment>
+				<Segment name="REF" max="15" required="y" min="1">
+					<Field name="REF01"/>
+					<Field name="REF02"/>
+					<Field name="REF03"/>
+					<Field name="REF04"/>
+				</Segment>
+				<Segment name="DTP" max="24" required="y" min="1">
+					<Field name="DTP01"/>
+					<Field name="DTP02"/>
+					<Field name="DTP03"/>
+				</Segment>
+				<Loop name="L2100A" max="1" required="y">
+					<Segment name="NM1" max="1" required="y">
+						<Field name="NM101"/>
+						<Field name="NM102"/>
+						<Field name="NM103"/>
+						<Field name="NM104"/>
+						<Field name="NM105"/>
+						<Field name="NM106"/>
+						<Field name="NM107"/>
+						<Field name="NM108"/>
+						<Field name="NM109"/>
+						<Field name="NM110"/>
+						<Field name="NM111"/>
+						<Field name="NM112"/>
+					</Segment>
+					<Segment name="PER" max="1">
+						<Field name="PER01"/>
+						<Field name="PER02"/>
+						<Field name="PER03"/>
+						<Field name="PER04"/>
+						<Field name="PER05"/>
+						<Field name="PER06"/>
+						<Field name="PER07"/>
+						<Field name="PER09"/>
+						<Field name="PER10"/>
+					</Segment>
+					<Segment name="N3" max="1">
+						<Field name="N301"/>
+						<Field name="N302"/>
+					</Segment>
+					<Segment name="N4" max="1">
+						<Field name="N401"/>
+						<Field name="N402"/>
+						<Field name="N403"/>
+						<Field name="N404"/>
+						<Field name="N405"/>
+						<Field name="N406"/>
+						<Field name="N407"/>
+					</Segment>
+					<Segment name="DMG" max="1">
+						<Field name="DMG01"/>
+						<Field name="DMG02"/>
+						<Field name="DMG03"/>
+						<Field name="DMG04"/>
+						<Field name="DMG05"/>
+						<Field name="DMG06"/>
+						<Field name="DMG07"/>
+						<Field name="DMG08"/>
+						<Field name="DMG09"/>
+						<Field name="DMG10"/>
+						<Field name="DMG11"/>
+					</Segment>
+					<Segment name="HLH" max="1">
+						<Field name="HLH01"/>
+						<Field name="HLH02"/>
+						<Field name="HLH03"/>
+						<Field name="HLH04"/>
+						<Field name="HLH05"/>
+						<Field name="HLH06"/>
+						<Field name="HLH07"/>
+					</Segment>
+					<Segment name="LUI" max="10" required="n">
+						<Field name="LUI01"/>
+						<Field name="LUI02"/>
+						<Field name="LUI03"/>
+						<Field name="LUI04"/>
+						<Field name="LUI05"/>
+					</Segment>
+				</Loop>
+				<Loop name="L2100B" max="1" required="n">
+					<Segment name="NM1" max="1" required="y">
+						<Field name="NM101" const="70" required="y"/>
+						<Field name="NM102" const="1" required="y"/>
+						<Field name="NM103"/>
+						<Field name="NM104"/>
+						<Field name="NM105"/>
+						<Field name="NM106"/>
+						<Field name="NM107"/>
+						<Field name="NM108"/>
+						<Field name="NM109"/>
+						<Field name="NM119"/>
+						<Field name="NM111"/>
+						<Field name="NM112"/>
+					</Segment>
+					<Segment name="DMG" max="1" required="n">
+						<Field name="DMG01"/>
+						<Field name="DMG02"/>
+						<Field name="DMG03"/>
+						<Field name="DMG04"/>
+						<Field name="DMG05"/>
+						<Field name="DMG06"/>
+						<Field name="DMG07"/>
+						<Field name="DMG08"/>
+						<Field name="DMG09"/>
+						<Field name="DMG10"/>
+						<Field name="DMG11"/>
+					</Segment>
+				</Loop>
+				<Loop name="L2100FG" max="1" required="n">
+					<Segment name="NM1" max="1" required="y">
+						<Field name="NM101" required="y"/>
+						<Field name="NM102"/>
+						<Field name="NM103"/>
+						<Field name="NM104"/>
+						<Field name="NM105"/>
+						<Field name="NM106"/>
+						<Field name="NM107"/>
+						<Field name="NM108"/>
+						<Field name="NM109"/>
+						<Field name="NM119"/>
+						<Field name="NM111"/>
+						<Field name="NM112"/>
+					</Segment>
+					<Segment name="PER" max="1" required="n">
+						<Field name="PER01"/>
+						<Field name="PER02"/>
+						<Field name="PER03"/>
+						<Field name="PER04"/>
+						<Field name="PER05"/>
+						<Field name="PER06"/>
+						<Field name="PER07"/>
+						<Field name="PER08"/>
+						<Field name="PER09"/>
+					</Segment>
+					<Segment name="N3" max="1" required="n">
+						<Field name="N301"/>
+						<Field name="N302"/>
+					</Segment>
+					<Segment name="N4" max="1" required="n">
+						<Field name="N401"/>
+						<Field name="N402"/>
+						<Field name="N403"/>
+						<Field name="N404"/>
+						<Field name="N405"/>
+						<Field name="N406"/>
+						<Field name="N407"/>
+					</Segment>
+				</Loop>
+				<Loop name="L2300" max="inf" required="y">
+					<Segment name="HD" max="1" required="y">
+						<Field name="HD01"/>
+						<Field name="HD02"/>
+						<Field name="HD03"/>
+						<Field name="HD04"/>
+						<Field name="HD05"/>
+						<Field name="HD06"/>
+						<Field name="HD07"/>
+						<Field name="HD08"/>
+						<Field name="HD09"/>
+						<Field name="HD10"/>
+						<Field name="HD11"/>
+					</Segment>
+					<Segment name="DTP" max="6" required="y">
+						<Field name="DTP01"/>
+						<Field name="DTP02"/>
+						<Field name="DTP03"/>
+					</Segment>
+					<Segment name="REF" max="14" required="y">
+						<Field name="REF01"/>
+						<Field name="REF02"/>
+						<Field name="REF03"/>
+						<Field name="REF04"/>
+					</Segment>
+				</Loop>
+				<Segment name="LS" max="1" required="n">
+					<Field name="LS01"/>
+				</Segment>
+				<Loop name="L2700" max="inf" required="n">
+					<Segment name="LX" max="1" required="y">
+						<Field name="LX01"/>
+					</Segment>
+					<Loop name="L2750" max="1" required="y">
+						<Segment name="N1" max="1" required="y">
+							<Field name="N101"/>
+							<Field name="N102"/>
+							<Field name="N103"/>
+							<Field name="N104"/>
+							<Field name="N105"/>
+							<Field name="N106"/>
+						</Segment>
+						<Segment name="REF" max="1" required="y">
+							<Field name="REF01"/>
+							<Field name="REF02"/>
+							<Field name="REF03"/>
+							<Field name="REF04"/>
+						</Segment>
+						<Segment name="DTP" max="1" required="n">
+							<Field name="DTP01"/>
+							<Field name="DTP02"/>
+							<Field name="DTP03"/>
+						</Segment>
+					</Loop>
+				</Loop>
+				<Segment name="LE" max="1" required="n">
+					<Field name="LE01"/>
+				</Segment>
+			</Loop>
+			<Segment name="SE" max="1" min="1">
+				<Field name="SE01"/>
+				<Field name="SE02"/>
+			</Segment>
+		</Loop>
+		<Segment name="GE"  max="1" min="1">
+			<Field name="GE01"/>
+			<Field name="GE02"/>
+		</Segment>
+		<Segment name="IEA" max="1" min="1">
+			<Field name="IEA01"/>
+			<Field name="IEA02"/>
+		</Segment>
+	</Loop>
+</Definition>

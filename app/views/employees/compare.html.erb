@@ -1,0 +1,23 @@
+<div class="page-header">
+  <ul class="breadcrumb">
+  	<% employer = Employer.find(params[:employer_id]) %>
+    <li><%= link_to "Employers", employers_path %></li>
+    <li><%= link_to employer.name, employer_path(Employer.find(employer.id)) %></li>
+    <li class="active">Compare</li>
+  </ul>
+</div>
+
+<%= simple_form_for(@person, url: employer_employees_path, html: { action: :put, class: 'form-horizontal' }) do |f| %>
+
+	<% @person.fields.each do |pf| %>
+		<p><%= "Field: #{pf.humanize}" %></p>
+		<p><%= "Before: #{@person[pf]} - After: #{@updated_person[pf]}"
+	<% end %>
+
+  <div class="well well-sm well-default">
+    <div class="form-actions">
+			<%= f.submit "Update Employee", :class => 'btn btn-primary' %>
+			<%= link_to t('.cancel', :default => t("helpers.links.cancel")), employer_employee_path(@person), :class => 'btn btn-default' %>
+		</div>
+	</div>
+<% end %>

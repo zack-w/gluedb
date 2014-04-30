@@ -1,0 +1,106 @@
+<%- model_class = Protocols::X12::Transmission -%>
+<%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li><%= link_to model_class.model_name.human.titleize.pluralize, edi_transmissions_path %></li>
+    <li class="active"><%= @edi_transmission.id %></li>
+  </ul>
+</div>
+
+<% @edi_transmission.fg_application_receivers_code == "SHP" ? shop_market = true : shop_market = false %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+    <span class="fui-exit">&nbsp;</span> 
+      EDI Transmission Envelope and Header
+      <span class="label label-primary pull-right"><%= shop_market ? "SHOP Market" : "Individual Market" %></span>
+    </h3>
+  </div>
+  <div class="panel-body">  
+    <div class="row">
+    <div class="col-md-6">
+    <dl class="dl-horizontal">
+      <dt><%= model_class.human_attribute_name(:sender) %>:</dt>
+      <% if !@edi_transmission.sender.nil? %>
+        <dd><%= link_to @edi_transmission.sender.name, carrier_path(@edi_transmission.sender) %></dd>
+      <% else %>
+        <dd>N/A</dd>
+      <% end %>
+      <dt><%= model_class.human_attribute_name(:receiver) %>:</dt>
+      <% if !@edi_transmission.receiver.nil? %>
+      <dd><%= link_to @edi_transmission.receiver.name, carrier_path(@edi_transmission.receiver) %></dd>
+      <% else %>
+      <dd>N/A</dd>
+      <% end %>
+      <dt><%= model_class.human_attribute_name(:submitted_at) %>:</dt>
+      <dd><%= @edi_transmission.submitted_at.strftime("%m-%d-%Y") if @edi_transmission.submitted_at.present? %> </dd>
+      <dt><%= model_class.human_attribute_name(:control_number) %>:</dt>
+      <dd><%= @edi_transmission.isa13 %></dd>
+      <dt><%= model_class.human_attribute_name(:usage) %>:</dt>
+      <dd><%= @edi_transmission.ic_usage_indicator == "T" ? "Test" : "Production" %></dd>
+    </dl>
+    </div>
+
+    <div class="col-md-6">
+    <dl class="dl-horizontal">
+      <dt><%= model_class.human_attribute_name(:senders_code) %>:</dt>
+      <dd><%= @edi_transmission.fg_application_senders_code %></dd>
+      <dt><%= model_class.human_attribute_name(:receivers_code) %>:</dt>
+      <dd><%= @edi_transmission.fg_application_receivers_code %></dd>
+      <dt><%= model_class.human_attribute_name(:control_number) %>:</dt>
+      <dd><%= @edi_transmission.fg_control_number %></dd>
+      <dt><%= model_class.human_attribute_name(:x12_standard) %>:</dt>
+      <dd><%= @edi_transmission.fg_x12_standards_reference_code %></dd>
+    </dl>
+  </div>
+  </div>
+</div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">
+        <span class="fui-document">&nbsp;</span>Transaction Sets
+        <span class="badge badge-info">&nbsp;<%= @edi_transmission.transaction_set_enrollments.count %></span>
+      </div>
+    </div>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Control #</th>
+          <th>Submitted</th>
+          <th>Ack/Nak Date</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @edi_transmission.transaction_set_enrollments.each do |ts| %>
+		<tr>
+	    <td><%= link_to ts.transaction_kind.humanize, edi_transaction_set_path(ts) %></td>
+            <td><%= ts.aasm_state.humanize %></td>
+            <td><%= ts.ts_control_number %></td>
+            <td><%= ts.submitted_at.strftime("%m-%d-%Y") unless ts.submitted_at.blank? %></td>
+            <td><%= ts.ack_nak_processed_at.strftime("%m-%d-%Y") if ts.ack_nak_processed_at.present? %></td>
+	    <td>
+		    <% unless ts.nil? %>
+		      <%#= link_to "Enrollment Group", enrollment_group_path(ts.enrollment.enrollment_group), {class: "btn btn-xs btn-info"} %>
+          &nbsp;
+		    <% else %>
+			    &nbsp;
+		    <% end %>
+	    </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p class="text-right"><small><%= "updated: #{@edi_transmission.updated_at.strftime('%m-%d-%Y') if @edi_transmission.updated_at.present?}" %></small></p>
+
+<div class="well well-sm well-default"
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              edi_transmissions_path, :class => 'btn btn-primary'  %>
+</div>
+</div>

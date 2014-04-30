@@ -1,0 +1,86 @@
+<%= form_for @enrollment_group, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :version, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :version, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :deleted_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :deleted_at, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :csr, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :csr, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :e_aptc, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :e_aptc, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :a_aptc, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :a_aptc, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :prm_tot, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :prm_tot, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :emp_amt, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :emp_amt, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :tot_res_amt, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :tot_res_amt, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :s_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :s_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :enrollment_group_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :enrollment_group_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :broker_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :broker_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :responsible_party_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :responsible_party_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :employer_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :employer_id, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                enrollment_groups_path, :class => 'btn' %>
+  </div>
+<% end %>

@@ -1,0 +1,43 @@
+<%- model_class = Enrollment -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:version) %>:</strong></dt>
+  <dd><%= @enrollment.version %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:deleted_at) %>:</strong></dt>
+  <dd><%= @enrollment.deleted_at %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:carrier_id) %>:</strong></dt>
+  <dd><%= @enrollment.carrier_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:hios_plan_id) %>:</strong></dt>
+  <dd><%= @enrollment.hios_plan_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:coverage_type) %>:</strong></dt>
+  <dd><%= @enrollment.coverage_type %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:e_aptc) %>:</strong></dt>
+  <dd><%= @enrollment.e_aptc %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:applied_aptc) %>:</strong></dt>
+  <dd><%= @enrollment.applied_aptc %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:pre_amt_tot) %>:</strong></dt>
+  <dd><%= @enrollment.pre_amt_tot %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:tot_res_amt) %>:</strong></dt>
+  <dd><%= @enrollment.tot_res_amt %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:tot_emp_res_amt) %>:</strong></dt>
+  <dd><%= @enrollment.tot_emp_res_amt %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:sep_reason) %>:</strong></dt>
+  <dd><%= @enrollment.sep_reason %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:enrollment_group_id) %>:</strong></dt>
+  <dd><%= @enrollment.enrollment_group_id %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              enrollments_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_enrollment_path(@enrollment), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              enrollment_path(@enrollment),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>

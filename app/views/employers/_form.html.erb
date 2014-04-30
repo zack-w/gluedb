@@ -1,0 +1,87 @@
+<%= simple_form_for @employer do |f| %>
+
+  <%= f.error_notification %>
+  <% if @employer.errors.any? %>
+    <div class="alert alert-error">
+      <h4><%= pluralize(@employer.errors.count, "error") %> prohibited this person from being saved:</h4>
+      <ul>
+        <% @employer.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <legend>Employer</legend>
+  <div class="row">
+    <div class="col-md-offset-1 col-md-10">
+      <div class="form-inputs">
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :name, placeholder: "Employer Name" %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :fein, placeholder: "FEIN" %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <%= f.association :carriers, collection: @carriers, include_blank: "Carriers"%>
+          </div>
+          <div class="col-md-6">
+            <%= f.association :plans, collection: @plans, include_blank: "Plans"%>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.association :broker, collection: @brokers, include_blank: 'Broker' %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <legend>Address</legend>
+  <div class="row">
+    <div class="col-md-offset-1 col-md-10">
+      <div class="form-inputs">
+        <%= f.simple_fields_for :addresses do |address|  %>
+          <%= render 'people/address_fields', a: address %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <legend>Phone</legend>
+  <div class="row">
+    <div class="col-md-offset-1 col-md-10">
+      <div class="form-inputs">
+        <%= f.simple_fields_for :phones do |phone|  %>
+          <%= render 'people/phone_fields', p: phone %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+          
+  <legend>Email</legend>
+  <div class="row">
+    <div class="col-md-offset-1 col-md-10">
+      <div class="form-inputs">
+        <%= f.simple_fields_for :emails do |email|  %>
+          <%= render 'people/email_fields', e: email %>
+        <% end %>
+
+      </div> <!-- form inputs -->
+    </div> <!-- col-md-offset -->
+  </div> <!-- row -->
+
+  <div class="well well-sm well-default">
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")), employers_path, :class => 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>

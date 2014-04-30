@@ -1,0 +1,22 @@
+<fieldset>
+	<div class="row">
+	  <div class="col-sm-12">
+		<%= f.input :hbx_member_id, placeholder: "HBX Member ID" %>
+	  </div>
+	  <div class="col-sm-12">
+		<%= f.input :carrier_member_id, placeholder: "Carrier Member ID" %>
+	  </div>
+	  <div class="col-sm-12">
+		<%= f.input :carrier_policy_id, placeholder: "Carrier Policy ID" %>
+	  </div>
+	  <div class="col-sm-12">
+		<%= f.input :premium_amount, placeholder: "Premium Amount" %>
+	  </div>
+	  <div class="col-sm-4">
+		<%= f.input :coverage_start, as: :string, input_html: {class: 'date_picker'} %>
+	  </div>
+	  <div class="col-sm-4">
+		<%= f.input :coverage_end, as: :string, input_html: {class: 'date_picker'} %>
+	  </div>
+	</div>
+</fieldset>

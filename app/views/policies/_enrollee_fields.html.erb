@@ -1,0 +1,40 @@
+<fieldset>
+	<div class="row">
+		<div class="col-md-2">
+			<%= e.input_field :ben_stat, collection: Enrollee::BENEFIT_STATUS_CODE_LIST, include_blank: "Benefit status" %>
+		</div>
+		<div class="col-md-2">
+			<%= e.input_field :emp_stat, collection: Enrollee::EMPLOYMENT_STATUS_CODE_LIST, include_blank: "Employment status" %>
+		</div>
+		<div class="col-md-2">
+			<%= e.input_field :rel_code, collection: Enrollee::RELATIONSHIP_STATUS_CODE_LIST, include_blank: "Relationship status" %>
+		</div>
+		<div class="col-md-2">
+			<%= e.input_field :pre_amt, placeholder: "Premium Amount" %>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-5">
+			<%= e.input :hbx_member_id, disabled: true, label: "HBX ID", wrapper: "bstrap_hz_medium" %>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-5">
+		  <%= e.input :coverage_start, as: :string, wrapper: "bstrap_hz_small",
+		  		start_year: Date.today.year - 110, 
+		  		end_year: Date.today.year, 
+		  		placeholder: "yyyy-mm-dd",
+		  		input_html: { class: :date_picker },
+		  		label: "Coverage start" %>
+		</div>
+		<div class="col-md-5">
+		  <%= e.input :coverage_start, as: :string, wrapper: "bstrap_hz_small",
+		  		start_year: Date.today.year - 110, 
+		  		end_year: Date.today.year, 
+		  		placeholder: "yyyy-mm-dd",
+		  		input_html: { class: :date_picker },
+		  		label: "Coverage start" %>
+		</div>
+	</div>
+</fieldset>

@@ -1,0 +1,27 @@
+%h4.sub-header
+  ST/SEs
+  .table-responsive
+    %table.table.table-striped
+      %thead
+        %tr
+          %th
+            Category
+          %th
+            Count
+      %tbody
+        %tr
+          %td
+            Total
+          %td= number_with_delimiter(response_metric.total)
+        %tr
+          %td
+            Acked
+          %td= number_with_delimiter(response_metric.acked)
+        %tr
+          %td
+            Nacked
+          %td= number_with_delimiter(response_metric.nacked)
+        %tr
+          %td
+            Outstanding
+          %td= number_with_delimiter(response_metric.outstanding)

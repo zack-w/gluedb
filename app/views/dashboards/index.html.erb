@@ -1,0 +1,68 @@
+<%- model_class = Dashboard -%>
+<%t '.title', :default => model_class.model_name.human.titleize %>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li><%= link_to model_class.model_name.human.titleize, root_path %></li>
+  </ul>
+</div>
+
+<div class="row">
+  <div class="col-md-2">
+    <div class="well sidebar-nav">
+      <ul class="nav nav-list">
+        <li class="nav-header">Actions</li>
+        <li class="active"><a href="#">Overview</a></li>
+        <li><a href="#">Reports</a></li>
+        <li><a href="#">Analytics</a></li>
+        <li><a href="#">Export</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-md-10 main">
+  <h3 class="danger">EXPERIMENTAL - DO NOT use figures below, as they're likely WRONG</h3>
+
+  <h4>Enrollment transactions</h4>
+  <dl class="dl-horizontal">
+    <dt>Dec</dt>
+    <dd><%= @transactions[:dec] %></dd>
+    <dt>Jan</dt>
+    <dd><%= @transactions[:jan] %></dd>
+    <dt>Feb</dt>
+    <dd><%= @transactions[:feb] %></dd>
+    <dt>Mar</dt>
+    <dd><%= @transactions[:mar] %></dd>
+    <dt>Apr</dt>
+    <dd><%= @transactions[:apr] %></dd>
+  </dl>
+
+
+    <%= render :partial => "dashboards/enrollments_metric", transaction: @transaction %>
+    <%= render :partial => "dashboards/transmissions_metric" %>
+
+    <%= render :partial => "dashboards/response_metric", :object => @response_metric %>
+
+    <%= render :partial => "dashboards/ambiguous_people_metric", :object => @ambiguous_people_metric %>
+
+    <h4 class="sub-header">Enrollment</h4>
+    <div class="table-responsive">
+      <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Total Lives Covered</th>
+              <th>Total Employers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= number_with_delimiter(@total_lives) %></td>
+              <td><%= number_with_delimiter(@total_employers) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <% unless Rails.env.test? %> 
+    <p class="text-right"><small><%= "updated: #{Person.first.updated_at.strftime('%m-%d-%Y') if Person.first.updated_at.present?}" %></small></p>
+  <% end %>

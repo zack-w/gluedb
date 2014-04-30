@@ -1,0 +1,184 @@
+<Definition>
+	<Loop name="820" required="y">
+		<Segment name="ISA" max="1" min="1">
+			<Field name="ISA01"/>
+			<Field name="ISA02"/>
+			<Field name="ISA03"/>
+			<Field name="ISA04"/>
+			<Field name="ISA05"/>
+			<Field name="ISA06"/>
+			<Field name="ISA07"/>
+			<Field name="ISA08"/>
+			<Field name="ISA09"/>
+			<Field name="ISA10"/>
+			<Field name="ISA11"/>
+			<Field name="ISA12"/>
+			<Field name="ISA13"/>
+			<Field name="ISA14"/>
+			<Field name="ISA15"/>
+			<Field name="ISA16"/>
+		</Segment>
+		<Segment name="GS"  max="1" min="1">
+			<Field name="GS01"/>
+			<Field name="GS02"/>
+			<Field name="GS03"/>
+			<Field name="GS04"/>
+			<Field name="GS05"/>
+			<Field name="GS06"/>
+			<Field name="GS07"/>
+			<Field name="GS08"/>
+		</Segment>
+		<Loop name="L820" max="inf" required="y">
+			<Segment name="ST"  max="1" required="y">
+				<Field name="ST01"/>
+				<Field name="ST02"/>
+				<Field name="ST03"/>
+			</Segment>
+			<Segment name="BPR" max="1" min="1">
+				<Field name="BPR01" const="I"/>
+				<Field name="BPR02"/>
+				<Field name="BPR03"/>
+				<Field name="BPR04"/>
+				<Field name="BPR05"/>
+				<Field name="BPR06"/>
+				<Field name="BPR07"/>
+				<Field name="BPR08"/>
+				<Field name="BPR09"/>
+				<Field name="BPR10"/>
+				<Field name="BPR11"/>
+				<Field name="BPR12"/>
+				<Field name="BPR13"/>
+				<Field name="BPR14"/>
+				<Field name="BPR15"/>
+				<Field name="BPR16"/>
+				<Field name="BPR17"/>
+				<Field name="BPR18"/>
+				<Field name="BPR19"/>
+				<Field name="BPR20"/>
+				<Field name="BPR21"/>
+			</Segment>
+			<Segment name="TRN" max="1" min="1">
+				<Field name="TRN01"/>
+				<Field name="TRN02"/>
+				<Field name="TRN03"/>
+				<Field name="TRN04"/>
+			</Segment>
+			<Segment name="REF" max="4" min="0">
+				<Field name="REF01"/>
+				<Field name="REF02"/>
+				<Field name="REF03"/>
+				<Field name="REF04"/>
+			</Segment>
+			<Loop name="L1000A" required="y" max="1">
+				<Segment name="N1" max="1" min="1">
+				  <Field name="N101" const="ABY"/>
+				  <Field name="N102"/>
+				  <Field name="N103"/>
+				  <Field name="N104"/>
+				  <Field name="N105"/>
+				  <Field name="N106"/>
+				</Segment>
+				<Segment name="REF" max="1" min="0">
+				  <Field name="REF01"/>
+				  <Field name="REF02"/>
+				  <Field name="REF03"/>
+				  <Field name="REF04"/>
+				</Segment>
+			</Loop>
+			<Loop name="L1000B" required="y" max="1">
+				<Segment name="N1" max="1" min="1">
+				  <Field name="N101" const="RM"/>
+				  <Field name="N102"/>
+				  <Field name="N103"/>
+				  <Field name="N104"/>
+				  <Field name="N105"/>
+				  <Field name="N106"/>
+				</Segment>
+				<Segment name="PER" max="inf" min="0">
+				  <Field name="PER01"/>
+				  <Field name="PER02"/>
+				  <Field name="PER03"/>
+				  <Field name="PER04"/>
+				  <Field name="PER05"/>
+				  <Field name="PER06"/>
+				  <Field name="PER07"/>
+				  <Field name="PER08"/>
+				  <Field name="PER09"/>
+				</Segment>
+			</Loop>
+			<Loop name="L2000" required="y" repeat="inf">
+				<Segment name="ENT" max="1" min="1">
+				  <Field name="ENT01"/>
+				  <Field name="ENT02"/>
+				  <Field name="ENT03"/>
+				  <Field name="ENT04"/>
+				  <Field name="ENT05"/>
+				  <Field name="ENT06"/>
+				  <Field name="ENT07"/>
+				  <Field name="ENT08"/>
+				  <Field name="ENT09"/>
+				</Segment>
+				<Loop name="L2100" required="y" repeat="1">
+					<Segment name="NM1" min="0" max="1">
+				          <Field name="NM101" const="IL"/>
+				          <Field name="NM102" const="1"/>
+				          <Field name="NM103"/>
+				          <Field name="NM104"/>
+				          <Field name="NM105"/>
+				          <Field name="NM106"/>
+				          <Field name="NM107"/>
+				          <Field name="NM108"/>
+				          <Field name="NM109"/>
+				          <Field name="NM110"/>
+				          <Field name="NM111"/>
+				          <Field name="NM112"/>
+					</Segment>
+					<Segment name="REF" min="1" max="11">
+				          <Field name="REF01"/>
+				          <Field name="REF02"/>
+				          <Field name="REF03"/>
+				          <Field name="REF04"/>
+					</Segment>
+				</Loop>
+				<Loop name="L2300" required="y" repeat="inf">
+					<Segment name="RMR" min="1" max="1">
+				          <Field name="RMR01" const="ZZ"/>
+				          <Field name="RMR02"/>
+				          <Field name="RMR03"/>
+				          <Field name="RMR04"/>
+				          <Field name="RMR05"/>
+				          <Field name="RMR06"/>
+				          <Field name="RMR07"/>
+				          <Field name="RMR08"/>
+					</Segment>
+					<Segment name="REF" min="0" max="inf">
+				          <Field name="REF01" const="0N"/>
+				          <Field name="REF02"/>
+				          <Field name="REF03"/>
+				          <Field name="REF04"/>
+					</Segment>
+					<Segment name="DTM" min="1" max="1">
+				          <Field name="DTM01" const="582"/>
+				          <Field name="DTM02"/>
+				          <Field name="DTM03"/>
+				          <Field name="DTM04"/>
+				          <Field name="DTM05"/>
+				          <Field name="DTM06"/>
+					</Segment>
+				</Loop>
+			</Loop>
+			<Segment name="SE" max="1" min="1">
+				<Field name="SE01"/>
+				<Field name="SE02"/>
+			</Segment>
+		</Loop>
+		<Segment name="GE"  max="1" min="1">
+			<Field name="GE01"/>
+			<Field name="GE02"/>
+		</Segment>
+		<Segment name="IEA" max="1" min="1">
+			<Field name="IEA01"/>
+			<Field name="IEA02"/>
+		</Segment>
+	</Loop>
+</Definition>

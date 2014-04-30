@@ -1,0 +1,25 @@
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Indiv/Employer</th> 
+      <th>Type</th> 
+      <th>Carrier</th> 
+      <th>Plan</th> 
+      <th>Status</th> 
+      <th>Cov Begin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% policies.each do |p| %>
+			<% enrollee = p.enrollee_for_member_id(member.hbx_member_id) %>
+	    <tr>
+        <td><%= policy_sponsor(p) %></td>
+        <td><%= p.plan.coverage_type.capitalize %></td>
+	    	<td><%= link_to p.carrier.name, carrier_path(p.carrier) %></td>
+	      <td><%= truncate(p.plan.name, length: 40) %></td>
+        <td><%= p.aasm_state.capitalize %></td>
+	      <td><%= enrollee.coverage_start %></td>
+	    </tr>
+    <% end %>
+  </tbody>
+</table>

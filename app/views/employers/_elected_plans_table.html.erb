@@ -1,0 +1,27 @@
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Carrier</th>
+      <th>Carrier Group ID</th>
+      <th>Carrier Pol #</th>
+      <th>Plan</th>
+      <th>Coverage Type</th>
+      <th>Metal level</th>
+      <th>Effective date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= table_empty_to_human if elected_plans.count < 1 %>
+    <% elected_plans.each do |p| %>
+    <tr>
+      <td><%= p.carrier.name %></td>
+      <td><%= p.carrier_employer_group_id %></td>
+      <td><%= p.carrier_policy_number %></td>
+      <td><%= p.plan_name %></td>
+      <td><%= p.coverage_type %></td>
+      <td><%= p.metal_level %></td>
+      <td><%= p.original_effective_date %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

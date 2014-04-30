@@ -1,0 +1,21 @@
+<%- model_class = Person -%>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li><%= link_to model_class.model_name.human.titleize.pluralize, people_path %></li>
+    <li><%= link_to @person.full_name, person_path(@person) %></li>
+    <li class="active">Edit</li>
+  </ul>
+</div>
+
+<%= simple_form_for(@person, url: compare_person_path(@person), :html => {:class => 'form-horizontal' }) do |f| %>
+
+	<%= render 'form', f: f %>
+
+  <div class="well well-sm well-default">
+    <div class="form-actions">
+			<%= f.submit "Continue", :class => 'btn btn-primary' %>
+			<%= link_to t('.cancel', :default => t("helpers.links.cancel")), people_path, :class => 'btn btn-default' %>
+		</div>
+	</div>
+
+<% end %>

@@ -1,0 +1,15 @@
+= simple_form_for(@vocab_upload, :html => { :multipart => true, :class => 'form-horizontal' }) do |f|
+  = f.error_notification
+  .row
+    .col-sm-offset-1.col-sm-8
+      = f.collection_radio_buttons :kind, [["initial_enrollment", 'Initial Enrollment'], ["maintenance", 'Maintenance']], :first, :last
+      = f.error :kind
+  .row
+    .col-sm-offset-1.col-sm-8
+      = f.input :vocab, :as => :file
+
+  = f.hidden_field :submitted_by
+
+  .row
+    .col-sm-offset-1
+      = f.submit "Upload", :class => "btn btn-primary"

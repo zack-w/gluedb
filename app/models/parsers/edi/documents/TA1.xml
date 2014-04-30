@@ -1,0 +1,33 @@
+<Definition>
+	<Loop name="TA1" required="y">
+		<Segment name="ISA" max="1" min="1">
+			<Field name="ISA01"/>
+			<Field name="ISA02"/>
+			<Field name="ISA03"/>
+			<Field name="ISA04"/>
+			<Field name="ISA05"/>
+			<Field name="ISA06"/>
+			<Field name="ISA07"/>
+			<Field name="ISA08"/>
+			<Field name="ISA09"/>
+			<Field name="ISA10"/>
+			<Field name="ISA11"/>
+			<Field name="ISA12"/>
+			<Field name="ISA13"/>
+			<Field name="ISA14"/>
+			<Field name="ISA15"/>
+			<Field name="ISA16"/>
+		</Segment>
+		<Segment name="TA1" max="1" min="1">
+			<Field name="TA101"/>
+			<Field name="TA102"/>
+			<Field name="TA103"/>
+			<Field name="TA104"/>
+			<Field name="TA105"/>
+		</Segment>
+		<Segment name="IEA" max="1" min="1">
+			<Field name="IEA01"/>
+			<Field name="IEA02"/>
+		</Segment>
+	</Loop>
+</Definition>

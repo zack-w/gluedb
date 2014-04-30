@@ -1,0 +1,48 @@
+<%= simple_form_for @enrollment, :html => { :class => 'form-horizontal' } do |f| %>
+
+<fieldset>
+<div class="row">
+  <div class="col-sm-12">
+    <%= f.input :hbx_policy_id, placeholder: "HBX Policy ID" %>
+  </div>
+  <div class="col-sm-12">
+    <%= f.input :preceding_enrollment_id, placeholder: "Preceeding Enrollment ID"  %>
+  </div>
+  <div class="col-sm-3">
+    <%= f.input :elected_aptc, as: :decimal, label: "Elected APTC", placeholder: "Elected APTC"  %>
+  </div>
+  <div class="col-sm-3">
+   <%= f.input :applied_aptc, as: :decimal, label: "Applied APTC", placeholder: "Applied APTC"  %>
+ </div>
+  <div class="col-sm-12">
+   <%= f.input :carrier_to_bill, as: :boolean, placeholder: "Carrier to Bill?"  %>
+  </div>
+  <div class="col-sm-12">
+   <%= f.input :pre_amt_tot, as: :decimal, placeholder: "Premium Amount"  %>
+  </div>
+  <div class="col-sm-12">
+    <%= f.input :tot_emp_res_amt, as: :decimal, placeholder: "Total Employer Responsible Amount"  %>
+  </div>
+  <div class="col-sm-12">
+    <%= f.input :tot_res_amt, as: :decimal, placeholder: "Total Responsible Amount"  %>
+  </div>
+  <div class="col-sm-12">
+   <%= f.input :sep_reason, placeholder: "Special Enrollment Period Reason"  %>
+  </div>
+  <div class="col-sm-12">
+    <%= f.input :rs_time, as: :string %>
+  </div>
+</fieldset>
+
+  <legend>Enrollment Members</legend>
+  <%= f.simple_fields_for :enrollment_members do |em|  %>
+    <%= render 'enrollment_member_fields', f: em %>
+  <% end %>
+
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                enrollments_path, :class => 'btn btn-default' %>
+  </div>
+<% end %>

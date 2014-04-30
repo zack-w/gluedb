@@ -1,0 +1,30 @@
+<%- model_class = Broker -%>
+<%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li class="active"><%= model_class.model_name.human.titleize.pluralize %> - Total: <%= @brokers.count %></li>
+  </ul>
+</div>
+
+<div class="col-md-10">
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th>Broker/TPA</th>
+      <th><%= model_class.human_attribute_name(:npn) %></th>
+      <th><%= model_class.human_attribute_name(:employer_count) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @brokers.each do |broker| %>
+      <tr>
+        <td><%= link_to mixed_case(broker.name), broker_path(broker) %></td>
+        <td><%= broker.b_type.capitalize %></td>
+        <td><%= broker.npn %></td>
+        <td><%= broker.employers.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>

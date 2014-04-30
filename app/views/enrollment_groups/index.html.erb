@@ -1,0 +1,38 @@
+<%- model_class = EnrollmentGroup -%>
+<%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li class="active"><%= model_class.model_name.human.titleize.pluralize %></li>
+  </ul>
+</div>
+
+<div>
+  <%= form_tag enrollment_groups_path, { :method => :get, :class => "form form-inline"} do %>
+    <div class="form-group">
+      <%= text_field_tag :q, @q, { :class => "form-control input-lg"} %>
+      <%= submit_tag "Search", { :class => "btn btn-primary" } %>
+    </div>
+  <% end %>
+</div>
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:enrollment_group_id) %></th>
+      <th><%= model_class.human_attribute_name(:primary_subscriber) %></th>
+      <th><%= model_class.human_attribute_name(:enrollee_count) %></th>
+      <th><%= model_class.human_attribute_name(:enrollment_count) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @enrollment_groups.each do |enrollment_group| %>
+      <tr>
+        <td><%= link_to enrollment_group.enrollment_group_id, enrollment_group_path(enrollment_group) %></td>
+        <td><%= link_to enrollment_group.subscriber.full_name, person_path(enrollment_group.subscriber) %></td>
+        <td><%= enrollment_group.enrollees.count %></td>
+        <td><%= enrollment_group.enrollments.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @enrollment_groups, theme: "twitter-bootstrap", pagination_class: "pagination-plain" %>

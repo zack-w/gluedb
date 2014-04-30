@@ -1,0 +1,24 @@
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Paid at</th>
+      <th>Paid to</th>
+      <th>Payment Amt</th>
+      <th>Cov Begin</th>
+      <th>Cov End</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= table_empty_to_human if premium_payments.count < 1 %>
+    <% premium_payments.each do |p| %>
+    <tr>
+      <td><span class="fui-credit-card">&nbsp;</span> <%= p.paid_at %></td>
+      <td><%= p.carrier.name %></td>
+      <td><%= number_to_currency(p.payment_amount_in_dollars) %></td>
+      <td><%= p.start_date %></td>
+      <td><%= p.end_date %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

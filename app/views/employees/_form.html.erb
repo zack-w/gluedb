@@ -1,0 +1,72 @@
+<%= f.error_notification %>
+  <% if @person.errors.any? %>
+  <div class="alert alert-error">
+    <h4><%= pluralize(@person.errors.count, "error") %> prohibited this person from being saved:</h4>
+    <ul>
+    <% @person.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= f.simple_fields_for @employer do |e| %>
+  <%= e.input :id, as: :hidden %>
+<% end %>
+
+<legend>Name</legend>
+<div class="row">
+	<div class="col-md-offset-1 col-md-10">
+	  <div class="form-inputs">
+			<%= render 'people/name_fields', f: f %>
+
+			<%= f.simple_fields_for :members do |member|  %>
+				<%= render 'people/member_fields', m: member %>
+		  <% end %>
+		</div>
+	</div>
+</div>
+
+<legend>Address</legend>
+<div class="row">
+	<div class="col-md-offset-1 col-md-10">
+	  <div class="form-inputs">
+			<%= f.simple_fields_for :addresses do |address|  %>
+				<%= render 'people/address_fields', a: address %>
+		  <% end %>
+
+			<%#= link_to_add_fields '<i class="icon-plus"></i> Add'.html_safe, f, :addresses, "btn btn-small btn-primary" %>
+		</div>
+	</div>
+</div>
+			
+<legend>Phone</legend>
+<div class="row">
+	<div class="col-md-offset-1 col-md-10">
+	  <div class="form-inputs">
+			<%= f.simple_fields_for :phones do |phone|  %>
+				<%= render 'people/phone_fields', p: phone %>
+		  <% end %>
+			<%#= link_to_add_fields '<i class="icon-plus"></i> Add'.html_safe, f, :phones, "btn btn-small btn-primary" %>
+		</div>
+	</div>
+</div>
+			
+<legend>Email</legend>
+<div class="row">
+	<div class="col-md-offset-1 col-md-10">
+	  <div class="form-inputs">
+			<%= f.simple_fields_for :emails do |email|  %>
+				<%= render 'people/email_fields', e: email %>
+		  <% end %>
+			<%#= link_to_add_fields '<i class="icon-plus"></i> Add'.html_safe, f, :emails, "btn btn-small btn-primary" %>
+		</div>
+	</div>
+</div>
+
+<div class="well well-sm well-default">
+  <div class="form-actions">
+		<%= f.submit "Create Employee", :class => 'btn btn-primary' %>
+		<%= link_to t('.cancel', :default => t("helpers.links.cancel")), people_path, :class => 'btn btn-default' %>
+	</div>
+</div>

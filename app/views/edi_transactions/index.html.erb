@@ -1,0 +1,32 @@
+<%- model_class = EdiTransaction -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:type) %></th>
+      <th><%= model_class.human_attribute_name(:enrollment_id) %></th>
+      <th><%= model_class.human_attribute_name(:carrier_id) %></th>
+      <th><%= model_class.human_attribute_name(:benefit_begin) %></th>
+      <th><%= model_class.human_attribute_name(:transaction_id) %></th>
+      <th><%= model_class.human_attribute_name(:status) %></th>
+      <th><%= model_class.human_attribute_name(:initiated_at) %></th>
+      <th><%= model_class.human_attribute_name(:ack_nack_at) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @edi_transactions.each do |edi_transaction| %>
+      <tr>
+        <td><%= link_to edi_transaction.transaction_kind, edi_transaction_path(edi_transaction) %></td>
+        <td><%= edi_transaction.enrollment_id %></td>
+        <td><%= edi_transaction.carrier_id %></td>
+        <td><%= edi_transaction.benefit_begin_date %></td>
+        <td><%= edi_transaction.transaction_id %></td>
+        <td><%= edi_transaction.aasm_state %></td>
+        <td><%= edi_transaction.initiated_at %></td>
+        <td><%= edi_transaction.ack_nack_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

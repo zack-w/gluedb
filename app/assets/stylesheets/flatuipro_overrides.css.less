@@ -1,0 +1,26 @@
+// Overrides to FlatUI CSS
+.page-header {
+	margin: 0px 0 30px;
+}
+
+.navbar {
+	margin_bottom: 10px;
+}
+
+// Fix Bootstrap aligment problem on blank definitions by appending an &nbsp;
+dl.dl-horizontal {
+    dd:after {
+        content: "\0000a0";
+    }
+}
+
+.table th.text-right, td.text-right {
+	text-align: right;
+	padding-right: 15px;
+	padding-left: 0px;
+}
+
+// Set dropdown width to data values
+.dropdown-auto-width {
+  width : auto;
+}

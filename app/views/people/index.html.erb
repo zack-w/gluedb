@@ -1,0 +1,27 @@
+<%- model_class = Person -%>
+<%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li class="active"><%= model_class.model_name.human.titleize.pluralize %></li>
+  </ul>
+
+  <div class="row">
+    <div class="col-md-8">
+      <%= link_to "New", new_person_path, class: "btn btn-primary" %>
+    </div>
+    <div class="col-md-4">
+      <%= render 'person_search', q: @q %>
+    </div>
+  </div>
+</div>
+
+<%= render "people_list", people: @people %>
+
+<div class="row">
+  <div class="col-md-8">
+    <%= paginate @people, theme: "twitter-bootstrap", pagination_class: "pagination-plain" %>
+  </div>
+  <div class="rol-md-4">
+    <p><%= "#{number_with_delimiter(@people.count)} / #{number_with_delimiter(Person.count)} " %><small>(people selected / total)</small></p>
+  </div>
+</div>

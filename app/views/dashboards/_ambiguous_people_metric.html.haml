@@ -1,0 +1,18 @@
+%h4.sub-header
+  Ambiguous People
+  .table-responsive
+    %table.table.table-striped
+      %thead
+        %tr
+          %th
+            Category
+          %th
+            Total
+          %th
+            Unresolved
+      %tbody
+        - ambiguous_people_metric.categories.each do |cat|
+          %tr
+            %td= cat.name
+            %td= cat.total
+            %td= cat.unresolved

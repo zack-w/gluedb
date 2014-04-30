@@ -1,0 +1,116 @@
+<%= form_for @edi_transaction_set, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :version, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :version, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :deleted_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :deleted_at, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :st01, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :st01, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :st02, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :st02, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :st03, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :st03, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :bgn01, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :bgn01, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :bgn02, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :bgn02, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :bgn03, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :bgn03, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :bgn04, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :bgn04, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :bgn05, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :bgn05, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :bgn06, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :bgn06, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :bgn08, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :bgn08, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :transaction_kind, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :transaction_kind, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :submitted_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :submitted_at, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :aasm_state, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :aasm_state, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :ack_nak_processed_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :ack_nak_processed_at, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :enrollment_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :enrollment_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :edi_transmission_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :edi_transmission_id, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                edi_transaction_sets_path, :class => 'btn' %>
+  </div>
+<% end %>

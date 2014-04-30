@@ -1,0 +1,12 @@
+<div class="page-header">
+  <ul class="breadcrumb">
+  	<% employer = Employer.find(params[:employer_id]) %>
+    <li><%= link_to "Employers", employers_path %></li>
+    <li><%= link_to employer.name, employer_path(Employer.find(employer.id)) %></li>
+    <li class="active">New</li>
+  </ul>
+</div>
+
+<%= simple_form_for(@person, url: employer_employees_path, html: { action: :post, class: 'form-horizontal' }) do |f| %>
+	<%= render :partial => 'form', :locals=> {f: f} %>
+<% end %>

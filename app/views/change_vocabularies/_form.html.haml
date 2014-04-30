@@ -1,0 +1,32 @@
+= form_for @change_vocabulary, :html => { :class => 'form-horizontal', :role => "form" } do |f|
+  .control-group
+    = f.select :operation, options_for_select(ChangeVocabulary.operations), :class => 'form-control select-block select mbl'
+  .control-group
+    = f.select :reason, options_for_select(ChangeVocabulary.reasons), :class => 'form-control select-block select mbl' 
+
+  %table.table.table-condensed
+    %thead
+      %tr
+        %th
+          &nbsp;
+        %th
+          Name
+        %th
+          Role
+    %tbody
+      = f.fields_for(:people) do |people_fields|
+        %tr
+          %td
+            = people_fields.check_box :selected
+            = people_fields.hidden_field :m_id
+          %td
+            = people_fields.object.name
+            = people_fields.hidden_field :name
+          %td
+            = people_fields.object.role
+            = people_fields.hidden_field :role
+
+  = f.hidden_field :policy_id
+
+  .form_actions
+    = f.submit nil, :class => 'btn btn-primary'

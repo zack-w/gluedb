@@ -1,0 +1,32 @@
+%div
+  %nav.navbar.navbar-inverse.navbar-embossed{:role => "navigation"}
+    .navbar-header
+      %button.navbar-toggle{ "data-toggle" => "collapse", "data-target" => "#navbar-collapse-02" }
+        %span.sr-only
+          Toggle navigation
+      %a.navbar-brand{ :href => "#" }
+        DC HealthLink Glue DB
+    .collapse.navbar-collapse#navbar-collapse-02
+      %ul.nav.navbar-nav
+        != active_menu_item("Dashboard", root_path, :dashboards)
+        != active_menu_item("People", people_path, :people)
+        != active_menu_item("Employers", employers_path, :employers)
+        != active_menu_item("Brokers", brokers_path, :brokers)
+        != active_menu_item("Carriers", carriers_path, :carriers)
+        - if current_user 
+          %li.dropdown
+            %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+              %span.visible-sm.visible-xs
+                Settings
+                %span.fui-gear
+                %b.caret
+              %span.visible-md.visible-lg
+                %span.fui-gear 
+                  #{current_user.email}
+                %b.caret
+              %span.dropdown-arrow
+            %ul.dropdown-menu
+              %li
+                = link_to "Sign out", destroy_user_session_path, :method => "delete"
+              %li 
+                = link_to "Change Password", edit_user_registration_path

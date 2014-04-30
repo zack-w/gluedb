@@ -1,0 +1,19 @@
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>HBX Employer ID</th>
+      <th>Carrier</th>
+      <th>Carrier-assigned ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= table_empty_to_human if employer_groups.count < 1 %>
+    <% employer_groups.each do |g| %>
+    <tr>
+      <td><%= g.employer.hbx_id %></td>
+      <td><%= g.carrier.name %></td>
+      <td><%= g.carrier_employer_group_id %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

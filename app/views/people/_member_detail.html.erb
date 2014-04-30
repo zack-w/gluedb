@@ -1,0 +1,24 @@
+<% person_members.each do |member| %>
+	<div class="panel <%= member.authority? ? 'panel-default' : 'panel-default' %>">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<span class="fui-tag">&nbsp;</span>
+				<%= member_heading(member) %>
+				<% if member.authority? %>
+				  <span class="label label-success pull-right">Authority Member</span>
+				<% else %>
+				  <span class="label label-warning pull-right">Non-Authority Member </span>
+				<% end %>
+			</h3>
+		</div>  <!-- outer panel-heading -->
+
+		<div class="panel-body">
+			<% policies = Policy.find_all_policies_for_member_id(member.hbx_member_id) %>
+			<ul class="list-group">
+				<% policies.each do |policy| %>	
+					<li class="list-group-item"><%= render 'policy_detail', p: policy %></li>
+				<% end %>
+			</ul>
+		</div>
+	</div> <!-- panel -->
+<% end %>

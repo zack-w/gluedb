@@ -1,0 +1,49 @@
+<div class="well well-sm">
+	<h6 style="inverse">	
+	<span class="fui-folder">&nbsp;</span>
+	<%= "HBX Policy ID: #{p.eg_id}" %>
+</h6>
+</div>
+<div class="row">
+	<div class="col-md-10">
+	  <dl class="dl-horizontal">
+			<dt>Coverage</dt>
+			<dd>
+				<%= "#{ p.coverage_type.capitalize } | " %>
+			  <%= link_to p.carrier.name, carrier_path(p.carrier) %> |
+				<%= truncate(p.plan.name, length: 50) %>
+		  </dd>
+		  <dt>Sponsor</dt>
+		  <dd><%= policy_sponsor(p) %></dd>
+		  <dt>Status</dt>
+		  <dd><%= p.aasm_state.capitalize %></dd>
+			<% if (policy_market(p) == "Individual") %>
+			  <dt>Carrier to Bill?</dt>
+			  <dd><%= boolean_to_human(p.carrier_to_bill) %></dd>
+			  <% if p.csr_amt %>
+				  <dt>CSR percent</dt>
+				  <dd><%= p.csr_amt %></dd>
+				<% end %>
+				<% if (p.has_responsible_person?) %>
+					<dt>Responsible party</dt>
+					<dd><%= link_to p.responsible_person.name_full, person_path(p.responsible_person) %></dd>
+				<% end %>
+			<% end %>
+		</dl>
+	</div>
+	<div class="col-md-2">
+		<%= link_to "Create CV", new_change_vocabulary_path(p, {:change_vocabulary => {:policy_id => p.id}}), :class => "btn btn-primary" %>
+	</div>
+</div>
+
+<h6>Enrollment Group</h6>
+<%= render 'enrollment_detail', policy: p %>
+
+<h6>EDI Transactions</h6>
+<% t = p.transaction_set_enrollments %>
+<%= render 'edi_transaction_table', transactions: t %>
+
+<h6>Premium Payments</h6>
+<%= render 'employers/payments_table', premium_payments: p.premium_payments.order_by([:payment_at, :desc]) %>
+
+

@@ -1,0 +1,115 @@
+<Definition>
+	<Loop name="999" required="y">
+		<Segment name="ISA" max="1" min="1">
+			<Field name="ISA01"/>
+			<Field name="ISA02"/>
+			<Field name="ISA03"/>
+			<Field name="ISA04"/>
+			<Field name="ISA05"/>
+			<Field name="ISA06"/>
+			<Field name="ISA07"/>
+			<Field name="ISA08"/>
+			<Field name="ISA09"/>
+			<Field name="ISA10"/>
+			<Field name="ISA11"/>
+			<Field name="ISA12"/>
+			<Field name="ISA13"/>
+			<Field name="ISA14"/>
+			<Field name="ISA15"/>
+			<Field name="ISA16"/>
+		</Segment>
+		<Segment name="GS"  max="1" min="1">
+			<Field name="GS01"/>
+			<Field name="GS02"/>
+			<Field name="GS03"/>
+			<Field name="GS04"/>
+			<Field name="GS05"/>
+			<Field name="GS06"/>
+			<Field name="GS07"/>
+			<Field name="GS08"/>
+		</Segment>
+		<Loop name="L999" max="inf" required="y">
+			<Segment name="ST"  max="1" required="y">
+				<Field name="ST01"/>
+				<Field name="ST02"/>
+				<Field name="ST03"/>
+			</Segment>
+			<Segment name="AK1" max="1" min="1">
+				<Field name="AK101"/>
+				<Field name="AK102"/>
+				<Field name="AK103"/>
+			</Segment>
+			<Loop name="L2000" max="inf" required="n">
+				<Segment name="AK2" max="1" min="1">
+					<Field name="AK201"/>
+					<Field name="AK202"/>
+					<Field name="AK203"/>
+				</Segment>
+				<Loop name="L2100" max="inf" required="n">
+
+					<Segment name="IK3" max="1" min="1">
+						<Field name="IK301"/>
+						<Field name="IK302"/>
+						<Field name="IK303"/>
+						<Field name="IK304"/>
+					</Segment>
+					<Segment name="CTX" min="0" max="10">
+						<Field name="CTX01"/>
+						<Field name="CTX02"/>
+						<Field name="CTX03"/>
+						<Field name="CTX04"/>
+						<Field name="CTX05"/>
+						<Field name="CTX06"/>
+					</Segment>
+					<Loop name="L2110" max="inf" required="n">
+						<Segment name="IK4" max="1" min="1">
+							<Field name="IK401"/>
+							<Field name="IK402"/>
+							<Field name="IK403"/>
+							<Field name="IK404"/>
+						</Segment>
+						<Segment name="CTX" min="0" max="10">
+							<Field name="CTX01"/>
+							<Field name="CTX02"/>
+							<Field name="CTX03"/>
+							<Field name="CTX04"/>
+							<Field name="CTX05"/>
+							<Field name="CTX06"/>
+						</Segment>
+					</Loop>
+				</Loop>
+				<Segment name="IK5" max="1" min="1">
+					<Field name="IK501"/>
+					<Field name="IK502"/>
+					<Field name="IK503"/>
+					<Field name="IK504"/>
+					<Field name="IK505"/>
+					<Field name="IK506"/>
+				</Segment>
+			</Loop>
+			<Segment name="AK9" max="1" min="1">
+				<Field name="AK901"/>
+				<Field name="AK902"/>
+				<Field name="AK903"/>
+				<Field name="AK904"/>
+				<Field name="AK905"/>
+				<Field name="AK906"/>
+				<Field name="AK907"/>
+				<Field name="AK908"/>
+				<Field name="AK909"/>
+			</Segment>
+			<Segment name="SE" max="1" min="1">
+				<Field name="SE01"/>
+				<Field name="SE02"/>
+			</Segment>
+		</Loop>
+		<Segment name="GE"  max="1" min="1">
+			<Field name="GE01"/>
+			<Field name="GE02"/>
+		</Segment>
+		<Segment name="IEA" max="1" min="1">
+			<Field name="IEA01"/>
+			<Field name="IEA02"/>
+		</Segment>
+	</Loop>
+</Definition>

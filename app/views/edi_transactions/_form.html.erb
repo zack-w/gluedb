@@ -1,0 +1,98 @@
+<%= form_for @edi_transaction, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :version, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :version, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :deleted_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :deleted_at, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :transaction_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :transaction_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :initiated_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :initiated_at, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :ack_nack_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :ack_nack_at, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :effectuated_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :effectuated_at, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :sla_days, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :sla_days, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :transaction_kind, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :transaction_kind, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :eg_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :eg_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :responsible_party_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :responsible_party_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :carrier_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :carrier_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :broker_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :broker_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :benefit_begin_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :benefit_begin_date, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :aasm_state, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :aasm_state, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :enrollment_group_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :enrollment_group_id, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                edi_transactions_path, :class => 'btn' %>
+  </div>
+<% end %>

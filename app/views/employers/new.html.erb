@@ -1,0 +1,8 @@
+<%- model_class = Employer -%>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li><%= link_to model_class.model_name.human.titleize.pluralize, employers_path %></li>
+    <li class="active">New</li>
+  </ul>
+</div>
+<%= render :partial => 'form' %>

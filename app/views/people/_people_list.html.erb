@@ -1,0 +1,28 @@
+<table class="table table-condensed">
+  <thead>
+    <tr>
+    	<th>Name</th>
+      <th class="text-right">HBX Member ID</th>
+      <th class="text-right">Policy Ct</th>
+      <th>SSN</th>
+      <th>DOB</th>
+      <th>Gender</th>
+      <th>Authority?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= table_empty_to_human if people.count < 1 %>
+    <% people.each do |p| %>
+      <tr>
+        <td <%= "rowspan=#{p.members.count + 1}" %>>
+        	<%= link_to prepend_glyph_to_name(name_to_listing(p)), person_path(p) %>
+        </td>
+        <% if p.members.count < 1 %>
+          <%= content_tag(:td, "None given", class: "text-right") %>
+          <%= content_tag(:td, "", colspan: "5") %>
+        <% end %>
+      </tr>
+      <%= render "people/members_list", members: p.members %>
+    <% end %>
+  </tbody>
+</table>

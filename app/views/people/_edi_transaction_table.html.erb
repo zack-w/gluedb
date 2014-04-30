@@ -1,0 +1,26 @@
+<% if transactions.count < 1 %>
+  <div class="row"><div class="col-md-offset-1 col-md-2"><p>None found</p></div></div>
+<% else %>
+  <table class="table ">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>State</th>
+        <th>Submitted at</th>
+        <th>Ack/Nak at</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>      
+      <% transactions.each do |trans| %>
+      <tr>
+        <td><span class="fui-export">&nbsp;</span> <%= trans.transaction_kind.humanize %></td>
+        <td><%= trans_aasm_state(trans) %></td>
+        <td><%= trans.submitted_at.to_date %></td>
+        <td><%= trans.ack_nak_processed_at.to_date unless trans.ack_nak_processed_at.blank? %></td>
+        <td><%= link_to "View detail", edi_transaction_set_path(trans) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

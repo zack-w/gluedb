@@ -1,0 +1,40 @@
+<%- model_class = EdiTransaction -%>
+<%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li><%= link_to model_class.model_name.human.titleize.pluralize, edi_transaction_path %></li>
+    <li class="active"><%= @edi_transaction.id %></li>
+  </ul>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><%= model_class.human_attribute_name(:enrollment_id) %>:</dt>
+  <dd><%= link_to @edi_transaction.enrollment_id, enrollment_path(@edi_transaction.enrollment) %></dd>
+  <dt><%= model_class.human_attribute_name(:transaction_id) %>:</dt>
+  <dd><%= @edi_transaction.transaction_id %></dd>
+  <dt><%= model_class.human_attribute_name(:transaction_kind) %>:</dt>
+  <dd><%= @edi_transaction.transaction_kind %></dd>
+  <dt><%= model_class.human_attribute_name(:carrier) %>:</dt>
+  <dd><%= link_to @edi_transaction.enrollment.carrier.name, carrier_path(@edi_transaction.enrollment.carrier_id) %></dd>
+  <dt><%= model_class.human_attribute_name(:aasm_state) %>:</dt>
+  <dd><%= @edi_transaction.aasm_state %></dd>
+  <dt><%= model_class.human_attribute_name(:initiated_at) %>:</dt>
+  <dd><%= @edi_transaction.initiated_at.strftime("%m-%d-%Y") if @edi_transaction.initiated_at.present?  %></dd>
+  <dt><%= model_class.human_attribute_name(:sla_days) %>:</dt>
+  <dd><%= @edi_transaction.sla_days %></dd>
+  <dt><%= model_class.human_attribute_name(:ack_nack_at) %>:</dt>
+  <dd><%= @edi_transaction.ack_nack_at.strftime("%m-%d-%Y") if @edi_transaction.ack_nack_at.present? %></dd>
+  <dt><%= model_class.human_attribute_name(:effectuated_at) %>:</dt>
+  <dd><%= @edi_transaction.effectuated_at.strftime("%m-%d-%Y") if @edi_transaction.effectuated_at.present? %></dd>
+  <dt><%= model_class.human_attribute_name(:benefit_begin_date) %>:</dt>
+  <dd><%= @edi_transaction.benefit_begin_date.strftime("%m-%d-%Y") if @edi_transaction.benefit_begin_date.present? %></dd>
+  <dt><%= model_class.human_attribute_name(:version) %>:</dt>
+  <dd><%= @edi_transaction.version %></dd>
+  <dt><%= model_class.human_attribute_name(:updated_at) %>:</dt>
+  <dd><%= @edi_transaction.updated_at.strftime("%m-%d-%Y") if @edi_transaction.updated_at.present? %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              edi_transactions_path, :class => 'btn'  %>
+</div>

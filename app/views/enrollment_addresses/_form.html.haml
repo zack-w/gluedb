@@ -1,0 +1,22 @@
+= simple_form_for(@enrollment_address, :html => { :class => 'form-horizontal', :role => 'form'}) do |f|
+  = f.error_notification
+  .row
+    .col-sm-offset-1.col-sm-8
+      = f.input :address_1, :placeholder => 'Street', :required => true
+  .row
+    .col-sm-offset-1.col-sm-8
+      = f.input :address_2, :placeholder => 'Apt, Suite, Bldg (optional)'
+  .row
+    .col-sm-offset-1.col-sm-3
+      = f.input :city, :placeholder => 'City', :required => true
+    .col-sm-3
+      = f.select :state, State::NAME_IDS, :placeholder => 'State', :required => true
+    .col-sm-2
+      = f.input :zip, :placeholder => 'Zip code', :required => true
+
+  - f.object.people.each do |p|
+    = hidden_field_tag "enrollment_address[people][]", p.to_s
+
+  .row
+    .col-sm-offset-1
+      = f.submit "Update", :class => "btn btn-primary"

@@ -1,0 +1,29 @@
+<%- model_class = Protocols::X12::Transmission -%>
+<%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li class="active"><%= model_class.model_name.human.titleize.pluralize %></li>
+  </ul>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:ic_sender_id) %></th>
+      <th><%= model_class.human_attribute_name(:ic_receiver_id) %></th>
+      <th><%= model_class.human_attribute_name(:transmission_date) %></th>
+      <th><%= model_class.human_attribute_name(:transaction_set_ct) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @edi_transmissions.each do |edi_transmission| %>
+      <tr>
+        <td><%= link_to edi_transmission.id, edi_transmission_path(edi_transmission) %></td>
+        <td><%= edi_transmission.sender.name %></td>
+        <td><%= edi_transmission.receiver.name %></td>
+        <td><%= edi_transmission.submitted_at.strftime("%m-%d-%Y") if edi_transmission.submitted_at.present?  %></td>
+        <td><%= edi_transmission.edi_transaction_sets.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

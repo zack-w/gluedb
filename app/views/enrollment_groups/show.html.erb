@@ -1,0 +1,154 @@
+<%- model_class = EnrollmentGroup -%>
+<%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
+<div class="page-header">
+  <ul class="breadcrumb">
+    <li><%= link_to model_class.model_name.human.titleize.pluralize, enrollment_groups_path %></li>
+    <li class="active"><%= @enrollment_group.enrollment_group_id %></li>
+  </ul>
+</div>
+
+<h4>Enrollment Group</h4>
+<dl class="dl-horizontal">
+  <dt><%= model_class.human_attribute_name(:subscriber_id) %></dt>
+  <dd><%= link_to @enrollment_group.subscriber.full_name, person_path(@enrollment_group.subscriber) %></dd>
+  <dt><%= model_class.human_attribute_name(:responsible_party_id) %></dt>
+  <dd><%= @enrollment_group.hbx_responsible_party_id ? @enrollment_group.hbx_responsible_party_id : "N/A" %></dd>
+  <dt>APTC Max</dt>
+  <dd><%= number_to_currency(@enrollment_group.allocated_aptc) %></dd>
+  <dt>CSR Percent</dt>
+  <dd><%= number_to_percentage(@enrollment_group.csr_amt) %></dd>
+</dl>
+
+<h4>Plan Enrollments</h4>
+<% @enrollments.each do |enrollment| %>
+<% enrollment.employer.blank? ? shop_market = false : shop_market = true %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <span class="fui-list">&nbsp;</span> 
+      <%= "#{ enrollment.coverage_type.capitalize } | " %>
+      <%= link_to enrollment.carrier.name, carrier_path(enrollment.carrier) %> |
+      <%= "<HBX Policy ID goes here>" %>
+      <span class="label label-info pull-right"><%= shop_market ? "SHOP Market" : "Individual Market" %></span>
+    </h3>
+  </div>
+
+  <div class="panel">
+    <%= link_to "Download CV", canonical_vocabulary_enrollment_path(enrollment), :class => "btn btn-primary" %>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>HBX ID</th>
+          <th>Premium</th>
+          <th>Coverage Begin</th>
+          <th>Coverage End</th>
+          <th>Carrier ID</th>
+          <th>Carrier Policy #</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% enrollment.enrollment_members.each do |em| %>
+        <tr>
+          <td><%= link_to raw("<span class='fui-user'>&nbsp;</span>") + em.person.full_name, person_path(em.person) %></td>
+          <td><%= em.hbx_member_id %></td>
+          <td><%= number_to_currency(em.premium_amount) %></td>
+          <td><%= em.coverage_start.strftime("%m-%d-%Y") if em.coverage_start.present? %></td>
+          <td><span class="label label-warning"><%= em.coverage_end.strftime("%m-%d-%Y") if em.coverage_end.present? %></span></td>
+          <td><%= em.carrier_member_id %></td>
+          <td><%= em.cp_id %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel-body">
+    <div class="col-md-6">
+      <dl class="dl-horizontal">
+        <dt>Plan</dt>
+        <dd><%= link_to truncate(enrollment.plan.name, length: 35), carrier_path(enrollment.carrier) %>
+        <dt>Plan HIOS ID</dt>
+        <dd><%= enrollment.hios_plan_id %>
+        <dt>SEP Type</dt>
+        <dd><%= enrollment.sep_reason.humanize %>
+        <dt>Submitted at:</dt>
+        <dd><%= enrollment.rs_time %></dd>
+        <% if !enrollment.employer.nil? %>
+          <dt>Employer</dt>
+          <dd><%= enrollment.employer.name %></dd>
+        <% end %>
+      </dl>
+    </div>
+    <div class="col-md-6">
+      <dl class="dl-horizontal">
+        <% unless shop_market %>
+          <dt><%= model_class.human_attribute_name(:carrier_to_bill) %></dt>
+          <dd><%= boolean_to_human(enrollment.carrier_to_bill) %>
+        <% end %>
+        <dt>Premium Subtotal</dt>
+        <dd><%= number_to_currency(enrollment.pre_amt_tot) unless enrollment.pre_amt_tot.blank? %>
+        <% if shop_market %>
+          <dt>Employer Amt</dt>
+          <dd><%= number_to_currency(enrollment.tot_emp_res_amt) unless enrollment.tot_emp_res_amt.blank? %>
+        <% else %>
+          <dt>APTC</dt>
+          <dd><%= number_to_currency(enrollment.applied_aptc) unless enrollment.applied_aptc.blank? %>
+        <% end %>
+        <dt>Total Amount</dt>
+        <dd><%= number_to_currency(enrollment.tot_res_amt) unless enrollment.tot_res_amt.blank? %>
+      </dl>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><div class="panel-title"><span class="fui-exit">&nbsp;</span>Carrier Transactions</div></div>
+    <% if enrollment.transaction_set_enrollments.count < 1 %>
+    <div class="row"><div class="col-md-offset-1 col-md-2"><p>None found</p></div></div>
+    <% else %>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Ref # (BGN02)</th>
+          <th>Submitted at</th>
+          <th>Ack/Nak Date</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% transactions = enrollment.transaction_set_enrollments.order_by([:submitted_at, :asc]) %>
+        <% transactions.each do |trans| %>
+        <tr>
+          <td><%= trans.transaction_kind.humanize %></td>
+          <% if trans.aasm_state == "rejected" %>
+            <td><span class="label label-danger">
+              <%= trans.aasm_state.humanize %>
+            </span></td>
+          <% else %>
+            <td><span class="label label-success">
+              <%= trans.aasm_state.humanize %>
+            </span></td>
+          <% end %>
+          <td><%= trans.ts_reference_number %></td>
+          <td><%= trans.submitted_at.strftime("%m-%d-%Y") %></td>
+          <td><%= trans.ack_nak_processed_at.strftime("%m-%d-%Y") if trans.ack_nak_processed_at.present? %></td>
+          <td><%= link_to "Transaction", edi_transaction_set_path(trans), class: "btn btn-sm btn-primary" %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>    
+  </div>
+
+</div>
+<% end %>
+
+<p class="text-right"><small><%= "version: #{@enrollment_group.version} | updated: #{@enrollment_group.updated_at.strftime('%m-%d-%Y') if @enrollment_group.updated_at.present?}" %></small></p>
+
+<div class="well well-sm default">
+  <div class="form-actions">
+   <%= link_to("All Enrollment Groups", enrollment_groups_path, {:class => 'btn btn-primary'})  %>
+ </div>
+</div>
