@@ -153,5 +153,22 @@ describe Person do
     end
   end
 
-
+  describe 'authority member id assignment' do
+    let(:person) { Person.new }
+    context 'one member' do
+      let(:member) { Member.new(hbx_member_id: 1) }
+      its 'authority member id is the member hbx id' do
+        person.members << member
+        person.assign_authority_member_id
+        expect(person.authority_member_id).to eq member.hbx_member_id
+      end
+    end 
+    context 'more than one member' do
+      its 'authority member id is nil' do
+        2.times { person.members << Member.new }
+        person.assign_authority_member_id
+        expect(person.authority_member_id).to be_nil
+      end
+    end
+  end
 end

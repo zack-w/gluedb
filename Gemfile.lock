@@ -29,6 +29,7 @@ GEM
     activesupport (3.2.16)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
+    american_date (1.1.0)
     amq-protocol (1.9.2)
     arel (3.0.3)
     atomic (1.1.15)
@@ -239,6 +240,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm (~> 3.0.25)
+  american_date
   bootstrap-kaminari-views
   bunny
   capistrano (= 2.15.4)

@@ -139,18 +139,6 @@ class Person
     }
   end
 
-  extend SimpleConverters
-
-  def self.member_sieves(d_of_b, n_f)
-    [ Proc.new { |m|
-        date_string(m.dob) == d_of_b
-      },
-      Proc.new { |m|
-        safe_downcase(m.person.name_first) == safe_downcase(n_f)
-      }
-    ]
-  end
-
   def self.match_for_ssn(m_ssn, nf, nl, d_of_b)
     ExistingPersonQuery.new(m_ssn, nf, d_of_b).find
   end
@@ -188,11 +176,15 @@ class Person
       found_member.merge_member(m_member)
     else
       self.members << m_member
-      if self.members.length < 2
-        self.authority_member_id = m_member.hbx_member_id
-      else
-        self.authority_member_id = nil
-      end
+      assign_authority_member_id
+    end
+  end
+
+  def assign_authority_member_id
+    if self.members.length > 1
+      self.authority_member_id = nil
+    else
+      self.authority_member_id = self.members.first.hbx_member_id
     end
   end
 
