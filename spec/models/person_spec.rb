@@ -165,7 +165,7 @@ describe Person do
     end 
     context 'more than one member' do
       its 'authority member id is nil' do
-        2.times { person.members << Member.new }
+        2.times { |i| person.members << Member.new(hbx_member_id: i) }
         person.assign_authority_member_id
         expect(person.authority_member_id).to be_nil
       end
