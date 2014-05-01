@@ -181,11 +181,7 @@ class Person
   end
 
   def assign_authority_member_id
-    if self.members.length > 1
-      self.authority_member_id = nil
-    else
-      self.authority_member_id = self.members.first.hbx_member_id
-    end
+    self.authority_member_id = (self.members.length > 1) ? nil : self.members.first.hbx_member_id
   end
 
   def merge_job(m_job)

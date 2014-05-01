@@ -318,32 +318,7 @@ class Policy
   end
 
   def self.process_audits(active_start, active_end, term_start, term_end, out_directory)
-     active_audits = self.find_active_and_unterminated_in_range(active_start, active_end)
-     term_audits = self.find_terminated_in_range(term_start, term_end)
-     active_audits.each do |term|
-       out_f = File.open(File.join(out_directory, "#{term._id}_active.xml"), 'w')
-       ser = CanonicalVocabulary::MaintenanceSerializer.new(
-         term,
-         "audit",
-         "notification_only",
-         term.enrollees.map(&:m_id),
-         { :term_boundry => active_end }
-       )
-       out_f.write(ser.serialize)
-       out_f.close
-     end
-     term_audits.each do |term|
-       out_f = File.open(File.join(out_directory, "#{term._id}_term.xml"), 'w')
-       ser = CanonicalVocabulary::MaintenanceSerializer.new(
-         term,
-         "audit",
-         "notification_only",
-         term.enrollees.map(&:m_id),
-         { :term_boundry => term_end }
-       )
-       out_f.write(ser.serialize)
-       out_f.close
-     end
+    ProcessAudits.execute(active_start, active_end, term_start, term_end, out_directory)
   end
 
   def can_edit_address?
