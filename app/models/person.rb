@@ -58,6 +58,12 @@ class Person
 
   scope :all_under_age_twenty_six, ->{ gt(:'members.dob' => (Date.today - 26.years))}
   scope :all_over_age_twenty_six,  ->{lte(:'members.dob' => (Date.today - 26.years))}
+
+  # TODO: Add scope that accepts age range
+  # scope :all_between_age_range, ->(range) {}
+
+  scope :all_over_or_equal_age, ->(age) {lte(:'members.dob' => (Date.today - age.years))}
+  scope :all_under_or_equal_age, ->(age) {gte(:'members.dob' => (Date.today - age.years))}
   scope :all_with_multiple_members, exists({ :'members.1' => true })
 
   # 
