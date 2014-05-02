@@ -20,7 +20,7 @@ module Parsers
             :name_sfx => @name_sfx
           )
           new_rp = ResponsibleParty.new(
-            :entity_code => @entity_qualifier
+            :entity_identifier => map_entity_qualifier
           )
           new_person.responsible_parties << new_rp
           if !@phone.blank?
@@ -48,13 +48,13 @@ module Parsers
             end
             new_person.addresses << new_address
           end
-
+          
           new_person.save!
           new_rp._id
         end
 
         def parse_contact_info
-          contact_seg= @rp_loop["PER"]
+          contact_seg = @rp_loop["PER"]
           if !contact_seg.blank?
             if contact_seg[3]
               interpret_contact_info(contact_seg[3], contact_seg[4])
@@ -106,6 +106,25 @@ module Parsers
           end
           if !name_loop[7].blank?
             @name_middle = name_loop[7]
+          end
+        end
+
+        def map_entity_qualifier
+          case @entity_qualifier
+          when "S3"
+            "parent"
+          when "6Y"
+            "case manager"
+          when "9K"
+            "key person"
+          when "X4"
+            "spouse"
+          when "GD"
+            "guardian"
+          when "EXS"
+            "ex-spouse"
+          else 
+            "responsible party"
           end
         end
 

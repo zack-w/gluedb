@@ -21,6 +21,15 @@ end
 
 m_ids.uniq!
 
+eff_people = Person.where({"members.hbx_member_id" => {"$in" => m_ids}})
+
+all_people = Person.where({"members.0" => {"$exists" => true}})
+
+uniq_people = all_people.uniq do |per|
+  [per.name_first.downcase.strip, per.name_last.downcase.strip, per.members.first.dob]
+end
 
 puts "Effectuated Policies: #{policies.count}"
-puts "Effectuated Lives: #{m_ids.uniq.length}"
+puts "Effectuated Lives: #{eff_people.count}"
+puts "All People: #{Person.count}"
+puts "Unique People the hard way: #{uniq_people.length}"

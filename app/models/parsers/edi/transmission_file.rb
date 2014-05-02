@@ -267,13 +267,17 @@ module Parsers
       end
 
       def persist_responsible_party_get_id(etf_loop)
-        rp_loop = [etf_loop["L2100F"], etf_loop["L2100G"]].compact.first
+        all_l2000s = etf_loop["L2000s"]
+        l2100Fs = all_l2000s.map { |l| l["L2100F"] }.compact
+        l2100Gs = all_l2000s.map { |l| l["L2100G"] }.compact
+        rp_loops = l2100Fs + l2100Gs
+        rp_loop = rp_loops.first
         return(nil) if rp_loop.blank?
-        begin
+#        begin
           Etf::ResponsiblePartyParser.parse_persist_and_return_id(rp_loop)
-        rescue
-          raise etf_loop.to_s
-        end
+#        rescue
+#         raise rp_loop.to_s
+#        end
       end
 
       def persist_broker_get_id(etf_loop)
