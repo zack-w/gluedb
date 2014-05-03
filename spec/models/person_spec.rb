@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Person do
   describe "validate associations" do
-	  it { should belong_to :household }
+	  it { should belong_to :tax_household }
 	  it { should embed_many :members }
 	  it { should embed_many :addresses }
 	  it { should embed_many :emails }
