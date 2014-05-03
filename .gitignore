@@ -16,9 +16,10 @@
 /log/*.log
 /tmp
 
-# Stupid vim swapfiles
+# Ignore vim swapfiles
 *.swp
 
+db/data
 db/seedfiles/*.csv
 db/seedfiles/*.yml
 config/exchange.yml
