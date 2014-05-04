@@ -49,8 +49,6 @@ class Person
   embeds_many :responsible_parties
 #  accepts_nested_attributes_for :responsible_parties, reject_if: :all_blank, allow_destroy: true
 
-  has_many :special_enrollment_periods, dependent: :delete
-
   embeds_many :jobs
   index({"jobs.employer_id" => 1})
   index({"jobs.m_id" => 1})
