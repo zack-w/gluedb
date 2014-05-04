@@ -14,7 +14,7 @@ class SpecialEnrollmentPeriod
   					inclusion: {in: %w( birth death adoption marriage legal_separation divorce retirement employment_termination reenrollment location_change )}
 
 
-  embedded_in :tax_household
+  embedded_in :household
 
 	def end_date_before_start
 		return if end_date.nil?

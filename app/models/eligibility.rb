@@ -5,7 +5,7 @@ class Eligibility
   field :max_aptc, type: BigDecimal, default: 0.00
   field :csr_amt, type: BigDecimal, default: 0.00
 
-  embedded_in :tax_household
+  embedded_in :household
 
   validates_presence_of :date_determined, :max_aptc, :csr_amt
 

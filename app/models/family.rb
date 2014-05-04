@@ -1,5 +1,9 @@
 class Family
   include Mongoid::Document
+  include Mongoid::Timestamps
+  include Mongoid::Versioning
+  include Mongoid::Paranoia
 
-  has_many :tax_households
+  has_many :households
+
 end

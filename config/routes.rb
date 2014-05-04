@@ -32,7 +32,19 @@ Gluedb::Application.routes.draw do
     end
   end
 
-  resources :households
+  resources :families do
+    get 'page/:page', :action => :index, :on => :collection
+    resources :households do
+      resources :individuals do
+        get 'page/:page', :action => :index, :on => :collection
+        member do
+          put :compare
+          put :persist_and_transmit
+        end
+      end
+    end
+  end
+
   resources :users
   resources :policies
 
