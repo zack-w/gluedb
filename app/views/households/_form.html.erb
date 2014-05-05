@@ -38,8 +38,9 @@
     <div class="col-md-offset-1 col-md-10">
       <div class="form-inputs">
         <%= f.simple_fields_for :special_enrollment_periods do |s|  %>
-          <%= render 'sep_fields', s: s %>
+          <%= render 'special_enrollment_period_fields', f: s %>
         <% end %>
+        <%= link_to_add_fields "Add Special Enrollment Period", f, :special_enrollment_periods %>
       </div>
     </div>
   </div>
@@ -49,8 +50,9 @@
     <div class="col-md-offset-1 col-md-10">
       <div class="form-inputs">
         <%= f.simple_fields_for :eligibilities do |e|  %>
-          <%= render 'eligibility_fields', e: e %>
+          <%= render 'eligibility_fields', f: e %>
         <% end %>
+        <%= link_to_add_fields "Add Enligibility", f, :eligibilities %>
       </div>
     </div>
   </div>
