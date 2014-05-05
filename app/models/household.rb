@@ -8,6 +8,8 @@ class Household
 
   field :rel, as: :relationship, type: String
   field :aasm_state, type: String
+  field :active, type: Boolean, default: true   # Household active on the Exchange?
+  field :notes, type: String
 
   validates :rel, presence: true, inclusion: {in: %w( subscriber responsible_party spouse life_partner child ward )}
 
@@ -16,7 +18,10 @@ class Household
   belongs_to :family, counter_cache: true
   has_and_belongs_to_many :people, inverse_of: nil
   embeds_many :special_enrollment_periods, cascade_callbacks: true
+  accepts_nested_attributes_for :special_enrollment_periods, allow_destroy: true
+
   embeds_many :eligibilities
+  accepts_nested_attributes_for :eligibilities, allow_destroy: true
 
   def self.create_for_people(the_people)
     found = self.where({

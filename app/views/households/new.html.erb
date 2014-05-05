@@ -1,5 +1,8 @@
 <%- model_class = Household -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => [:'helpers.titles.new', 'New %{model}'], :model => model_class.model_name.human.titleize %></h1>
+  <ul class="breadcrumb">
+    <li><%= link_to model_class.model_name.human.titleize.pluralize, households_path %></li>
+    <li class="active">New</li>
+  </ul>
 </div>
 <%= render :partial => 'form' %>
