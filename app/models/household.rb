@@ -16,7 +16,7 @@ class Household
   index({:aasm_state => 1})
 
   belongs_to :family, counter_cache: true
-  has_many :people, dependent: :delete
+  has_and_belongs_to_many :people, inverse_of: nil
   embeds_many :special_enrollment_periods, cascade_callbacks: true
   accepts_nested_attributes_for :special_enrollment_periods, allow_destroy: true
 

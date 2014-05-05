@@ -14,7 +14,7 @@ end
   )
   add_a_user(
     "dan.thomas@dc.gov",
-    "$2a$10$du.Cf8B8pBSEqBK4uwE9xe3QQILK7aZCyjOUONwPWkURTc6fZiU4."
+    "$2a$10$DzT.gqAI1..R8VCxfcn20.bTDIH7H4OO4b.X5IHdkxNbQw1qrXgoS"
   )
   add_a_user(
     "saadi.mirza@dc.gov",
@@ -99,4 +99,8 @@ end
   add_a_user(
     "john.kisor@dc.gov",
     "$2a$10$wvthMeSh5DfB3IUCA/PEfuq322hXnBxI2eiEUEUoktidN9B5kpU6q"
+  )
+  add_a_user(
+    "micah.kidd@dc.gov",
+    "$2a$10$CGPndVtDB9HlEuog3o9m3uhOTHpAR0eRf2Hq84xwIIhqqDYoG0IRS"
   )
