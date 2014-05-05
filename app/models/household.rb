@@ -6,12 +6,12 @@ class Household
   include AASM
 
 
-  field :rel, as: :relationship, type: String
+#  field :rel, as: :relationship, type: String
   field :aasm_state, type: String
   field :active, type: Boolean, default: true   # Household active on the Exchange?
   field :notes, type: String
 
-  validates :rel, presence: true, inclusion: {in: %w( subscriber responsible_party spouse life_partner child ward )}
+#  validates :rel, presence: true, inclusion: {in: %w( subscriber responsible_party spouse life_partner child ward )}
 
   index({:aasm_state => 1})
 
@@ -25,7 +25,7 @@ class Household
 
   def self.create_for_people(the_people)
     found = self.where({
-      "people_ids" => { "$all" => the_people.map(&:id) }
+      "person_ids" => { "$all" => the_people.map(&:id) }
     }).first
     return(nil) if found
     self.create!( :people => the_people )

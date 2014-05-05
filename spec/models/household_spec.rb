@@ -121,7 +121,7 @@ describe Household do
 
     it "should create a new one when no matching instance is found" do
       expect(Household).to receive(:where).with({
-        "people_ids" => { "$all" => [1,2]}
+        "person_ids" => { "$all" => [1,2]}
       }).and_return([])
       expect(Household).to receive(:create!).with({ :people => people })
       Household.create_for_people(people)
@@ -129,7 +129,7 @@ describe Household do
 
     it "should do nothing if it already exists" do
       expect(Household).to receive(:where).with({
-        "people_ids" => { "$all" => [1,2] }
+        "person_ids" => { "$all" => [1,2] }
       }).and_return([1])
       expect(Household).not_to receive(:create!).with({ :people => people })
       Household.create_for_people(people)
