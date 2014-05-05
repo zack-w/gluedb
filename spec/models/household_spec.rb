@@ -2,10 +2,12 @@ require 'spec_helper'
 
 describe Household do
   describe "validate associations" do
-	  it { should have_many  :people }
+	  it { should have_and_belong_to_many  :people }
 	  it { should embed_many :special_enrollment_periods }
 	  it { should embed_many :eligibilities }
   end
+
+  its(:people) { should be_empty }
 
   it "max_aptc and csr values returned are from the most recent eligibility record" do
   	hh = Household.new(
