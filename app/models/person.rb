@@ -94,6 +94,9 @@ class Person
     save!
   end
 
+  def self.find_for_members(member_ids)
+    PersonMemberQuery.new(member_ids).execute
+  end
 
   def self.with_over_age_child_enrollments
     # Return set of People > 26 years old and listed on policies as child relationship code
@@ -116,10 +119,10 @@ class Person
   end
 
   def self.default_search_order
-  [
-    ["name_last", 1],
-    ["name_first", 1]
-  ]
+    [
+      ["name_last", 1],
+      ["name_first", 1]
+    ]
   end
 
   def self.search_hash(s_str)
@@ -157,7 +160,7 @@ class Person
     Policy.where(
       { "enrollees.m_id" =>
         {"$in" => self.members.map(&:hbx_member_id)}
-      }
+    }
     )
   end
 
@@ -299,7 +302,7 @@ class Person
     ([self._id] + other_ids).uniq
   end
 
-private
+  private
   def initialize_authority_member
     self.authority_member = members.first.hbx_member_id if members.count == 1
   end
