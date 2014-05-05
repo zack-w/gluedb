@@ -2,6 +2,13 @@ Gluedb::Application.routes.draw do
 
   devise_for :users
 
+  namespace :admin do
+    namespace :settings do
+      resources :hbx_policies
+    end
+    resources :users
+  end
+
   resources :enrollment_addresses
 
   resources :plan_metrics, :only => :index
@@ -34,20 +41,16 @@ Gluedb::Application.routes.draw do
 
   resources :families do
     get 'page/:page', :action => :index, :on => :collection
-    resources :households do
-      resources :individuals do
-        get 'page/:page', :action => :index, :on => :collection
-        member do
-          put :compare
-          put :persist_and_transmit
-        end
-      end
-    end
+  end
+
+  resources :households do
+    get 'page/:page', :action => :index, :on => :collection
   end
 
   resources :users
   resources :policies
 
+  resources :individuals 
   resources :people do
     get 'page/:page', :action => :index, :on => :collection
     member do
