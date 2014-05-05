@@ -132,7 +132,8 @@ module Parsers
           persist_edi_transactions(etf_loop, nil, carrier_id, employer_id, edi_transmission)
           return nil
         end
-        persist_edi_transactions(etf_loop, policy._id, carrier_id, employer_id, edi_transmission) 
+        persist_edi_transactions(etf_loop, policy._id, carrier_id, employer_id, edi_transmission)
+        persist_household(etf_loop)
         edi_transmission.save!
         persist_people(etf_loop, employer_id)
       end
@@ -196,11 +197,14 @@ module Parsers
           end)["L2750"]["REF"][2]
       end
 
+      def persist_household(etf_loop)
+        Etf::HouseholdParser.new(etf_loop).persist!
+      end
+
       def persist_policy_members(etf_loop, policy)
         etf_loop["L2000s"].each do |l2000|
-          member_id = (l2000["REFs"].detect do |r|
-            r[1] == "17"
-          end)[2]
+          person_loop = Etf::PersonLoop.new(l2000)
+          member_id = person_loop.member_id
           pre_amt = l2700val(l2000, "PRE AMT 1")
           c_member_id = nil
           c_member_node = l2000["REFs"].detect do |r|
