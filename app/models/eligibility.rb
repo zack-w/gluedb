@@ -1,5 +1,6 @@
 class Eligibility
   include Mongoid::Document
+  include Mongoid::Timestamps
 
 	field :date_determined, type: Date
   field :max_aptc, type: BigDecimal, default: 0.00
