@@ -25,7 +25,10 @@ class Household
 
   def self.create_for_people(the_people)
     found = self.where({
-      "person_ids" => { "$all" => the_people.map(&:id) }
+      "person_ids" => { 
+        "$all" => the_people.map(&:id),
+        "$size" => the_people.length
+       }
     }).first
     return(nil) if found
     self.create!( :people => the_people )
