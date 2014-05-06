@@ -112,6 +112,41 @@ describe PeopleController do
     end
   end
 
+  describe 'PUT compare' do
+    let(:person) { create :person }
+    let(:new_attributes) { attributes_for :person }
+      
+    context 'with valid attributes' do
+      before { put :compare, format: 'html', id: person.id, person: new_attributes }
+      
+      it 'finds the requested person' do
+        expect(assigns(:person)).to eq person
+      end
+
+      it 'stores the updates for later submission' do 
+        expect(assigns(:updates)).to include(new_attributes)
+      end
+
+      it 'stores the delta' do
+        expect(assigns(:delta)).not_to be_nil
+      end
+    end
+
+    context 'with invalid attributes' do
+      let(:invalid_attributes) { attributes_for :invalid_person }
+      before { put :update, id: person.id, person: invalid_attributes }
+      
+      it 'finds the requested person' do
+        expect(assigns(:person)).to eq person
+      end
+
+      it 'renders the edit view' do
+        expect(response).to render_template :edit
+      end
+    end
+  end
+
+
   describe 'DELETE destroy' do
     before { @person = create :person }
 
