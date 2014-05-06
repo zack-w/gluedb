@@ -206,13 +206,7 @@ module Parsers
           person_loop = Etf::PersonLoop.new(l2000)
           member_id = person_loop.member_id
           pre_amt = l2700val(l2000, "PRE AMT 1")
-          c_member_id = nil
-          c_member_node = l2000["REFs"].detect do |r|
-            r[1] == "23"
-          end
-          if !c_member_node.blank?
-            c_member_id = c_member_node[2]
-          end
+          c_member_id = person_loop.carrier_member_id
           c_policy_id = nil
           c_pol_node = l2000["L2300s"].first["REFs"].detect do |r|
             r[1] == "X9"
@@ -234,9 +228,9 @@ module Parsers
           if bgn_end_node
             bgn_end = bgn_end_node[3]
           end
-          ben_stat = l2000["INS"][5]
-          rel_code = l2000["INS"][2]
-          emp_stat = l2000["INS"][8]
+          ben_stat = person_loop.ben_stat
+          rel_code = person_loop.rel_code
+          emp_stat = person_loop.emp_stat
           p_action = determine_policy_action(l2000["L2300s"].first)
           new_member = Enrollee.new(
             :m_id => member_id,
