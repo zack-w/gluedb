@@ -27,9 +27,9 @@ set :default_shell, "bash -l"
 # set :password, 'kermit12'
 # set :ssh_options, {:forward_agent => true, :keys=>[File.join(ENV["HOME"], "ec2", "AWS-dan.thomas-me.com", "ipublic-key.pem")]}
 
-role :web, "10.82.55.113"
-role :app, "10.82.55.113"
-role :db,  "10.82.55.113", :primary => true        # This is where Rails migrations will run
+role :web, "10.83.85.127"
+role :app, "10.83.85.127"
+role :db,  "10.83.85.127", :primary => true        # This is where Rails migrations will run
 # role :db,  "ec2-50-16-240-48.compute-1.amazonaws.com"                          # your slave db-server here
 
 # if you're still using the script/reaper helper you will need
@@ -43,6 +43,7 @@ namespace :deploy do
   desc "create symbolic links to project nginx, unicorn and database.yml config and init files"
   task :finalize_update do
     run "cp #{deploy_to}/shared/config/mongoid.yml #{release_path}/config/mongoid.yml"
+    run "cp #{deploy_to}/shared/config/exchange.yml #{release_path}/config/exchange.yml"
   end
   
   desc "Restart nginx and unicorn"
