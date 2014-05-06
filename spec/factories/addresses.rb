@@ -7,6 +7,10 @@ FactoryGirl.define do
     state 'DC'
     zip '20002'
 
+    trait :with_invalid_address_type do
+      address_type 'invalid'
+    end
+
     trait :without_address_1 do
       address_1 ' '
     end
