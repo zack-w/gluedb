@@ -1,1 +1,24 @@
-Present!
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Subscriber Name</th>
+      <th># SEPs</th>
+      <th># Eligibilities</th>
+      <th># Individuals</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <%= table_empty_to_human if households.count < 1 %>
+    <% households.each do |h| %>
+      <tr>
+        <td>
+          <%= link_to prepend_glyph_to_name(h.subscriber.full_name), household_path(h) %>
+        </td>
+        <td><%= h.special_enrollment_periods.count %></td>
+        <td><%= h.eligibilities.count %></td>
+        <td><%= h.people.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

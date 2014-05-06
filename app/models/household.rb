@@ -58,6 +58,18 @@ class Household
     current_eligibility.csr_percent
   end
 
+  def subscriber
+    people.each do |person|
+      person.members.each do |member|
+        member.enrollees.each do |enrollee|
+          if enrollee.subscriber?
+            return person
+          end
+        end
+      end
+    end
+  end
+
   aasm do
     state :closed_enrollment, initial: true
     state :open_enrollment_period
