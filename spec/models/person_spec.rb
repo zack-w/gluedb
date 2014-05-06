@@ -182,4 +182,11 @@ describe Person do
       Person.find_for_members(member_ids)
     end
   end
+
+  describe '#full_name' do
+    let(:person) { Person.new(name_pfx: 'Mr', name_first: 'Joe', name_middle: 'X', name_last: 'Dirt', name_sfx: 'Jr') }
+    it 'returns persons full name as string' do
+      expect(person.full_name).to eq 'Mr Joe X Dirt Jr'
+    end
+  end
 end
