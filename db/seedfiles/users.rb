@@ -104,3 +104,7 @@ end
     "micah.kidd@dc.gov",
     "$2a$10$CGPndVtDB9HlEuog3o9m3uhOTHpAR0eRf2Hq84xwIIhqqDYoG0IRS"
   )
+  add_a_user(
+    "heather.parker@dc.gov",
+    "$2a$10$/9hyQU0up7tk.LQkFUouSul7d.3ChweDK/bApr3DuLGxxKZdBsBMK"
+  )
