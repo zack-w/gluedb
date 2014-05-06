@@ -59,6 +59,7 @@ class Household
   end
 
   def subscriber
+    #TODO - correct when household has policy association
     people.each do |person|
       person.members.each do |member|
         member.enrollees.each do |enrollee|
