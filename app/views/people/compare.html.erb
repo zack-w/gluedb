@@ -22,9 +22,9 @@
 </div>
 
 
-<%= simple_form_for(@person, url: persist_and_transmit_person_path(@person), html: { class: 'form-horizontal' }) do |f| %>
+<%= simple_form_for(@person, url: update_person_path(@person), html: { class: 'form-horizontal' }) do |f| %>
 	
-	<%= hidden_field_tag(:person, @updates.to_json, id: nil) %>
+	<%= hidden_field_tag(:person, @updates, id: nil) %>
 
   <div class="well well-sm well-default">
     <div class="form-actions">
