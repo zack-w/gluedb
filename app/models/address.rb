@@ -29,18 +29,14 @@ class Address
     end
   end
 
-  def safe_downcase(val)
-    val.nil? ? nil : val.downcase
-  end
-
   def match(another_address)
     return(false) if another_address.nil?
-    (safe_downcase(self.address_type) == safe_downcase(another_address.address_type)) &&
-    (safe_downcase(address_1) == safe_downcase(another_address.address_1)) &&
-    (safe_downcase(address_2) == safe_downcase(another_address.address_2)) &&
-    (safe_downcase(city) == safe_downcase(another_address.city)) &&
-    (safe_downcase(state) == safe_downcase(another_address.state)) &&
-    (safe_downcase(zip) == safe_downcase(another_address.zip))
+    attrs_to_match = [:address_type, :address_1, :address_2, :city, :state, :zip]
+    attrs_to_match.all? { |attr| attribute_matches?(attr, another_address) }
+  end
+
+  def attribute_matches?(attribute, other)
+    safe_downcase(self[attribute]) == safe_downcase(other[attribute])
   end
 
   def formatted_address
@@ -66,6 +62,12 @@ class Address
 
   def home?
     "home" == self.address_type.downcase
+  end
+  
+  private
+
+  def safe_downcase(val)
+    val.nil? ? nil : val.downcase
   end
 
 end
