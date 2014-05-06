@@ -23,15 +23,11 @@ class Address
   before_save :clean_fields
 
   def clean_fields
-    self.address_1 = self.address_1.strip
-    if !self.address_2.blank?
-      self.address_2 = self.address_2.strip
+    attrs_to_clean = [:address_type, :address_1, :address_2, :city, :state, :zip]
+    attrs_to_clean.each do |a|
+      self[a].strip! unless self[a].blank?
     end
-    self.city = self.city.strip
-    self.state = self.state.strip
-    self.zip = self.zip.strip
   end
-
 
   def safe_downcase(val)
     val.nil? ? nil : val.downcase

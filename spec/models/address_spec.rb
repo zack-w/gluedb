@@ -67,4 +67,39 @@ describe Address do
       end
     end
   end
+
+  describe '#home?' do
+    context 'when not a home address' do 
+      it 'returns false' do
+        address = Address.new(address_type: 'work')
+        expect(address.home?).to be_false
+      end
+    end
+
+    context 'when a home address' do 
+      it 'returns true' do
+        address = Address.new(address_type: 'home')
+        expect(address.home?).to be_true
+      end
+    end
+  end
+
+  describe 'clean_fields' do
+    it 'removes trailing and leading whitespace from fields' do
+      address = Address.new
+      address.address_1 = '   4321 Awesome Drive   '
+      address.address_2 = '   #321   '
+      address.city = '   Washington    '
+      address.state = '    DC     '
+      address.zip = '   20002    '
+
+      address.clean_fields
+
+      expect(address.address_1).to eq '4321 Awesome Drive'
+      expect(address.address_2).to eq '#321'
+      expect(address.city).to eq 'Washington'
+      expect(address.state).to eq 'DC'
+      expect(address.zip).to eq '20002'
+    end  
+  end
 end
