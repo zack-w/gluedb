@@ -22,7 +22,7 @@
 </div>
 
 
-<%= simple_form_for(@person, url: update_person_path(@person), html: { class: 'form-horizontal' }) do |f| %>
+<%= simple_form_for(@person, html: { class: 'form-horizontal' }) do |f| %>
 	
 	<%= hidden_field_tag(:person, @updates, id: nil) %>
 
