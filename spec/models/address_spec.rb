@@ -84,7 +84,7 @@ describe Address do
     end
   end
 
-  describe 'clean_fields' do
+  describe '#clean_fields' do
     it 'removes trailing and leading whitespace from fields' do
       address = Address.new
       address.address_1 = '   4321 Awesome Drive   '
@@ -101,5 +101,42 @@ describe Address do
       expect(address.state).to eq 'DC'
       expect(address.zip).to eq '20002'
     end  
+  end
+
+  describe '#match' do
+    let(:address) do
+      a = Address.new
+      a.address_1 = '4321 Awesome Drive'
+      a.address_2 = '#321'
+      a.city = 'Washington'
+      a.state = 'DC'
+      a.zip = 20002
+      a
+    end
+
+    context 'addresses are the same' do 
+      let(:second_address) { address.clone }
+      it 'returns true' do
+        expect(address.match(second_address)).to be_true
+      end
+
+      context 'mismatched case' do
+        before { second_address.address_1.upcase! }
+        it 'returns true' do
+          expect(address.match(second_address)).to be_true
+        end
+      end
+    end
+
+    context 'addresses differ' do 
+      let(:second_address) do 
+        a = address.clone 
+        a.state = 'AL'
+        a
+      end
+      it 'returns false' do
+        expect(address.match(second_address)).to be_false
+      end
+    end
   end
 end
