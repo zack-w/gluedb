@@ -10,6 +10,26 @@ describe Phone do
     it { should respond_to attribute }
   end
 
+  describe 'validations' do
+    describe 'phone type' do
+      let(:phone) { Phone.new(phone_type: 'invalid') }
+      context 'when invalid' do
+        its 'invalid' do 
+          expect(phone).to be_invalid
+        end
+      end
+      valid_types = ['primary', 'secondary', 'home', 'work', 'mobile', 'pager', 'main', 'other']
+      valid_types.each do |type|
+        context('when ' + type) do
+          before { phone.phone_type = type}
+          its 'valid' do
+            expect(phone).to be_valid
+          end 
+        end
+      end
+    end
+  end
+
   describe '#match' do
     let(:phone) do
       p = Phone.new
