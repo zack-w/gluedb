@@ -14,7 +14,12 @@ class Email
 
   def match(another_email)
     return false if another_email.nil?
-    (email_type == another_email.email_type) && (email_address == another_email.email_address)
+    attrs_to_match = [:email_type, :email_address]
+    attrs_to_match.all? { |attr| attribute_matches?(attr, another_email) }
+  end
+
+  def attribute_matches?(attribute, other)
+    self[attribute] == other[attribute]
   end
 
   def merge_update(m_email)
