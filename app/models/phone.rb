@@ -14,7 +14,12 @@ class Phone
 
   def match(another_phone)
     return(false) if another_phone.nil?
-    (phone_type == another_phone.phone_type) && (phone_number == another_phone.phone_number)
+    attrs_to_match = [:phone_type, :phone_number]
+    attrs_to_match.all? { |attr| attribute_matches?(attr, another_phone) }
+  end
+
+  def attribute_matches?(attribute, other)
+    self[attribute] == other[attribute]
   end
 
   def phone_number=(value)

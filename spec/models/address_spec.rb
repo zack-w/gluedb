@@ -6,7 +6,7 @@ describe Address do
     it { should be_embedded_in :employer }
   end
 
-  [:address_type, :address_1, :address_2, :city, :state, :zip].each do |attribute|
+  [:address_type, :address_1, :address_2, :city, :state, :zip, :person, :employer].each do |attribute|
     it { should respond_to attribute }
   end
 

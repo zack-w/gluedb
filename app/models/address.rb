@@ -50,6 +50,7 @@ class Address
     [address_1, address_2, city_delim, state, zip].reject(&:nil? || empty?).join(' ')
   end
 
+  # NOTE: searching won't help -- dynamically called in PersonParser using send
   def merge_update(m_address)
     merge_with_overwrite(m_address,
       :address_1,
