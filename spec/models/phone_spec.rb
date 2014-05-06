@@ -50,4 +50,19 @@ describe Phone do
     end
   end
 
+  describe 'changing phone number' do
+    let(:phone) { Phone.new }
+    it 'removes non-numerals' do
+      phone.phone_number = 'a1b2c3d4'
+      expect(phone.phone_number).to eq '1234'
+    end
+  end
+
+  describe 'changing phone extension' do
+    let(:phone) { Phone.new }
+    it 'removes non-numerals' do
+      phone.extension = 'a1b2c3d4'
+      expect(phone.extension).to eq '1234'
+    end
+  end
 end
