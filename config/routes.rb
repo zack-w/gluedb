@@ -55,6 +55,7 @@ Gluedb::Application.routes.draw do
     get 'page/:page', :action => :index, :on => :collection
     member do
       put :compare
+      put :persist_and_transmit
     end
   end
 
