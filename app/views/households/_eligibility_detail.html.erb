@@ -11,7 +11,7 @@
 		  <tr>
 		    <td><%= format_date(e.date_determined) %></td>
 		    <td><%= number_to_currency(e.max_aptc) %></td>
-		    <td><%= number_to_percent(e.csr_percent) %></td>
+		    <td><%= number_to_percentage(e.csr_percent) %></td>
 		  </tr>
 		<% end %>
   </tbody>

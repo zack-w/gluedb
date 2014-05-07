@@ -2,10 +2,9 @@
   <thead>
     <tr>
       <th>Subscriber Name</th>
+      <th># Individuals</th>
       <th># SEPs</th>
       <th># Eligibilities</th>
-      <th># Individuals</th>
-
     </tr>
   </thead>
   <tbody>
@@ -15,9 +14,9 @@
         <td>
           <%= link_to prepend_glyph_to_name(h.subscriber.full_name), household_path(h) %>
         </td>
+        <td><%= h.people.count %></td>
         <td><%= h.special_enrollment_periods.count %></td>
         <td><%= h.eligibilities.count %></td>
-        <td><%= h.people.count %></td>
       </tr>
     <% end %>
   </tbody>

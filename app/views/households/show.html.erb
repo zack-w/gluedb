@@ -10,7 +10,10 @@
 <div class="row">
   <div class="col-md-2">
     <div class="well sidebar-nav">
-      <%#= controls_for_people(@person) %>
+      <ul class="nav nav-list">
+        <li class="nav-header">Individual</li>
+        <li><%= link_to "Edit", edit_household_path(@household) %></li>
+      </ul>
     </div>
   </div>
 

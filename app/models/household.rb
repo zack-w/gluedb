@@ -18,10 +18,10 @@ class Household
   belongs_to :family, counter_cache: true
   has_and_belongs_to_many :people, inverse_of: nil
   embeds_many :special_enrollment_periods, cascade_callbacks: true
-  accepts_nested_attributes_for :special_enrollment_periods, allow_destroy: true
+  accepts_nested_attributes_for :special_enrollment_periods, reject_if: proc { |attribs| attribs['start_date'].blank? }, allow_destroy: true
 
   embeds_many :eligibilities
-  accepts_nested_attributes_for :eligibilities, allow_destroy: true
+  accepts_nested_attributes_for :eligibilities, reject_if: proc { |attribs| attribs['date_determined'].blank? }, allow_destroy: true
 
   def self.create_for_people(the_people)
     found = self.where({
