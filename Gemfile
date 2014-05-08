@@ -29,7 +29,7 @@ group :development, :assets do
 
 end
 
-group :development, :test do
+group :test do
 	gem 'mongoid-rspec'
   gem 'rspec-rails' #, '~> 3.0.0.beta'
   gem 'capybara'
