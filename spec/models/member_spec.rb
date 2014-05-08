@@ -65,12 +65,7 @@ describe Member do
 
 end
 
-describe Member, "given:
-  - name_last of \"LaName\"
-  - name_first of \"Exampile\"
-  - dob of 19640229
-  - totally a dude
-" do
+describe Member do
   let(:dob) { "19640229" }
   let(:name_last) { "LaName" }
   let(:name_first) { "Exampile" }
@@ -100,6 +95,37 @@ describe Member, "given:
   it "should be valid with a nil hbx_member_id" do
     subject.hbx_member_id = nil
     subject.should be_valid
+  end
+
+  [ :hbx_member_id, 
+    :concern_role_id, 
+    :import_source, 
+    :imported_at, 
+    :dob, 
+    :ssn, 
+    :gender, 
+    :hlh, 
+    :lui, 
+    :person
+  ].each do |attribute|
+    it { should respond_to attribute }
+  end
+
+  describe 'setters' do
+    let(:member) { Member.new }
+    describe 'ssn' do
+      it 'removes all non-numerals' do
+        member.ssn = 'a2a2b2ccc2d2ee2f2gg2h2'
+        expect(member.ssn).to eq '222222222'
+      end
+    end
+
+    describe 'gender' do
+      it 'forces to lowercase' do
+        member.gender = 'fEMaLE'
+        expect(member.gender).to eq 'female'
+      end
+    end
   end
 
 end
