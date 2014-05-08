@@ -189,4 +189,43 @@ describe Person do
       expect(person.full_name).to eq 'Mr Joe X Dirt Jr'
     end
   end
+
+  describe '#addresses_match?' do
+    context 'unequal count of home addresses' do
+      it 'returns false' do
+        person = Person.new
+        person.addresses << Address.new(address_type: 'home')
+        person.addresses << Address.new(address_type: 'home')
+
+        other_person = Person.new
+        other_person.addresses << Address.new(address_type: 'home')
+
+        expect(person.addresses_match?(other_person)).to be_false
+      end
+    end
+
+    context 'no home addresses match' do
+      it 'returns false' do
+        person = Person.new
+        person.addresses << Address.new(address_type: 'home', city: 'Boston')
+
+        other_person = Person.new
+        other_person.addresses << Address.new(address_type: 'home', city: 'New York')
+
+        expect(person.addresses_match?(other_person)).to be_false
+      end
+    end
+
+    context 'home address count and values match' do
+      it 'returns true' do
+        person = Person.new
+        person.addresses << Address.new(address_type: 'home', city: 'Boston')
+
+        other_person = Person.new
+        other_person.addresses << Address.new(address_type: 'home', city: 'Boston')
+
+        expect(person.addresses_match?(other_person)).to be_true
+      end
+    end
+  end
 end
