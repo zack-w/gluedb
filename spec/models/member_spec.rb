@@ -194,4 +194,32 @@ describe Member do
       end
     end
   end 
+
+  describe '.find_for_member_id' do
+    let(:id_to_lookup) { '666' }
+    let(:person) { Person.new(name_first: 'Joe', name_last: 'Dirt') }
+    let(:member) { Member.new(gender: 'male') }
+    
+    context 'person with a member with matching hbx_member_id' do
+      before do 
+        member.hbx_member_id = id_to_lookup
+        person.members << member
+        person.save!
+      end
+      it 'returns person' do
+        expect(Person.find_for_member_id(id_to_lookup)).to eq person
+      end
+    end
+
+    context 'no matching person with a member with matching hbx_member_id' do
+      before do 
+        member.hbx_member_id = id_to_lookup.next
+        person.members << member
+        person.save!
+      end
+      it 'returns nil' do
+        expect(Person.find_for_member_id(id_to_lookup)).to eq nil
+      end
+    end
+  end
 end
