@@ -165,4 +165,30 @@ describe Member do
       expect(member.enrollees).to eq [enrollee]
     end
   end
+
+  describe '#authority?' do
+    context 'members hbx id equals the person authority member id' do
+      let(:id) { '666' }
+      it 'returns true' do
+        person = Person.new(name_first: 'Joe', name_last: 'Dirt')
+        person.authority_member_id = id
+        member = Member.new(gender: 'male', hbx_member_id: id)
+        person.members << member
+
+        expect(member.authority?).to eq true
+      end
+    end
+
+    context 'members hbx id NOT equal to the person authority member id' do
+      let(:id) { '666' }
+      it 'returns true' do
+        person = Person.new(name_first: 'Joe', name_last: 'Dirt')
+        person.authority_member_id = id
+        member = Member.new(gender: 'male', hbx_member_id: '777')
+        person.members << member
+
+        expect(member.authority?).to eq false
+      end
+    end
+  end 
 end
