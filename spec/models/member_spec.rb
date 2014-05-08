@@ -128,4 +128,23 @@ describe Member do
     end
   end
 
+  describe '#policies' do
+    it 'finds policies who has an enrollee with a matching hbx_member_id' do
+      hbx_member_id = '666'
+      member = Member.new(gender: 'male', hbx_member_id: hbx_member_id)
+      
+      enrollee = Enrollee.new(m_id: hbx_member_id, relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+      policy = Policy.new(eg_id: '1')
+      policy.enrollees << enrollee
+      policy.save!
+
+      unrelated_enrollee = Enrollee.new(m_id: '777', relationship_status_code: 'spouse', employment_status_code: 'active', benefit_status_code: 'active')
+      other_policy = Policy.new(eg_id: '1')
+      other_policy.enrollees << unrelated_enrollee
+      other_policy.save!
+
+      expect(member.policies.to_a).to eq [policy]
+    end
+  end
+
 end
