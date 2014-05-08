@@ -1,0 +1,56 @@
+%id= person._id
+%addresses
+  - person.addresses.each do |a|
+    %address
+      %id= a._id
+      %address-1= a.address_1
+      %address-2= a.address_2
+      %address-type= a.address_type
+      %city= a.city
+      %state= a.state
+      %zip= a.zip
+      %created-at= a.created_at
+      %updated-at= a.updated_at
+%authority-member-id= person.authority_member_id
+%broker-id= person.broker_id
+%create-at= person.created_at
+%deleted-at= person.deleted_at
+%emails
+  - person.emails.each do |e|
+    %email
+      %id= e._id
+      %email-address= e.email_address
+      %email-type= e.email_type
+%employer-id= person.employer_id
+%household-id= person.household_id
+%members
+  - person.members.each do |m|
+    %member
+      %id= m._id
+      %concern-role-id= m.concern_role_id
+      %created-at= m.created_at
+      %dob= m.dob
+      %gender= m.gender
+      %hbx-member-id= m.hbx_member_id
+      %hlh= m.hlh
+      %import-source= m.import_source
+      %imported-at= m.imported_at
+      %lui= m.lui
+      %ssn= m.ssn
+      %updated-at= m.updated_at
+%name-first= person.name_first
+%name-full= person.name_full
+%name-last= person.name_last
+%name-middle= person.name_middle
+%name-pfx= person.name_pfx
+%name-sfx= person.name_sfx
+%phones
+  - person.phones.each do |phone|
+    %phone
+      %id= phone._id
+      %extension= phone.extension
+      %phone-number= phone.phone_number
+      %phone-type= phone.phone_type
+%updated-at= person.updated_at
+%updated-by= person.updated_by
+%version= person.version

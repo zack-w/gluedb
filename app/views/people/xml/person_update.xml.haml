@@ -1,0 +1,11 @@
+!!! XML
+%person_changes{"xmlns" => "uri:gluedb:v0.1.0:person" }
+  %url 
+    = person_url(person._id)
+  %person
+    =render template: 'people/xml/person.xml.haml', locals:{person: person}
+    %versions
+      - person.versions.each do |v|
+        %version
+          =render template: 'people/xml/person.xml.haml', locals:{person: v}
+  =changes.to_xml(root: 'changes', skip_instruct: true)
