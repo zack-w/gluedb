@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Member do
-
   before(:each) do
     @p1 = Person.create!(
           name_pfx: "Mrs",
@@ -128,65 +127,69 @@ describe Member do
     end
   end
 
-  describe '#policies' do
-    it 'finds policies who has an enrollee with a matching hbx_member_id' do
-      hbx_member_id = '666'
-      member = Member.new(gender: 'male', hbx_member_id: hbx_member_id)
-      
-      enrollee = Enrollee.new(m_id: hbx_member_id, relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
-      policy = Policy.new(eg_id: '1')
-      policy.enrollees << enrollee
-      policy.save!
+  describe 'associated lookup by hbx_member_id' do
+    let(:member) { Member.new(gender: 'male') }
+    let(:id_to_lookup) { '666' }
+    let(:different_id) { '777' }
+    let(:enrollee) { Enrollee.new(relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active') }
+    let(:policy) { Policy.new(eg_id: '1') }
 
-      unrelated_enrollee = Enrollee.new(m_id: '777', relationship_status_code: 'spouse', employment_status_code: 'active', benefit_status_code: 'active')
-      other_policy = Policy.new(eg_id: '1')
-      other_policy.enrollees << unrelated_enrollee
-      other_policy.save!
+    describe '#policies' do
+      it 'finds policies who has an enrollee with a matching hbx_member_id' do
+        member.hbx_member_id = id_to_lookup
+        enrollee.m_id = id_to_lookup
+        
+        policy.enrollees << enrollee
+        policy.save!
 
-      expect(member.policies.to_a).to eq [policy]
+        unrelated_enrollee = Enrollee.new(m_id: different_id, relationship_status_code: 'spouse', employment_status_code: 'active', benefit_status_code: 'active')
+        other_policy = Policy.new(eg_id: '1')
+        other_policy.enrollees << unrelated_enrollee
+        other_policy.save!
+
+        expect(member.policies.to_a).to eq [policy]
+      end
     end
-  end
 
-  describe '#enrollees' do
-    it 'finds enrollees with matching hbx_member_ids' do
-      hbx_member_id = '666'
-      member = Member.new(gender: 'male', hbx_member_id: hbx_member_id)
-      
-      enrollee = Enrollee.new(m_id: hbx_member_id, relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
-      policy = Policy.new(eg_id: '1')
-      policy.enrollees << enrollee
-      policy.save!
+    describe '#enrollees' do
+      it 'finds enrollees with matching hbx_member_ids' do
+        member.hbx_member_id = id_to_lookup
+        enrollee.m_id = id_to_lookup
+        
+        policy.enrollees << enrollee
+        policy.save!
 
-      unrelated_enrollee = Enrollee.new(m_id: '777', relationship_status_code: 'spouse', employment_status_code: 'active', benefit_status_code: 'active')
-      other_policy = Policy.new(eg_id: '1')
-      other_policy.enrollees << unrelated_enrollee
-      other_policy.save!
+        unrelated_enrollee = Enrollee.new(m_id: different_id, relationship_status_code: 'spouse', employment_status_code: 'active', benefit_status_code: 'active')
+        other_policy = Policy.new(eg_id: '1')
+        other_policy.enrollees << unrelated_enrollee
+        other_policy.save!
 
-      expect(member.enrollees).to eq [enrollee]
+        expect(member.enrollees).to eq [enrollee]
+      end
     end
   end
 
   describe '#authority?' do
-    context 'members hbx id equals the person authority member id' do
-      let(:id) { '666' }
-      it 'returns true' do
-        person = Person.new(name_first: 'Joe', name_last: 'Dirt')
-        person.authority_member_id = id
-        member = Member.new(gender: 'male', hbx_member_id: id)
-        person.members << member
+    let(:member) { Member.new(gender: 'male') }
+    let(:person) { Person.new(name_first: 'Joe', name_last: 'Dirt') }
+    before { person.members << member }
 
+    context 'members hbx id equals the person authority member id' do
+      before do 
+        person.authority_member_id = '666'
+        member.hbx_member_id = '666'
+      end
+      it 'returns true' do
         expect(member.authority?).to eq true
       end
     end
 
     context 'members hbx id NOT equal to the person authority member id' do
-      let(:id) { '666' }
+      before do
+        person.authority_member_id = '666'
+        member.hbx_member_id = '7'
+      end
       it 'returns true' do
-        person = Person.new(name_first: 'Joe', name_last: 'Dirt')
-        person.authority_member_id = id
-        member = Member.new(gender: 'male', hbx_member_id: '777')
-        person.members << member
-
         expect(member.authority?).to eq false
       end
     end
