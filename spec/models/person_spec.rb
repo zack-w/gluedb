@@ -228,4 +228,71 @@ describe Person do
       end
     end
   end
+
+
+  describe '#home_address' do
+    context 'home address exists' do
+      it 'returns the first home address' do
+        person = Person.new
+        address = Address.new(address_type: 'home')
+        another_address = Address.new(address_type: 'home')
+
+        person.addresses << address
+        person.addresses << another_address
+
+        expect(person.home_address).to eq address
+      end
+    end
+    context 'home address doesnt exist' do
+      it 'returns nil' do
+        person = Person.new
+        person.addresses << Address.new(address_type: 'work')
+        expect(person.home_address).to be_nil
+      end
+    end
+  end
+
+  describe '#home_phone' do
+    context 'home phone exists' do
+      it 'returns the first home phone' do
+        person = Person.new
+        home_phone = Phone.new(phone_type: 'home')
+        other_phone = Phone.new(phone_type: 'home')
+
+        person.phones << home_phone
+        person.phones << other_phone
+
+        expect(person.home_phone).to eq home_phone
+      end
+    end
+    context 'home phone doesnt exist' do
+      it 'returns nil' do
+        person = Person.new
+        person.phones << Phone.new(phone_type: 'work')
+        expect(person.home_phone).to be_nil
+      end
+    end
+  end
+
+  describe '#home_email' do
+    context 'home email exists' do
+      it 'returns the first home email' do
+        person = Person.new
+        home_email = Email.new(email_type: 'home')
+        other_email = Email.new(email_type: 'home')
+
+        person.emails << home_email
+        person.emails << other_email
+
+        expect(person.home_email).to eq home_email
+      end
+    end
+    context 'home email doesnt exist' do
+      it 'returns nil' do
+        person = Person.new
+        person.emails << Email.new(email_type: 'work')
+        expect(person.home_email).to be_nil
+      end
+    end
+  end
 end
