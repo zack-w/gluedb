@@ -103,11 +103,6 @@ class Policy
     enrollees.detect { |m| m.relationship_status_code == "self" }
   end
 
-  def members
-    member_ids = enrollees.map(&:m_id).uniq
-    people.map(&:members).flatten.select { |m| member_ids.include?(m.hbx_member_id) }
-  end
-
   def has_responsible_person?
     !self.responsible_party_id.blank?
   end
