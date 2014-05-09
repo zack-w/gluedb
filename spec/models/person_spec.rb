@@ -175,7 +175,7 @@ describe Person do
   describe 'being searched for members' do
     let(:member_ids) { ["a", "b" "c" ] }
 
-    let(:query) { PersonMemberQuery.new(member_ids) }
+    let(:query) { Queries::PersonMemberQuery.new(member_ids) }
 
     it "should search for the specified members" do
       expect(Person).to receive(:where).with(query.query)

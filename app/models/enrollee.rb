@@ -31,11 +31,11 @@ class Enrollee
   validates_inclusion_of :relationship_status_code, in: RELATIONSHIP_STATUS_CODE_LIST
 
   def person
-    PersonByHBXIDQuery.new(m_id).execute
+    Queries::PersonByHbxIdQuery.new(m_id).execute
   end
 
   def member
-    MemberByHBXIDQuery.new(m_id).execute
+    Queries::MemberByHbxIdQuery.new(m_id).execute
   end
 
   def merge_enrollee(m_enrollee, p_action)

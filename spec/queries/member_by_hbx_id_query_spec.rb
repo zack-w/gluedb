@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe MemberByHBXIDQuery do
+describe Queries::MemberByHbxIdQuery do
   let(:existing_member) { Member.new(gender: 'male') }
   let(:lookup_id) { '666' }
   let(:different_id) { '777' }
   let(:person) { Person.new(name_first: 'Joe', name_last: 'Dirt') }
 
-  let(:query) { MemberByHBXIDQuery.new(lookup_id) }
+  let(:query) { Queries::MemberByHbxIdQuery.new(lookup_id) }
 
   context 'no person has a member with the id' do
     before { person.save! }

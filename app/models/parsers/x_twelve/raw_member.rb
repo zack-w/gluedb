@@ -233,7 +233,7 @@ module Parsers
       end
 
       def check_for_member(dcas_no)
-        MemberByHBXIDQuery.new(dcas_no).execute
+        Queries::MemberByHbxIdQuery.new(dcas_no).execute
       end
     end
   end

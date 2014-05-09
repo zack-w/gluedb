@@ -88,7 +88,7 @@ class Member
   end
 
   def self.find_for_member_id(member_id)
-    MemberByHBXIDQuery.new(member_id).execute
+    Queries::MemberByHbxIdQuery.new(member_id).execute
   end
 
 protected

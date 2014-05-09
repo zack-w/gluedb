@@ -95,7 +95,7 @@ class Person
   end
 
   def self.find_for_members(member_ids)
-    PersonMemberQuery.new(member_ids).execute
+    Queries::PersonMemberQuery.new(member_ids).execute
   end
 
   def self.with_over_age_child_enrollments
@@ -147,11 +147,11 @@ class Person
   end
 
   def self.match_for_ssn(m_ssn, nf, nl, d_of_b)
-    ExistingPersonQuery.new(m_ssn, nf, d_of_b).find
+    Queries::ExistingPersonQuery.new(m_ssn, nf, d_of_b).find
   end
 
   def self.find_for_member_id(m_id)
-    PersonByHBXIDQuery.new(m_id).execute
+    Queries::PersonByHbxIdQuery.new(m_id).execute
   end
 
   def policies
