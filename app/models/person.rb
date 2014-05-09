@@ -151,9 +151,7 @@ class Person
   end
 
   def self.find_for_member_id(m_id)
-    #    Rails.cache.fetch("Person/find/members.hbx_member_id.#{m_id}") do
-    Person.where({"members.hbx_member_id" => m_id}).first
-    #    end
+    PersonByHBXIDQuery.new(m_id).execute
   end
 
   def policies
