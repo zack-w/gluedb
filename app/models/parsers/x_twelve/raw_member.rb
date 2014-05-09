@@ -233,9 +233,7 @@ module Parsers
       end
 
       def check_for_member(dcas_no)
-        person = Person.where("members.hbx_member_id" => dcas_no).first
-        return(nil) if person.blank?
-        person.nil? ? nil : (person.members.detect { |m| m.hbx_member_id == dcas_no}) 
+        MemberByHBXIDQuery.new(dcas_no).execute
       end
     end
   end

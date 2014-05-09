@@ -36,9 +36,8 @@ class Enrollee
   end
 
   def member
-    Member.find_for_member_id(self.m_id)
+    MemberByHBXIDQuery.new(m_id).execute
   end
-
 
   def merge_enrollee(m_enrollee, p_action)
     merge_without_blanking(
