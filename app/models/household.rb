@@ -16,7 +16,7 @@ class Household
   index({:aasm_state => 1})
 
   belongs_to :family, counter_cache: true
-  has_and_belongs_to_many :people, inverse_of: nil
+  has_and_belongs_to_many :people, inverse_of: nil, foreign_key: "person_ids"
   embeds_many :special_enrollment_periods, cascade_callbacks: true
   accepts_nested_attributes_for :special_enrollment_periods, reject_if: proc { |attribs| attribs['start_date'].blank? }, allow_destroy: true
 
