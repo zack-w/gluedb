@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Policy do
-it { should have_index_for(eg_id: 1) }
+  it { should have_index_for(eg_id: 1) }
 
   describe "with proper associations" do
 	  it { should belong_to :employer }
@@ -10,6 +10,55 @@ it { should have_index_for(eg_id: 1) }
 	  it { should belong_to :plan }
   end
 
+  [
+    :eg_id,
+    :preceding_enrollment_group_id,
+    :allocated_aptc,
+    :elected_aptc,
+    :applied_aptc,
+    :csr_amt,
+    :pre_amt_tot,
+    :tot_res_amt,
+    :tot_emp_res_amt,
+    :sep_reason,
+    :carrier_to_bill,
+    :aasm_state,
+    :enrollees,
+    :carrier,
+    :broker,
+    :plan,
+    :employer,
+    :responsible_party,
+    :transaction_set_enrollments,
+    :premium_payments
+  ].each do |attribute|
+    it { should respond_to attribute }
+  end
+
+  describe '#subscriber' do
+    let(:policy) { Policy.new(eg_id: '1') }
+    let(:enrollee) { Enrollee.new(m_id: '1', relationship_status_code: relationship, employment_status_code: 'active', benefit_status_code: 'active') }
+    
+    before do
+      policy.enrollees << enrollee
+      policy.save!
+    end
+    
+    context 'given no enrollees with relationship of self' do
+      let(:relationship) { 'child' }
+      it 'returns nil' do
+        expect(policy.subscriber).to eq nil
+      end
+    end
+
+    context 'given an enrollee with relationship of self' do
+      let(:relationship) { 'self' }
+      it 'returns nil' do
+        expect(policy.subscriber).to eq enrollee
+      end
+    end
+
+  end
 
 end
 
