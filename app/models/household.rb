@@ -60,13 +60,9 @@ class Household
 
   def subscriber
     #TODO - correct when household has policy association
-    people.each do |person|
-      person.members.each do |member|
-        member.enrollees.each do |enrollee|
-          if enrollee.subscriber?
-            return person
-          end
-        end
+    people.detect do |person|
+      person.members.detect do |member|
+        member.enrollees.detect(&:subscriber?) 
       end
     end
   end
