@@ -165,6 +165,28 @@ describe Policy do
       end
     end
   end
+
+  describe '#hios_plan_id' do
+    let(:policy) { Policy.new }
+    let(:plan) { Plan.new(hbx_plan_id: '666') }
+    
+    before { policy.plan = plan }
+    
+    it 'returns the policys plan hios id' do
+      expect(policy.hios_plan_id).to eq plan.hios_plan_id
+    end
+  end
+
+  describe '#coverage_type' do
+    let(:policy) { Policy.new }
+    let(:plan) { Plan.new(coverage_type: 'health') }
+    
+    before { policy.plan = plan }
+    
+    it 'returns the policys plan coverage type' do
+      expect(policy.coverage_type).to eq plan.coverage_type
+    end
+  end
 end
 
 describe Policy, "given:
