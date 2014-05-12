@@ -31,13 +31,10 @@ module Protocols
         }
         reply_properties, reply_result = client.request(xml.target!, req_headers, 5)
         if !(reply_properties.headers["result_code"] == "OK")
-          reply_queue.delete
           raise reply_properties.headers["result_code"].inspect
         end
-        event_exchange = Protocols::Amqp::Settings.event_exchange("individual")
-        event_key = Protocols::Amqp::Settings.event_key("individual", "update")
-        e_ex = ch.send(*event_exchange)
-        e_ex.publish(reply_result, :durable => true, :routing_key => event_key)
+        ev_client = ::Protocols::Amqp::EventClient.new(ch, "individual")
+        ev_client.publish("update", reply_result)
         conn.close 
       end
     end
