@@ -112,6 +112,32 @@ describe Policy do
     end
   end
 
+  describe '#edi_transaction_sets' do
+    let(:transation_set_enrollment) { Protocols::X12::TransactionSetEnrollment.new(ts_purpose_code: '00', ts_action_code: '2', ts_reference_number: '1', ts_date: '1', ts_time: '1', ts_id: '1', ts_control_number: '1', ts_implementation_convention_reference: '1', transaction_kind: 'initial_enrollment') }
+    let(:policy) { Policy.new(eg_id: '1') }
+    context 'transaction set enrollment policy id matches policys id' do
+      before do 
+        policy.save!
+        transation_set_enrollment.policy_id = policy._id
+        transation_set_enrollment.save
+      end
+      it 'returns the transation set' do
+        expect(policy.edi_transaction_sets.to_a).to eq [transation_set_enrollment]
+      end
+    end
+
+    context 'transaction set enrollment policy id does not matche policys id' do
+      before do 
+        policy.save!
+        transation_set_enrollment.policy_id = '444'
+        transation_set_enrollment.save
+      end
+      it 'returns the transation set' do
+        expect(policy.edi_transaction_sets.to_a).to eq []
+      end
+    end
+  end
+
 end
 
 describe Policy, "given:
