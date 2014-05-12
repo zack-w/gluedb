@@ -108,14 +108,11 @@ class Policy
   end
 
   def responsible_person
-    Person.where("responsible_parties._id" => Moped::BSON::ObjectId.from_string(self.responsible_party_id)).first
+    query_proxy.responsible_person
   end
 
   def people
-    Person.where({
-      "members.hbx_member_id" =>
-      { "$in" => enrollees.map(&:m_id) }
-    })
+    query_proxy.people
   end
 
   def merge_enrollee(m_enrollee, p_action)
@@ -372,6 +369,10 @@ private
 
     def filter_non_numbers(str)
       str.to_s.gsub(/\D/,'') if str.present?
+    end
+
+    def query_proxy
+      @query_proxy ||= Queries::PolicyAssociations.new(self)
     end
 
 end
