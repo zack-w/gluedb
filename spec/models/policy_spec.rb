@@ -57,7 +57,59 @@ describe Policy do
         expect(policy.subscriber).to eq enrollee
       end
     end
+  end
 
+  describe '#has_responsible_person?' do
+    let(:policy) { Policy.new(eg_id: '1') }
+    context 'no responsible party ID is set' do
+      before { policy.responsible_party_id = nil }
+
+      it 'return false' do
+        expect(policy.has_responsible_person?).to be_false
+      end
+    end
+
+    context 'responsible party ID is set' do
+      before { policy.responsible_party_id = 2 }
+
+      it 'return true' do
+        expect(policy.has_responsible_person?).to be_true
+      end
+    end
+  end
+
+  describe '#responsible_person' do
+    let(:id) { 1 }
+    let(:policy) { Policy.new(eg_id: '1') }
+    let(:person) { Person.new(name_first: 'Joe', name_last: 'Dirt') }
+    let(:responsible_party) { ResponsibleParty.new(_id: id, entity_identifier: "parent") }
+    before do
+      person.responsible_parties << responsible_party
+      person.save!
+      policy.responsible_party_id = responsible_party._id
+    end
+    it 'returns the person that has a responsible party that matches the policy responsible party id' do
+      expect(policy.responsible_person).to eq person
+    end
+  end
+
+  describe '#people' do
+    let(:policy) { Policy.new(eg_id: '1') }
+    let(:lookup_id) { '666' }
+    let(:person) { Person.new(name_first: 'Joe', name_last: 'Dirt') }
+
+    before do
+      enrollee = Enrollee.new(relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+      enrollee.m_id = lookup_id
+      policy.enrollees << enrollee
+
+      person.members << Member.new(gender: 'male', hbx_member_id: lookup_id) 
+      person.save!
+    end
+
+    it 'returns people whose members ids match the policy enrollees ids' do
+      expect(policy.people).to eq [person] 
+    end
   end
 
 end
