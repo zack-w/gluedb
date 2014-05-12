@@ -207,6 +207,50 @@ describe Policy do
       end
     end
   end
+
+  describe '.find_all_policies_for_member_id' do
+    let(:member_id) { '666' }
+    let(:policy) { Policy.new(eg_id: '1') }
+    before do
+      policy.save!
+    end
+    context 'given no policy has enrollees with the member id' do
+      it 'returns an empty array' do
+        expect(Policy.find_all_policies_for_member_id(member_id)).to eq []
+      end
+    end
+
+    context 'given policies has enrollees with the member id' do
+      before do
+        policy.enrollees << Enrollee.new(m_id: member_id, relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+        policy.save!
+      end
+      it 'returns the policies' do
+        expect(Policy.find_all_policies_for_member_id(member_id).to_a).to eq [policy]
+      end
+    end
+
+  end
+  # describe '#find_all_enrollees_for_member_id' do
+  #   let(:member_id) { '666' }
+    
+  #   context 'given no enrollees with the member id' do
+  #     it 'returns an empty array' do
+  #       expect(Policy.find_all_enrollees_for_member_id(member_id)).to eq []
+  #     end
+  #   end
+
+  #   context 'given enrollees with the member id' do
+  #     let(:policy) { Policy.new(eg_id: '1') }
+  #     before do
+  #       policy.enrollees << Enrollee.new(m_id: '666', relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+  #       policy.save!
+  #     end
+  #     it 'returns the enrollees' do
+  #       expect(Policy.find_all_enrollees_for_member_id('666')).to eq policy.enrollees
+  #     end
+  #   end
+  # end
 end
 
 describe Policy, "given:
