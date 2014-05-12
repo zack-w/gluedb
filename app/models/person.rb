@@ -155,11 +155,7 @@ class Person
   end
 
   def policies
-    Policy.where(
-      { "enrollees.m_id" =>
-        {"$in" => self.members.map(&:hbx_member_id)}
-    }
-    )
+    query_proxy.policies
   end
 
   def authority_member=(hbx_id)
@@ -305,4 +301,7 @@ class Person
     self.authority_member = members.first.hbx_member_id if members.count == 1
   end
 
+  def query_proxy
+    @query_proxy ||= Queries::PersonAssociations.new(self)
+  end
 end
