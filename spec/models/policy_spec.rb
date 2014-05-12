@@ -187,6 +187,26 @@ describe Policy do
       expect(policy.coverage_type).to eq plan.coverage_type
     end
   end
+
+  describe '#enrollee_for_member_id' do
+    let(:policy) { Policy.new }
+    context 'given there are no policy enrollees with the member id' do
+      it 'returns nil' do
+        expect(policy.enrollee_for_member_id('888')).to eq nil
+      end
+    end
+
+    context 'given a policy enrollee with the member id' do
+      let(:member_id) { '666'}
+      let(:enrollee) { Enrollee.new(m_id: member_id) }
+      
+      before { policy.enrollees << enrollee }
+
+      it 'returns the enrollee' do
+        expect(policy.enrollee_for_member_id(member_id)).to eq enrollee
+      end
+    end
+  end
 end
 
 describe Policy, "given:
