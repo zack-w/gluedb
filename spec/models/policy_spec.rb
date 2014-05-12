@@ -138,6 +138,33 @@ describe Policy do
     end
   end
 
+  describe '#merge_enrollee' do
+    let(:policy) { Policy.new(eg_id: '1') }
+    let(:enrollee) { Enrollee.new(m_id: '1', relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active') }
+
+    context 'no enrollee with member id exists' do
+      before { policy.merge_enrollee(enrollee, :stop) }
+
+      context 'action is stop' do 
+        it 'coverage_status changes to inactive' do
+          expect(enrollee.coverage_status).to eq 'inactive'
+        end
+      end
+
+      it 'adds enrollee to the policy' do
+        expect(policy.enrollees).to include(enrollee)
+      end
+    end
+
+    context 'enrollee with member id exists' do
+      before { policy.enrollees << enrollee }
+      it 'calls enrollees merge_enrollee' do
+        enrollee.stub(:merge_enrollee)
+        policy.merge_enrollee(enrollee, :stop)
+        expect(enrollee).to have_received(:merge_enrollee)
+      end
+    end
+  end
 end
 
 describe Policy, "given:
