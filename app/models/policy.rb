@@ -150,10 +150,6 @@ class Policy
     self.plan.coverage_type
   end
 
-  def employer_group
-    Employer.elem_match(employer_groups: {hbx_carrier_id: carrier_id })
-  end
-
   def enrollee_for_member_id(m_id)
     self.enrollees.detect { |en| en.m_id == m_id }
   end
