@@ -162,12 +162,6 @@ class Policy
     [[:eg_id, 1]]
   end
 
-  def self.find_all_enrollees_for_member_id(m_id)
-    Enrollee.where(
-      "m_id" => m_id
-    )
-  end  
-
   def self.find_all_policies_for_member_id(m_id)
     self.where(
       "enrollees.m_id" => m_id
