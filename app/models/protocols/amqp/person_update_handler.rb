@@ -20,28 +20,16 @@ module Protocols
         conn.start
         ch = conn.create_channel
         ex = ch.send(*transform_exchange)
-        reply_queue = ch.queue
         # TODO: send to the right place, with the transformation XSL
-        ex.publish( xml.target!,
+        client = ::Protocols::Amqp::RpcClient.new(ex, chan)
+        req_headers = {
                     :durable => true,
                     :routing_key => transform_key,
-                    :reply_to => reply_queue.name,
                     :headers => {
                       :transform => message_ns
                     }
-                  )
-        reply_properties = nil
-        reply_result = nil
-        timeout(5) {
-          consumer = Bunny::Consumer.new(ch, reply_queue)
-          consumer.on_delivery do |delivery_info, properties, payload|
-            reply_properties = properties
-            reply_result = payload
-            consumer.cancel
-            throw :terminate, "cancelled because of response"
-          end
-          reply_queue.subscribe_with(consumer, :block => true)
         }
+        reply_properties, reply_result = client.request(xml.target!, req_headers, 5)
         if !(reply_properties.headers["result_code"] == "OK")
           reply_queue.delete
           raise reply_properties.headers["result_code"].inspect
@@ -50,7 +38,6 @@ module Protocols
         event_key = Protocols::Amqp::Settings.event_key("individual", "update")
         e_ex = ch.send(*event_exchange)
         e_ex.publish(reply_result, :durable => true, :routing_key => event_key)
-        reply_queue.delete
         conn.close 
       end
     end
