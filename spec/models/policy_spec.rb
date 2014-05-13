@@ -249,6 +249,17 @@ describe Policy do
       expect(Policy.find_by_sub_and_plan(member_id, plan._id)).to eq policy
     end
   end
+
+  describe '.find_by_subkeys' do
+    let(:eg_id) { '1' }
+    let(:carrier_id) { '2' }
+    let(:plan_id) { '3' }
+    let(:policy) { Policy.create!(eg_id: eg_id, carrier_id: carrier_id, plan_id: plan_id) }
+
+    it 'finds policy by eg_id, carrier_id, and plan_id' do
+      expect(Policy.find_by_subkeys(eg_id, carrier_id, plan_id)).to eq policy
+    end
+  end
 end
 
 describe Policy, "given:
