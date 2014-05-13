@@ -312,6 +312,29 @@ describe Policy do
     end
   end
 
+  describe '#check_for_cancel_or_term' do
+    let(:policy) { Policy.new(eg_id: '1') }
+    let(:subscriber) { Enrollee.new(relationship_status_code: 'self') }
+    before { policy.enrollees << subscriber }
+
+    context 'subscriber is canceled' do
+      before { subscriber.stub(:canceled?) { true }}
+      it 'sets policy as canceled' do
+        policy.check_for_cancel_or_term
+        expect(policy.aasm_state).to eq 'canceled'
+      end
+    end
+
+    context 'subscriber is terminated' do
+      before { subscriber.stub(:terminated?) { true }}
+      it 'sets policy as terminated' do
+        policy.check_for_cancel_or_term
+        expect(policy.aasm_state).to eq 'terminated'
+      end
+    end
+
+  end
+
 end
 
 describe Policy, "given:
