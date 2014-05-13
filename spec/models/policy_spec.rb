@@ -138,7 +138,230 @@ describe Policy do
     end
   end
 
+  describe '#merge_enrollee' do
+    let(:policy) { Policy.new(eg_id: '1') }
+    let(:enrollee) { Enrollee.new(m_id: '1', relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active') }
+
+    context 'no enrollee with member id exists' do
+      before { policy.merge_enrollee(enrollee, :stop) }
+
+      context 'action is stop' do 
+        it 'coverage_status changes to inactive' do
+          expect(enrollee.coverage_status).to eq 'inactive'
+        end
+      end
+
+      it 'adds enrollee to the policy' do
+        expect(policy.enrollees).to include(enrollee)
+      end
+    end
+
+    context 'enrollee with member id exists' do
+      before { policy.enrollees << enrollee }
+      it 'calls enrollees merge_enrollee' do
+        enrollee.stub(:merge_enrollee)
+        policy.merge_enrollee(enrollee, :stop)
+        expect(enrollee).to have_received(:merge_enrollee)
+      end
+    end
+  end
+
+  describe '#hios_plan_id' do
+    let(:policy) { Policy.new }
+    let(:plan) { Plan.new(hbx_plan_id: '666') }
+    
+    before { policy.plan = plan }
+    
+    it 'returns the policys plan hios id' do
+      expect(policy.hios_plan_id).to eq plan.hios_plan_id
+    end
+  end
+
+  describe '#coverage_type' do
+    let(:policy) { Policy.new }
+    let(:plan) { Plan.new(coverage_type: 'health') }
+    
+    before { policy.plan = plan }
+    
+    it 'returns the policys plan coverage type' do
+      expect(policy.coverage_type).to eq plan.coverage_type
+    end
+  end
+
+  describe '#enrollee_for_member_id' do
+    let(:policy) { Policy.new }
+    context 'given there are no policy enrollees with the member id' do
+      it 'returns nil' do
+        expect(policy.enrollee_for_member_id('888')).to eq nil
+      end
+    end
+
+    context 'given a policy enrollee with the member id' do
+      let(:member_id) { '666'}
+      let(:enrollee) { Enrollee.new(m_id: member_id) }
+      
+      before { policy.enrollees << enrollee }
+
+      it 'returns the enrollee' do
+        expect(policy.enrollee_for_member_id(member_id)).to eq enrollee
+      end
+    end
+  end
+
+  describe '.find_all_policies_for_member_id' do
+    let(:member_id) { '666' }
+    let(:policy) { Policy.new(eg_id: '1') }
+    before do
+      policy.save!
+    end
+    context 'given no policy has enrollees with the member id' do
+      it 'returns an empty array' do
+        expect(Policy.find_all_policies_for_member_id(member_id)).to eq []
+      end
+    end
+
+    context 'given policies has enrollees with the member id' do
+      before do
+        policy.enrollees << Enrollee.new(m_id: member_id, relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+        policy.save!
+      end
+      it 'returns the policies' do
+        expect(Policy.find_all_policies_for_member_id(member_id).to_a).to eq [policy]
+      end
+    end
+  end
+
+  describe '.find_by_sub_and_plan' do
+    it 'finds policies matching subscriber member id and plan id' do
+      member_id = '666'
+      plan = Plan.new(coverage_type: 'health')
+      policy = Policy.new(eg_id: '1')
+      subscriber = Enrollee.new(m_id: member_id, rel_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+
+      policy.enrollees << subscriber
+      
+      plan.policies << policy # policy.plan = plan
+
+      policy.save!
+
+      plan.save!
+
+      expect(Policy.find_by_sub_and_plan(member_id, plan._id)).to eq policy
+    end
+  end
+
+  describe '.find_by_subkeys' do
+    let(:eg_id) { '1' }
+    let(:carrier_id) { '2' }
+    let(:plan_id) { '3' }
+    let(:policy) { Policy.new(eg_id: eg_id, carrier_id: carrier_id, plan_id: plan_id) }
+    before { policy.save! }
+    it 'finds policy by eg_id, carrier_id, and plan_id' do
+      expect(Policy.find_by_subkeys(eg_id, carrier_id, plan_id)).to eq policy
+    end
+  end
+
+  describe '.find_or_update_policy' do
+    let(:eg_id) { '1' }
+    let(:carrier_id) { '2' }
+    let(:plan_id) { '3' }
+    let(:policy) { Policy.new(enrollment_group_id: eg_id, carrier_id: carrier_id, plan_id: plan_id)}
+    let(:responsible_party_id) { '1' }
+    let(:employer_id) { '2' }
+    let(:broker_id) { '3' }
+    let(:applied_aptc) { 1.0 }
+    let(:tot_res_amt) { 1.0 }
+    let(:pre_amt_tot) { 1.0 }
+    let(:employer_contribution) { 1.0 }
+    let(:carrier_to_bill) { true }
+
+    before do
+      policy.responsible_party_id = responsible_party_id
+      policy.employer_id = employer_id
+      policy.broker_id = broker_id
+      policy.applied_aptc = applied_aptc
+      policy.tot_res_amt = tot_res_amt
+      policy.pre_amt_tot = pre_amt_tot
+      policy.employer_contribution = employer_contribution
+      policy.carrier_to_bill = carrier_to_bill
+    end
+    context 'given policy exists' do
+      let(:existing_policy) { Policy.new(eg_id: eg_id, carrier_id: carrier_id, plan_id: plan_id) }
+      before { existing_policy.save! }
+      it 'finds and updates the policy' do
+        found_policy = Policy.find_or_update_policy(policy)
+
+        expect(found_policy).to eq existing_policy
+        
+        expect(found_policy.responsible_party_id).to eq responsible_party_id
+        expect(found_policy.employer_id).to eq employer_id
+        expect(found_policy.broker_id).to eq broker_id
+        expect(found_policy.applied_aptc).to eq applied_aptc
+        expect(found_policy.tot_res_amt).to eq tot_res_amt
+        expect(found_policy.pre_amt_tot).to eq pre_amt_tot
+        expect(found_policy.employer_contribution).to eq employer_contribution
+        expect(found_policy.carrier_to_bill).to eq carrier_to_bill
+      end
+    end
+
+    context 'given no policy exists' do
+      it 'saves the policy' do
+        found_policy = Policy.find_or_update_policy(policy)
+        expect(found_policy.persisted?).to eq true
+      end
+    end
+  end
+
+  describe '#check_for_cancel_or_term' do
+    let(:policy) { Policy.new(eg_id: '1') }
+    let(:subscriber) { Enrollee.new(relationship_status_code: 'self') }
+    before { policy.enrollees << subscriber }
+
+    context 'subscriber is canceled' do
+      before { subscriber.stub(:canceled?) { true }}
+      it 'sets policy as canceled' do
+        policy.check_for_cancel_or_term
+        expect(policy.aasm_state).to eq 'canceled'
+      end
+    end
+
+    context 'subscriber is terminated' do
+      before { subscriber.stub(:terminated?) { true }}
+      it 'sets policy as terminated' do
+        policy.check_for_cancel_or_term
+        expect(policy.aasm_state).to eq 'terminated'
+      end
+    end
+  end
+
+  describe '.find_covered_in_range' do
+    it 'finds non-canceled policies whose subscriber coverage dates are in range' do
+      start_date = Date.new(2014, 1, 1)
+      end_date = Date.new(2014,1,31)
+
+      policy_in_range = Policy.new(eg_id: '1')
+      enrollee = Enrollee.new(m_id: '1', relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+      enrollee.coverage_start = start_date.next_day
+      enrollee.coverage_end = end_date.prev_day
+      policy_in_range.enrollees << enrollee
+      policy_in_range.save!
+
+
+      policy_out_of_range = Policy.new(eg_id: '1')
+      enrollee = Enrollee.new(m_id: '1', relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+      enrollee.coverage_start = start_date.prev_year
+      enrollee.coverage_end = end_date.prev_year
+      policy_out_of_range.enrollees << enrollee
+      policy_out_of_range.save!
+
+
+      policies = Policy.find_covered_in_range(start_date, end_date)
+      expect(policies).to include policy_in_range
+      expect(policies).not_to include policy_out_of_range
+    end
+  end
 end
+
 
 describe Policy, "given:
   - a subscriber with id 454321
