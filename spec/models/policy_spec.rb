@@ -295,7 +295,7 @@ describe Policy do
     context 'given no policy exists' do
       it 'saves the policy' do
         found_policy = Policy.find_or_update_policy(policy)
-        expect(Policy.find(found_policy._id)).not_to eq nil
+        expect(found_policy.persisted?).to eq true
       end
     end
   end
