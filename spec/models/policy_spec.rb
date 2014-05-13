@@ -254,12 +254,52 @@ describe Policy do
     let(:eg_id) { '1' }
     let(:carrier_id) { '2' }
     let(:plan_id) { '3' }
-    let(:policy) { Policy.create!(eg_id: eg_id, carrier_id: carrier_id, plan_id: plan_id) }
-
+    let(:policy) { Policy.new(eg_id: eg_id, carrier_id: carrier_id, plan_id: plan_id) }
+    before { policy.save! }
     it 'finds policy by eg_id, carrier_id, and plan_id' do
       expect(Policy.find_by_subkeys(eg_id, carrier_id, plan_id)).to eq policy
     end
   end
+
+  describe '.find_or_update_policy' do
+    let(:policy) { Policy.new(enrollment_group_id: '1', carrier_id: '2', plan_id: '3')}
+    before do
+      policy.responsible_party_id = '1'
+      policy.employer_id = '2'
+      policy.broker_id = '3'
+      policy.applied_aptc = 1.0
+      policy.tot_res_amt = 1.0
+      policy.pre_amt_tot = 1.0
+      policy.employer_contribution = 1.0
+      policy.carrier_to_bill = true
+    end
+    context 'given policy exists' do
+      let(:existing_policy) { Policy.new(eg_id: '1', carrier_id: '2', plan_id: '3') }
+      before { existing_policy.save! }
+      it 'finds and updates the policy' do
+        found_policy = Policy.find_or_update_policy(policy)
+
+        expect(found_policy).to eq existing_policy
+        
+        expect(found_policy.responsible_party_id).to eq '1'
+        expect(found_policy.employer_id).to eq '2'
+        expect(found_policy.broker_id).to eq '3'
+        expect(found_policy.applied_aptc).to eq 1.0
+        expect(found_policy.tot_res_amt).to eq 1.0
+        expect(found_policy.pre_amt_tot).to eq 1.0
+        expect(found_policy.employer_contribution).to eq 1.0
+        expect(found_policy.carrier_to_bill).to eq true
+      end
+    end
+
+    context 'given no policy exists' do
+      it 'saves the policy' do
+        found_policy = Policy.find_or_update_policy(policy)
+        expect(Policy.find(found_policy._id)).not_to eq nil
+      end
+    end
+  end
+
 end
 
 describe Policy, "given:
