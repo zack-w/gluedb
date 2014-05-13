@@ -332,10 +332,36 @@ describe Policy do
         expect(policy.aasm_state).to eq 'terminated'
       end
     end
-
   end
 
+  describe '.find_covered_in_range' do
+    it 'finds non-canceled policies whose subscriber coverage dates are in range' do
+      start_date = Date.new(2014, 1, 1)
+      end_date = Date.new(2014,1,31)
+
+      policy_in_range = Policy.new(eg_id: '1')
+      enrollee = Enrollee.new(m_id: '1', relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+      enrollee.coverage_start = start_date.next_day
+      enrollee.coverage_end = end_date.prev_day
+      policy_in_range.enrollees << enrollee
+      policy_in_range.save!
+
+
+      policy_out_of_range = Policy.new(eg_id: '1')
+      enrollee = Enrollee.new(m_id: '1', relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active')
+      enrollee.coverage_start = start_date.prev_year
+      enrollee.coverage_end = end_date.prev_year
+      policy_out_of_range.enrollees << enrollee
+      policy_out_of_range.save!
+
+
+      policies = Policy.find_covered_in_range(start_date, end_date)
+      expect(policies).to include policy_in_range
+      expect(policies).not_to include policy_out_of_range
+    end
+  end
 end
+
 
 describe Policy, "given:
   - a subscriber with id 454321
