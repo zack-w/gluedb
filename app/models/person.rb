@@ -95,7 +95,7 @@ class Person
   end
 
   def self.find_for_members(member_ids)
-    PersonMemberQuery.new(member_ids).execute
+    Queries::PersonMemberQuery.new(member_ids).execute
   end
 
   def self.with_over_age_child_enrollments
@@ -147,21 +147,15 @@ class Person
   end
 
   def self.match_for_ssn(m_ssn, nf, nl, d_of_b)
-    ExistingPersonQuery.new(m_ssn, nf, d_of_b).find
+    Queries::ExistingPersonQuery.new(m_ssn, nf, d_of_b).find
   end
 
   def self.find_for_member_id(m_id)
-    #    Rails.cache.fetch("Person/find/members.hbx_member_id.#{m_id}") do
-    Person.where({"members.hbx_member_id" => m_id}).first
-    #    end
+    Queries::PersonByHbxIdQuery.new(m_id).execute
   end
 
   def policies
-    Policy.where(
-      { "enrollees.m_id" =>
-        {"$in" => self.members.map(&:hbx_member_id)}
-    }
-    )
+    query_proxy.policies
   end
 
   def authority_member=(hbx_id)
@@ -307,4 +301,7 @@ class Person
     self.authority_member = members.first.hbx_member_id if members.count == 1
   end
 
+  def query_proxy
+    @query_proxy ||= Queries::PersonAssociations.new(self)
+  end
 end

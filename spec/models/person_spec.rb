@@ -175,7 +175,7 @@ describe Person do
   describe 'being searched for members' do
     let(:member_ids) { ["a", "b" "c" ] }
 
-    let(:query) { PersonMemberQuery.new(member_ids) }
+    let(:query) { Queries::PersonMemberQuery.new(member_ids) }
 
     it "should search for the specified members" do
       expect(Person).to receive(:where).with(query.query)
@@ -292,6 +292,35 @@ describe Person do
         person = Person.new
         person.emails << Email.new(email_type: 'work')
         expect(person.home_email).to be_nil
+      end
+    end
+  end
+
+  describe '.find_for_member_id' do
+    let(:person) { Person.new(name_first: 'Joe', name_last: 'Dirt') }
+    let(:member) { Member.new(gender: 'male') }
+    let(:lookup_id) { '666' }
+    let(:different_id) { '777'}
+    context 'no person has members with the hbx id' do
+      before do
+        member.hbx_member_id = different_id
+        person.members << member
+        person.save!
+      end
+
+      it 'returns nil' do
+        expect(Person.find_for_member_id(lookup_id)).to eq nil
+      end
+    end
+
+    context 'person has members with the hbx id' do
+      before do
+        member.hbx_member_id = lookup_id
+        person.members << member
+        person.save!
+      end
+      it 'returns the person' do
+        expect(Person.find_for_member_id(lookup_id)).to eq person
       end
     end
   end

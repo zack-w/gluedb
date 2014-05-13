@@ -88,9 +88,7 @@ class Member
   end
 
   def self.find_for_member_id(member_id)
-    per = Person.where({"members.hbx_member_id" => member_id}).first
-    return nil if per.nil?
-    per.members.detect { |m| m.hbx_member_id == member_id }
+    Queries::MemberByHbxIdQuery.new(member_id).execute
   end
 
 protected

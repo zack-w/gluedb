@@ -103,24 +103,16 @@ class Policy
     enrollees.detect { |m| m.relationship_status_code == "self" }
   end
 
-  def members
-    member_ids = enrollees.map(&:m_id).uniq
-    people.map(&:members).flatten.select { |m| member_ids.include?(m.hbx_member_id) }
-  end
-
   def has_responsible_person?
     !self.responsible_party_id.blank?
   end
 
   def responsible_person
-    Person.where("responsible_parties._id" => Moped::BSON::ObjectId.from_string(self.responsible_party_id)).first
+    query_proxy.responsible_person
   end
 
   def people
-    Person.where({
-      "members.hbx_member_id" =>
-      { "$in" => enrollees.map(&:m_id) }
-    })
+    query_proxy.people
   end
 
   def merge_enrollee(m_enrollee, p_action)
@@ -158,10 +150,6 @@ class Policy
     self.plan.coverage_type
   end
 
-  def employer_group
-    Employer.elem_match(employer_groups: {hbx_carrier_id: carrier_id })
-  end
-
   def enrollee_for_member_id(m_id)
     self.enrollees.detect { |en| en.m_id == m_id }
   end
@@ -173,12 +161,6 @@ class Policy
   def self.default_search_order
     [[:eg_id, 1]]
   end
-
-  def self.find_all_enrollees_for_member_id(m_id)
-    Enrollee.where(
-      "m_id" => m_id
-    )
-  end  
 
   def self.find_all_policies_for_member_id(m_id)
     self.where(
@@ -377,6 +359,10 @@ private
 
     def filter_non_numbers(str)
       str.to_s.gsub(/\D/,'') if str.present?
+    end
+
+    def query_proxy
+      @query_proxy ||= Queries::PolicyAssociations.new(self)
     end
 
 end

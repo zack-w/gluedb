@@ -105,6 +105,10 @@ end
     "$2a$10$CGPndVtDB9HlEuog3o9m3uhOTHpAR0eRf2Hq84xwIIhqqDYoG0IRS"
   )
   add_a_user(
-    "heather.parker@dc.gov",
-    "$2a$10$/9hyQU0up7tk.LQkFUouSul7d.3ChweDK/bApr3DuLGxxKZdBsBMK"
+    "candice.hammonds@dc.gov",
+    "$2a$10$HjM8G3VcDLEBUlRlDCsGQOuGwtZuzRr/fEBiPOejsBokX2B4OiTTu"
+  )
+  add_a_user(
+    "selamawit.teka@dc.gov",
+    "$2a$10$Fm07ib6e7GM0VrmNQaq6UuwsewwgfD7TIV79btkjEnIgDVTCHwrDO"
   )

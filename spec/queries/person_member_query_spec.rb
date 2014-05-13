@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe PersonMemberQuery do
+describe Queries::PersonMemberQuery do
 
   let(:member_ids) { [1, 2] }
 
-  subject { PersonMemberQuery.new(member_ids) }
+  subject { Queries::PersonMemberQuery.new(member_ids) }
 
   its(:query) { should eq({   
     "members" => {

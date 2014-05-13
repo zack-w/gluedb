@@ -301,7 +301,8 @@ module Parsers
         # Specified as group
         if emp_seg[3] == "94"
           employer = Employer.find_for_carrier_and_group_id(carrier_id, emp_seg[4])
-        else
+        end
+        if employer.nil?
           new_employer = Employer.new(
             :name => emp_seg[2],
             :fein => emp_seg[4]
