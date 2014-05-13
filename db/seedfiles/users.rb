@@ -108,3 +108,7 @@ end
     "candice.hammonds@dc.gov",
     "$2a$10$HjM8G3VcDLEBUlRlDCsGQOuGwtZuzRr/fEBiPOejsBokX2B4OiTTu"
   )
+  add_a_user(
+    "selamawit.teka@dc.gov",
+    "$2a$10$Fm07ib6e7GM0VrmNQaq6UuwsewwgfD7TIV79btkjEnIgDVTCHwrDO"
+  )
