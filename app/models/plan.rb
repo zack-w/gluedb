@@ -21,7 +21,7 @@ class Plan
   validates_inclusion_of :coverage_type, in: ["health", "dental"]
 
 	belongs_to :carrier, index: true
-  has_many :policies
+  has_many :policies, :inverse_of => :plan
   has_and_belongs_to_many :employers
 
   before_save :invalidate_find_cache
