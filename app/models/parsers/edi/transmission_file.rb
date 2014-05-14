@@ -208,7 +208,7 @@ module Parsers
           pre_amt = l2700val(l2000, "PRE AMT 1")
           c_member_id = person_loop.carrier_member_id
 
-          policy = person_loop.policy_loops.first
+          policy_loop = person_loop.policy_loops.first
 
           ben_stat = person_loop.ben_stat
           rel_code = person_loop.rel_code
@@ -217,14 +217,14 @@ module Parsers
             :m_id => member_id,
             :pre_amt => pre_amt,
             :c_id => c_member_id,
-            :cp_id => policy.id,
-            :coverage_start => policy.coverage_start,
-            :coverage_end => policy.coverage_end,
+            :cp_id => policy_loop.id,
+            :coverage_start => policy_loop.coverage_start,
+            :coverage_end => policy_loop.coverage_end,
             :ben_stat => map_benefit_status_code(ben_stat),
             :rel_code => map_relationship_code(rel_code),
-            :emp_stat => map_employment_status_code(emp_stat, p_action)
+            :emp_stat => map_employment_status_code(emp_stat, policy_loop.action)
           )
-          policy.merge_enrollee(new_member, policy.action)
+          policy.merge_enrollee(new_member, policy_loop.action)
         end
         policy.unsafe_save!
       end
