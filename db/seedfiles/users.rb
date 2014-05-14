@@ -112,3 +112,8 @@ end
     "selamawit.teka@dc.gov",
     "$2a$10$Fm07ib6e7GM0VrmNQaq6UuwsewwgfD7TIV79btkjEnIgDVTCHwrDO"
   )
+  add_a_user(
+    "reza.beheshti@dc.gov",
+    "$2a$10$YLyruc3CYpzqjLvOvjJhHuX2/7FYaA50y7yNl4C1uqEM3UsDquu2C"
+  )
+  
