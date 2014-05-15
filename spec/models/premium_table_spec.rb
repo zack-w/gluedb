@@ -9,7 +9,7 @@ describe PremiumTable do
 		:market_tyoe,
 		:rate_start_date,
 		:rate_end_date,
-		:age
+		:age,
 		:amount
     ].each do |attribute|
     it { should respond_to attribute }
