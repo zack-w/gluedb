@@ -244,14 +244,12 @@ module Parsers
       end
 
       def persist_broker_get_id(etf_loop)
-        broker_loop = etf_loop["L1000C"]
-        return nil if broker_loop.blank?
-        broker_name = broker_loop["N1"][2]
-        broker_npn = broker_loop["N1"][4]
-        return nil if broker_npn.blank?
+        broker_loop = Etf::BrokerLoop.new(etf_loop["L1000C"])
+        return nil if !broker_loop.valid?
+
         new_broker = Broker.new(
-          :name => broker_name,
-          :npn => broker_npn,
+          :name => broker_loop.name,
+          :npn => broker_loop.npn,
           :b_type => "broker"
         )
         broker = Broker.find_or_create_broker(new_broker)
