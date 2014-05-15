@@ -11,18 +11,23 @@ class Plan
   field :hios_plan_id, type: String
   field :coverage_type, type: String
   field :metal_level, type: String
+  field :market_type, type: String 
   field :ehb, as: :ehb_max_as_percent, type: BigDecimal, default: 0.0
 
   index({ hbx_plan_id: 1 }, { unique: true, name: "exchange_plan_id_index" })
 	index({ hios_plan_id: 1 }, { unique: false, name: "hios_plan_id_index" })
-  index({ coverage_type: 1})
-  index({ metal_level: 1})
+  index({ coverage_type: 1 })
+  index({ metal_level: 1 })
+  index({ market_type: 1 })
 
   validates_inclusion_of :coverage_type, in: ["health", "dental"]
+  validates_inclusion_of :market_type, in: ["individual", "shop"]
+
 
 	belongs_to :carrier, index: true
   has_many :policies, :inverse_of => :plan
   has_and_belongs_to_many :employers
+  embeds_many :premium_tables
 
   before_save :invalidate_find_cache
 
