@@ -207,61 +207,26 @@ module Parsers
           member_id = person_loop.member_id
           pre_amt = l2700val(l2000, "PRE AMT 1")
           c_member_id = person_loop.carrier_member_id
-          c_policy_id = nil
-          c_pol_node = l2000["L2300s"].first["REFs"].detect do |r|
-            r[1] == "X9"
-          end
-          if !c_pol_node.blank?
-            c_policy_id = c_pol_node[2]
-          end
-          bgn_date = nil
-          bgn_node = l2000["L2300s"].first["DTPs"].detect do |dtp|
-            dtp[1] == "348"
-          end
-          if bgn_node
-            bgn_date = bgn_node[3]
-          end
-          bgn_end = nil
-          bgn_end_node = l2000["L2300s"].first["DTPs"].detect do |dtp|
-            dtp[1] == "349"
-          end
-          if bgn_end_node
-            bgn_end = bgn_end_node[3]
-          end
+
+          policy_loop = person_loop.policy_loops.first
+
           ben_stat = person_loop.ben_stat
           rel_code = person_loop.rel_code
           emp_stat = person_loop.emp_stat
-          p_action = determine_policy_action(l2000["L2300s"].first)
           new_member = Enrollee.new(
             :m_id => member_id,
             :pre_amt => pre_amt,
             :c_id => c_member_id,
-            :cp_id => c_policy_id,
-            :coverage_start => bgn_date,
-            :coverage_end => bgn_end,
+            :cp_id => policy_loop.id,
+            :coverage_start => policy_loop.coverage_start,
+            :coverage_end => policy_loop.coverage_end,
             :ben_stat => map_benefit_status_code(ben_stat),
             :rel_code => map_relationship_code(rel_code),
-            :emp_stat => map_employment_status_code(emp_stat, p_action)
+            :emp_stat => map_employment_status_code(emp_stat, policy_loop.action)
           )
-          policy.merge_enrollee(new_member, p_action)
+          policy.merge_enrollee(new_member, policy_loop.action)
         end
         policy.unsafe_save!
-      end
-
-      def determine_policy_action(l2300)
-        action_val = l2300["HD"][1].strip
-        case action_val
-        when "001"
-          :change
-        when "024"
-          :stop
-        when "030"
-          :audit
-        when "025"
-          :reinstate
-        else
-          :add
-        end
       end
 
       def persist_responsible_party_get_id(etf_loop)
@@ -279,14 +244,12 @@ module Parsers
       end
 
       def persist_broker_get_id(etf_loop)
-        broker_loop = etf_loop["L1000C"]
-        return nil if broker_loop.blank?
-        broker_name = broker_loop["N1"][2]
-        broker_npn = broker_loop["N1"][4]
-        return nil if broker_npn.blank?
+        broker_loop = Etf::BrokerLoop.new(etf_loop["L1000C"])
+        return nil if !broker_loop.valid?
+
         new_broker = Broker.new(
-          :name => broker_name,
-          :npn => broker_npn,
+          :name => broker_loop.name,
+          :npn => broker_loop.npn,
           :b_type => "broker"
         )
         broker = Broker.find_or_create_broker(new_broker)

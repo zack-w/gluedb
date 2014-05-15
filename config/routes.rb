@@ -39,13 +39,11 @@ Gluedb::Application.routes.draw do
     end
   end
 
-  resources :families do
+  resources :application_groups do
     get 'page/:page', :action => :index, :on => :collection
+    resources :households
   end
 
-  resources :households do
-    get 'page/:page', :action => :index, :on => :collection
-  end
 
   resources :users
   resources :policies

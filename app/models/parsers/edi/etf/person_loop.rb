@@ -39,7 +39,17 @@ module Parsers
         def subscriber?
           @subscriber ||= (@loop["INS"][2].strip == "18")
         end
+
+        def policy_loops
+          loops = []
+          @loop["L2300s"].each do |raw_loop|
+            loops << PolicyLoop.new(raw_loop)
+          end
+          loops
+        end
       end
     end
   end
 end
+
+

@@ -3,22 +3,21 @@ class Household
   include Mongoid::Timestamps
   include Mongoid::Versioning
   include Mongoid::Paranoia
-  include AASM
 
 
 #  field :rel, as: :relationship, type: String
-  field :aasm_state, type: String
   field :active, type: Boolean, default: true   # Household active on the Exchange?
+  field :relationships, type: Array, default: []
   field :notes, type: String
 
 #  validates :rel, presence: true, inclusion: {in: %w( subscriber responsible_party spouse life_partner child ward )}
 
-  index({:aasm_state => 1})
+  belongs_to :application_group, counter_cache: true
+  has_many :people
+  has_and_belongs_to_many :policies, inverse_of: nil
 
-  belongs_to :family, counter_cache: true
-  has_and_belongs_to_many :people, inverse_of: nil, foreign_key: "person_ids"
-  embeds_many :special_enrollment_periods, cascade_callbacks: true
-  accepts_nested_attributes_for :special_enrollment_periods, reject_if: proc { |attribs| attribs['start_date'].blank? }, allow_destroy: true
+  embeds_many :person_relationships
+  accepts_nested_attributes_for :person_relationships, reject_if: proc { |attribs| attribs['subject_person', 'relationship_kind', 'primary_person'].blank? }, allow_destroy: true
 
   embeds_many :eligibilities
   accepts_nested_attributes_for :eligibilities, reject_if: proc { |attribs| attribs['date_determined'].blank? }, allow_destroy: true
@@ -32,16 +31,6 @@ class Household
     }).first
     return(nil) if found
     self.create!( :people => the_people )
-  end
-
-  # List of SEPs active for this Household on this or specified date
-  def active_seps(day = Date.today)
-    special_enrollment_periods.find_all { |sep| (sep.start_date..sep.end_date).include?(day) }
-  end
-
-  # single SEP with latest end date from list of active SEPs
-  def current_sep
-    active_seps.max { |sep| sep.end_date }
   end
 
   def current_eligibility
@@ -64,25 +53,6 @@ class Household
       person.members.detect do |member|
         member.enrollees.detect(&:subscriber?) 
       end
-    end
-  end
-
-  aasm do
-    state :closed_enrollment, initial: true
-    state :open_enrollment_period
-    state :special_enrollment_period
-
-    event :open_enrollment do
-      transitions from: [:closed_enrollment, :special_enrollment_period, :open_enrollment_period], to: :open_enrollment_period
-    end
-
-    # TODO - what are rules around special enrollments that extend past open enrollment?
-    event :special_enrollment do
-      transitions from: [:closed_enrollment, :open_enrollment_period, :special_enrollment_period], to: :special_enrollment_period
-    end
-
-    event :close_enrollment do
-      transitions from: [:open_enrollment_period, :special_enrollment_period, :closed_enrollment], to: :closed_enrollment
     end
   end
 
