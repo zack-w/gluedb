@@ -116,4 +116,7 @@ end
     "reza.beheshti@dc.gov",
     "$2a$10$YLyruc3CYpzqjLvOvjJhHuX2/7FYaA50y7yNl4C1uqEM3UsDquu2C"
   )
-  
+  add_a_user(
+    "heather.parker@dc.gov",
+    "$2a$10$w1n6u5XErDHiblHZCi7wqOIfVnD3Q5rVqRdvvsy26roVUmp0BwwE."
+  )
