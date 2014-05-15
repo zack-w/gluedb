@@ -21,7 +21,7 @@ class Plan
   index({ market_type: 1 })
 
   validates_inclusion_of :coverage_type, in: ["health", "dental"]
-  validates_inclusion_of :market_type, in: ["individual", "shop"]
+#  validates_inclusion_of :market_type, in: ["individual", "shop"]
 
 
 	belongs_to :carrier, index: true

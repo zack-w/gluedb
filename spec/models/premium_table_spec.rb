@@ -6,7 +6,6 @@ describe PremiumTable do
   end
 
 	[
-		:market_tyoe,
 		:rate_start_date,
 		:rate_end_date,
 		:age,

@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Household do
   describe "validate associations" do
-	  it { should have_and_belong_to_many  :people }
-	  it { should embed_many :special_enrollment_periods }
+#	  it { should have_and_belong_to_many  :people }
+#	  it { should embed_many :special_enrollment_periods }
 	  it { should embed_many :eligibilities }
   end
 
@@ -22,7 +22,7 @@ describe Household do
   	expect(hh.max_aptc).to eq(287.95)
   	expect(hh.csr_percent).to eq(0.73)
   end
-
+=begin
   it "returns list of SEPs for specified day and single 'current_sep'" do
   	hh = Household.new(
   			special_enrollment_periods: [
@@ -110,8 +110,8 @@ describe Household do
 
 		it "change Household state when System date enters or exits current_sep range" do
 		end
-
   end
+=end
 
   describe "being found or created using a list of people" do
 
