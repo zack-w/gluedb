@@ -64,3 +64,14 @@ given:
   it { should be_subscriber }
 
 end
+
+describe Parsers::Edi::Etf::PersonLoop do
+  describe 'policy_loops' do
+    let(:raw_policy_loop) { Hash.new }
+    let(:raw_loop) { { "L2300s" => [raw_policy_loop, raw_policy_loop, raw_policy_loop] } }
+    let(:person_loop) { Parsers::Edi::Etf::PersonLoop.new(raw_loop)}
+    it 'returns a collection of policy loop instances' do
+      expect(person_loop.policy_loops.count).to eq(raw_loop['L2300s'].count)
+    end
+  end
+end
