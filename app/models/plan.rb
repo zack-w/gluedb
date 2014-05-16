@@ -43,4 +43,11 @@ class Plan
       ).first
     end
   end
+
+  # Provide premium rate given the rate schedule, date coverage will start, and applicant age when coverage starts
+  def rate(rate_period_date, benefit_begin_date, birth_date)
+    age = Ager.new(birth_date).age_as_of(benefit_begin_date)
+    premiums = Collections::Premiums.new(self.premium_tables).for_date(rate_period_date).for_age(age)
+    premiums.to_a.first.amount
+  end
 end
