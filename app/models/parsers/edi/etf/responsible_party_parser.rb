@@ -48,8 +48,22 @@ module Parsers
             end
             new_person.addresses << new_address
           end
-          
-          new_person.save!
+          persist_and_give_rp_id(new_person, new_rp)
+        end
+
+        def persist_and_give_rp_id(new_person, new_rp)
+          query = Queries::ExistingResponsibleParty.new(new_person)
+          existing_person = query.execute
+          if existing_person.nil?
+            new_person.save!
+            return new_rp._id 
+          end
+          existing_rp = existing_person.responsible_parties.detect do |rp|
+            rp.entity_identifier == new_rp.entity_identifier
+          end
+          return existing_rp._id unless existing_rp.nil?
+          existing_person.responsible_parties << new_rp
+          existing_person.save!
           new_rp._id
         end
 

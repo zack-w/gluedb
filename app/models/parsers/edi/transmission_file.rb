@@ -135,7 +135,7 @@ module Parsers
         persist_edi_transactions(etf_loop, policy._id, carrier_id, employer_id, edi_transmission)
         edi_transmission.save!
         persist_people(etf_loop, employer_id)
-        persist_household(etf_loop)
+        #persist_household(etf_loop)
       end
 
       def find_policy(eg_id, carrier_id, hios_id)
