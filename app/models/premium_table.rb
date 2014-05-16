@@ -9,11 +9,4 @@ class PremiumTable
 	embedded_in :plan
 
   index({ age: 1 })
-
-	# Provide premium rate given the rate schedule, date coverage will start, and applicant age when coverage starts
-	def calculate_rate(rate_period_date, benefit_begin_date, date_of_birth)
-
-	end
-
-
 end
