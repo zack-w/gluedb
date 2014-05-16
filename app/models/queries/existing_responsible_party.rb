@@ -37,11 +37,29 @@ module Queries
     end
 
     def address_match(exprs)
-      exprs
+      return exprs if @person.addresses.empty?
+      more_exprs = @person.addresses.map do |address|
+        address_hash = {
+          "address_type" => address.address_type,
+          "address_1" => address.address_1,
+          "city" => address.city,
+          "state" => address.state,
+          "zip" => address.zip
+        }
+        unless address.address_2.blank?
+          address_hash["address_2"] = address.address_2
+        end
+        {"addresses" => { "$elemMatch" => address_hash}}
+      end
+      exprs + more_exprs
     end
 
     def email_match(exprs)
-      exprs
+      return exprs if @person.emails.empty?
+      more_exprs = @person.emails.map do |email|
+        {"emails" => { "$elemMatch" => {"email_type" => email.email_type, "email_address" => email.email_address}}}
+      end
+      exprs + more_exprs
     end
   end
 end
