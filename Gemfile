@@ -49,6 +49,8 @@ gem "rsec"
 gem "mongoid_auto_increment"
 gem 'american_date'
 
+gem 'roo'
+
 group :production do
   gem 'unicorn'
 end
