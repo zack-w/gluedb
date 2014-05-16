@@ -41,8 +41,8 @@ Gluedb::Application.routes.draw do
 
   resources :application_groups do
     get 'page/:page', :action => :index, :on => :collection
-    resources :households
   end
+    resources :households
 
 
   resources :users
