@@ -4,6 +4,8 @@ class Address
 
   include MergingModel
 
+  TYPES = %W(home work billing)
+
   field :address_type, type: String
   field :address_1, type: String
   field :address_2, type: String, default: ""
@@ -11,11 +13,10 @@ class Address
   field :state, type: String
   field :zip, type: String
 
-  validates_inclusion_of :address_type, in: ["home", "work", "billing"]
-  validates_presence_of :address_1
-  validates_presence_of :city
-  validates_presence_of :state
-  validates_presence_of :zip
+  validates_presence_of  :address_type, message: "Choose a type"
+  validates_inclusion_of :address_type, in: TYPES, message: "Invalid type"
+
+  validates_presence_of :address_1, :city, :state, :zip
 
   embedded_in :person, :inverse_of => :addresses
   embedded_in :employer, :inverse_of => :addresses

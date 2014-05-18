@@ -1,16 +1,15 @@
 <fieldset>
 	<div class="row">
-		<div class="col-md-4">
-			<%= f.input :email_type, as: :select, collection: ["home", "work"], include_blank: "Type" %>
+		<div class="col-md-2">
+			<%= f.input :email_type, as: :select, collection: Email::TYPES, include_blank: "Type" %>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-offset-1 col-md-3">
 			<%= f.input :email_address, as: :email, placeholder: "name@example.com" %>
 		</div>
-		<div class="col-md-3">
-			<%= link_to '<span class="fui-cross-inverted"> Delete</span>'.html_safe, '#', :class => "remove_fields btn btn-small btn-danger" %>
-		</div>
+		<p class="text-right">
+			<%= link_to '<span class="fui-cross-inverted"> Delete Email</span>'.html_safe, '#', :class => "remove_fields text-danger" %>
+		</p>
 	</div>
 	<%= f.hidden_field :_destroy %>
+	<hr/>
 </fieldset>

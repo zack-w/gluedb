@@ -5,6 +5,8 @@ class Member
 
   include MergingModel
 
+  GENDER_TYPES = %W(male female unknown)
+
   # gdb_member_id is the primary key. if hbx_member_id isn't provided, gdb_member_id is used
   auto_increment :_id, seed: 9999
   field :hbx_member_id, type: String
@@ -24,12 +26,12 @@ class Member
   field :hlh, as: :tobacco_use_code, type: String, default: "Unknown"
   field :lui, as: :language_code, type: String
 
-  validates_presence_of :gender
-  validates_inclusion_of :gender, in: ["male", "female", "unknown"]
+  validates_presence_of  :gender, message: "Choose a gender"
+  validates_inclusion_of :gender, in: GENDER_TYPES, message: "Invalid gender"
 
   # validates_numericality_of :ssn
   validates_length_of :ssn, allow_blank: true, allow_nil: true, minimum: 9, maximum: 9,
-                      message: "SSN is too short (minimum is 9 digits)"
+                      message: "SSN must be 9 digits"
 
 #  index({ hbx_member_id: 1 }, { unique: false, name: "member_exchange_id_index" })
 #  index({ a_id: 1 }, { unique: false, name: "authority_member_exchange_id_index" })

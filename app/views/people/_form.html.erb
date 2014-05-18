@@ -14,9 +14,9 @@
     </div>
   <% end %>
 
-	<legend>Name</legend>
+	<legend>Name and Identifying Info</legend>
 	<div class="row">
-		<div class="col-md-offset-1 col-md-10">
+		<div class="col-md-offset-1 col-md-9">
 		  <div class="form-inputs">
 				<%= render 'name_fields', f: f %>
 
@@ -29,40 +29,36 @@
 
 	<legend>Address</legend>
 	<div class="row">
-		<div class="col-md-offset-1 col-md-10">
+		<div class="col-md-offset-1 col-md-9">
 		  <div class="form-inputs nested-fields">
 				<%= f.simple_fields_for :addresses do |address|  %>
 					<%= render 'address_fields', f: address %>
 			  <% end %>
-
-        <%= link_to_add_fields "Add Address", f, :addresses %>
-
-
-				<%#= link_to_add_fields '<i class="icon-plus"></i> Add'.html_safe, f, :addresses, "btn btn-small btn-primary" %>
+			  <p class="text-right"><%= link_to_add_fields "Add Address", f, :addresses %></p>
 			</div>
 		</div>
 	</div>
 				
 	<legend>Phone</legend>
 	<div class="row">
-		<div class="col-md-offset-1 col-md-10">
+		<div class="col-md-offset-1 col-md-9">
 		  <div class="form-inputs nested-fields">
 				<%= f.simple_fields_for :phones do |phone|  %>
 					<%= render 'phone_fields', f: phone %>
 			  <% end %>
-        <%= link_to_add_fields "Add Phone", f, :phones %>
+			  <p class="text-right"><%= link_to_add_fields "Add Phone", f, :phones %><p>
 			</div>
 		</div>
 	</div>
 				
 	<legend>Email</legend>
 	<div class="row">
-		<div class="col-md-offset-1 col-md-10">
+		<div class="col-md-offset-1 col-md-9">
 		  <div class="form-inputs nested-fields">
 				<%= f.simple_fields_for :emails do |email|  %>
 					<%= render 'email_fields', f: email %>
 			  <% end %>
-        <%= link_to_add_fields "Add Email", f, :emails %>
+			  <p class="text-right"><%= link_to_add_fields "Add Email", f, :emails %></p>
 			</div>
 		</div>
 	</div>
