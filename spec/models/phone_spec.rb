@@ -12,16 +12,19 @@ describe Phone do
 
   describe 'validations' do
     describe 'phone type' do
-      let(:phone) { Phone.new(phone_type: 'invalid') }
+      let(:phone) { Phone.new(phone_type: 'invalid', phone_number: "12345") }
       context 'when invalid' do
         its 'invalid' do 
           expect(phone).to be_invalid
         end
       end
-      valid_types = ['primary', 'secondary', 'home', 'work', 'mobile', 'pager', 'main', 'other']
+      valid_types = ['home', 'work', 'mobile']
       valid_types.each do |type|
         context('when ' + type) do
-          before { phone.phone_type = type}
+          before { 
+            phone.phone_number = "12345"
+            phone.phone_type = type
+          }
           its 'valid' do
             expect(phone).to be_valid
           end 

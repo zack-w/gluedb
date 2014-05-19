@@ -25,7 +25,8 @@ class PersonRelationship
 	validates_presence_of :subject_person, :relationship_kind, :object_person
 	validates_inclusion_of :relationship_kind, in: ALL_RELATIONSHIPS_LIST
 
-  embedded_in :household
+  embedded_in :household, :inverse_of => :person_relationships
+  embedded_in :application_groups, :inverse_of => :person_relationships
 
 
 end

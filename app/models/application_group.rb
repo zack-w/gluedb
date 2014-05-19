@@ -16,6 +16,9 @@ class ApplicationGroup
   embeds_many :special_enrollment_periods, cascade_callbacks: true
   accepts_nested_attributes_for :special_enrollment_periods, reject_if: proc { |attribs| attribs['start_date'].blank? }, allow_destroy: true
 
+  embeds_many :person_relationships
+  accepts_nested_attributes_for :person_relationships, reject_if: proc { |attribs| attribs['subject_person', 'relationship_kind', 'object_person'].blank? }, allow_destroy: true
+
   # List of SEPs active for this Household on this or specified date
   def active_seps(day = Date.today)
     special_enrollment_periods.find_all { |sep| (sep.start_date..sep.end_date).include?(day) }
