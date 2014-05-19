@@ -47,6 +47,10 @@ module Parsers
           end
           loops
         end
+
+        def responsible_party?
+          @responsible_party ||= !(@loop["L2100F"].blank? && @loop["L2100G"].blank?) 
+        end
       end
     end
   end

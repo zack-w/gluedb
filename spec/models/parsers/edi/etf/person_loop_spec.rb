@@ -63,7 +63,60 @@ given:
 
   it { should be_subscriber }
 
+  it "should NOT have a responsible party" do
+    expect(subject).not_to be_responsible_party 
+  end
+
 end
+
+describe Parsers::Edi::Etf::PersonLoop, "
+given:
+ - a responsible party
+" do
+  include EdiFactory
+
+
+  let(:l2000) {
+    {
+          "INS" => [0, nil, "18", nil, nil],
+          "REFs" => [
+          ],
+         "L2100G" => [1] 
+    }
+  }
+
+  subject { Parsers::Edi::Etf::PersonLoop.new(l2000)  }
+
+  it { should be_subscriber }
+
+  it "should have a responsible party" do
+    expect(subject).to be_responsible_party 
+  end
+
+end
+
+describe Parsers::Edi::Etf::PersonLoop, "
+given:
+ - a custodial parent
+" do
+  include EdiFactory
+
+  let(:l2000) {
+    {
+          "INS" => [0, nil, "18", nil, nil],
+          "REFs" => [
+          ],
+         "L2100F" => [1] 
+    }
+  }
+
+  subject { Parsers::Edi::Etf::PersonLoop.new(l2000)  }
+
+  it "should have a responsible party" do
+    expect(subject).to be_responsible_party 
+  end
+end
+
 
 describe Parsers::Edi::Etf::PersonLoop do
   describe 'policy_loops' do
