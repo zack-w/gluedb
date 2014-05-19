@@ -17,7 +17,7 @@ class Household
   has_and_belongs_to_many :policies, inverse_of: nil
 
   embeds_many :person_relationships
-  accepts_nested_attributes_for :person_relationships, reject_if: proc { |attribs| attribs['subject_person', 'relationship_kind', 'primary_person'].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :person_relationships, reject_if: proc { |attribs| attribs['subject_person', 'relationship_kind', 'object_person'].blank? }, allow_destroy: true
 
   embeds_many :eligibilities
   accepts_nested_attributes_for :eligibilities, reject_if: proc { |attribs| attribs['date_determined'].blank? }, allow_destroy: true
