@@ -262,25 +262,26 @@ module Parsers
 
       def persist_employer_get_id(etf_loop, carrier_id)
         etf = Etf::EtfLoop.new(etf_loop)
-        emp_seg = etf.employer_loop
+        employer_loop = Etf::EmployerLoop.new(etf.employer_loop)
+
         return(nil) if !etf.is_shop?
         new_employer = nil
         employer = nil
-        # Specified as group
-        if emp_seg[3] == "94"
-          employer = Employer.find_for_carrier_and_group_id(carrier_id, emp_seg[4])
+
+        if employer_loop.specified_as_group?
+          employer = Employer.find_for_carrier_and_group_id(carrier_id, employer_loop.group_id)
         end
         if employer.nil?
           new_employer = Employer.new(
-            :name => emp_seg[2],
-            :fein => emp_seg[4]
+            :name => employer_loop.name,
+            :fein => employer_loop.fein
           )
           employer = Employer.find_or_create_employer_by_fein(new_employer)
         end
         begin
           employer._id
         rescue
-          raise("Unknown employer ID: #{emp_seg[3]} #{emp_seg[4]}")
+          raise("Unknown employer ID: #{employer_loop.id_qualifer} #{employer_loop.fein}")
         end
       end
 
