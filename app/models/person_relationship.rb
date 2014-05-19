@@ -12,9 +12,9 @@ class PersonRelationship
                               stepdaughter child sponsored\ dependent dependent\ of\ a\ minor\ dependent
                               guardian court\ appointed\ guardian collateral\ dependent life\ partner]
 
-  SYMMETRICAL_RELATIONSHIPS_LIST = %W[head\ of\ household spouse ex-spouse cousin ward]
+  SYMMETRICAL_RELATIONSHIPS_LIST = %W[head\ of\ household spouse ex-spouse cousin ward trustee annuitant other\ relationship other\ relative self]
 
-  ALL_RELATIONSHIPS_LIST    =  SYMMETRICAL_RELATIONSHIPS_LIST & MALE_RELATIONSHIPS_LIST & FEMALE_RELATIONSHIPS_LIST
+  ALL_RELATIONSHIPS_LIST    =  SYMMETRICAL_RELATIONSHIPS_LIST | MALE_RELATIONSHIPS_LIST | FEMALE_RELATIONSHIPS_LIST
 
   # Relationships are defined using RDF-style Subject -> Predicate -> Object
   # Subject is 'head of household' by convention

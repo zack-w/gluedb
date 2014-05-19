@@ -135,7 +135,7 @@ module Parsers
         persist_edi_transactions(etf_loop, policy._id, carrier_id, employer_id, edi_transmission)
         edi_transmission.save!
         persist_people(etf_loop, employer_id)
-        #persist_household(etf_loop)
+        persist_application_group(etf_loop)
       end
 
       def find_policy(eg_id, carrier_id, hios_id)
@@ -197,8 +197,8 @@ module Parsers
           end)["L2750"]["REF"][2]
       end
 
-      def persist_household(etf_loop)
-        Etf::HouseholdParser.new(etf_loop).persist!
+      def persist_application_group(etf_loop)
+        Etf::ApplicationGroupParser.new(etf_loop).persist!
       end
 
       def persist_policy_members(etf_loop, policy)
