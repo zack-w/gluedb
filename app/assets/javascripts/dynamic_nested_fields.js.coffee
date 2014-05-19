@@ -3,7 +3,9 @@ jQuery ->
     event.preventDefault()
     time = new Date().getTime()
     regexp = new RegExp($(this).data('id'), 'g')
-    $(this).before($(this).data('fields').replace(regexp, time))
+    html = $(this).data('fields').replace(regexp, time)
+    $(this).closest('.form-inputs').find('fieldset:last').after(html)
+
     style_select_picker()
     update_delete_buttons()
 
