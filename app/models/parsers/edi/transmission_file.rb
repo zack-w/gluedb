@@ -101,20 +101,14 @@ module Parsers
         carrier ||= @carrier
         carrier_id = carrier._id
 
-        eg_id = (etf.subscriber_loop["L2300s"].first["REFs"].detect do |r|
-          r[1] == "1L"
-        end)[2]
-        hios_id = (etf.subscriber_loop["L2300s"].first["REFs"].detect do |r|
-          r[1] == "CE"
-        end)[2]
+        coverage_loop = Parsers::Edi::Etf::CoverageLoop.new(etf.subscriber_loop["L2300s"].first)
 
         employer_id = persist_employer_get_id(etf_loop, carrier_id)
         if etf.is_shop? && is_carrier_maintenance?(etf_loop, edi_transmission)
-          persist_screened_834(etf_loop, carrier_id, eg_id, hios_id, employer_id, edi_transmission)
+          persist_screened_834(etf_loop, carrier_id, coverage_loop.eg_id, coverage_loop.hios_id, employer_id, edi_transmission)
           return nil
         end
-        # raise [carrier_id, eg_id, hios_id, employer_id, edi_transmission].inspect
-        persist_unscreened_834(etf_loop, carrier_id, eg_id, hios_id, employer_id, edi_transmission)
+        persist_unscreened_834(etf_loop, carrier_id, coverage_loop.eg_id, coverage_loop.hios_id, employer_id, edi_transmission)
       end
 
       def persist_screened_834(etf_loop, carrier_id, eg_id, hios_id, employer_id, edi_transmission)
