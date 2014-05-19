@@ -19,5 +19,29 @@ describe Parsers::Edi::Etf::EtfLoop do
         expect(etf.carrier_fein).to eq carrier_fein
       end
     end
+    describe '#employer_loop' do
+      let(:n1) { ['','','DC0'] }
+      let(:raw_etf_loop) { {"L1000A" => {"N1" => n1}} }
+      it 'returns the employer loop' do
+        expect(etf.employer_loop).to eq n1
+      end
+    end
+
+    describe '#is_shop?' do
+      let(:raw_etf_loop) { {"L1000A" => {"N1" => n1}} }
+      context 'when employer is not DC0' do
+        let(:n1) { ['','','NOT_DC0'] }
+        it 'returns the employer loop' do
+          expect(etf.is_shop?).to eq true
+        end
+      end
+
+      context 'when employer is DC0' do
+        let(:n1) { ['','','DC0'] }
+        it 'returns the employer loop' do
+          expect(etf.is_shop?).to eq false
+        end
+      end
+    end
   end
 end

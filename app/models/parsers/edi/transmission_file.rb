@@ -109,7 +109,7 @@ module Parsers
         end)[2]
 
         employer_id = persist_employer_get_id(etf_loop, carrier_id)
-        if is_shop?(etf_loop) && is_carrier_maintenance?(etf_loop, edi_transmission)
+        if etf.is_shop? && is_carrier_maintenance?(etf_loop, edi_transmission)
           persist_screened_834(etf_loop, carrier_id, eg_id, hios_id, employer_id, edi_transmission)
           return nil
         end
@@ -261,8 +261,9 @@ module Parsers
       end
 
       def persist_employer_get_id(etf_loop, carrier_id)
-        emp_seg = etf_loop["L1000A"]["N1"]
-        return(nil) if emp_seg[2] == "DC0"
+        etf = Etf::EtfLoop.new(etf_loop)
+        emp_seg = etf.employer_loop
+        return(nil) if !etf.is_shop?
         new_employer = nil
         employer = nil
         # Specified as group
@@ -350,11 +351,6 @@ module Parsers
         val = ((edi_transmission.isa06.strip != ExchangeInformation.receiver_id)  &&
           (determine_transaction_set_kind(etf_loop) == "maintenance"))
         val
-      end
-
-      def is_shop?(etf_loop)
-        emp_seg = etf_loop["L1000A"]["N1"]
-        !(emp_seg[2] == "DC0")
       end
 
       def incomplete_isa?

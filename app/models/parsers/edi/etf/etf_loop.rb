@@ -15,6 +15,14 @@ module Parsers
         def carrier_fein
           @loop["L1000B"]["N1"][4]
         end
+
+        def employer_loop
+          @loop["L1000A"]["N1"]
+        end
+
+        def is_shop?
+          !(@loop["L1000A"]["N1"][2] == "DC0")
+        end
       end
     end
   end
