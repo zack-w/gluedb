@@ -26,7 +26,6 @@ class PersonRelationship
 	validates_inclusion_of :relationship_kind, in: ALL_RELATIONSHIPS_LIST
 
   embedded_in :household, :inverse_of => :person_relationships
-  embedded_in :application_groups, :inverse_of => :person_relationships
-
+  embedded_in :application_group, :inverse_of => :person_relationships
 
 end

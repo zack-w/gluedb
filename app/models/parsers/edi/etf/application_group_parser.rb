@@ -58,14 +58,12 @@ module Parsers
 
         def create_relationship_triples(primary_member_key, loop_lookup, people_lookup)
           loop_lookup.keys.inject([]) do |acc, k|
-            if !loop_lookup[k].subscriber?
               acc << [
                 people_lookup[primary_member_key]._id.to_s,
                 loop_lookup[k].group_relationship,
                 people_lookup[k]._id.to_s
               ]
-            end
-            acc
+              acc
           end
         end
 
