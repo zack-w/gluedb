@@ -96,18 +96,20 @@ module Parsers
           )
           return nil
         end
-        carrier_fein = etf_loop["L1000B"]["N1"][4]
-        carrier = Carrier.for_fein(carrier_fein)
+        etf = Etf::EtfLoop.new(etf_loop)
+        carrier = Carrier.for_fein(etf.carrier_fein)
         carrier ||= @carrier
         carrier_id = carrier._id
-        eg_id = (subscriber_loop(etf_loop)["L2300s"].first["REFs"].detect do |r|
+
+        eg_id = (etf.subscriber_loop["L2300s"].first["REFs"].detect do |r|
           r[1] == "1L"
         end)[2]
-        hios_id = (subscriber_loop(etf_loop)["L2300s"].first["REFs"].detect do |r|
+        hios_id = (etf.subscriber_loop["L2300s"].first["REFs"].detect do |r|
           r[1] == "CE"
         end)[2]
+
         employer_id = persist_employer_get_id(etf_loop, carrier_id)
-        if is_shop?(etf_loop) && is_carrier_maintenance?(etf_loop, edi_transmission)
+        if etf.is_shop? && is_carrier_maintenance?(etf_loop, edi_transmission)
           persist_screened_834(etf_loop, carrier_id, eg_id, hios_id, employer_id, edi_transmission)
           return nil
         end
@@ -148,8 +150,10 @@ module Parsers
 
       # FIXME: pull sep reason
       def persist_policy(etf_loop, carrier_id, hios_id, eg_id, employer_id, rp_id)
+        etf = Etf::EtfLoop.new(etf_loop)
+
         broker_id = persist_broker_get_id(etf_loop)
-        s_loop = subscriber_loop(etf_loop)
+        s_loop = etf.subscriber_loop
         trans_kind = determine_transaction_set_kind(etf_loop)
         carrier_to_bill = s_loop["L2700s"].any? do |lth|
           lth["L2750"]["N1"][2] == "CARRIER TO BILL"
@@ -257,25 +261,27 @@ module Parsers
       end
 
       def persist_employer_get_id(etf_loop, carrier_id)
-        emp_seg = etf_loop["L1000A"]["N1"]
-        return(nil) if emp_seg[2] == "DC0"
+        etf = Etf::EtfLoop.new(etf_loop)
+        employer_loop = Etf::EmployerLoop.new(etf.employer_loop)
+
+        return(nil) if !etf.is_shop?
         new_employer = nil
         employer = nil
-        # Specified as group
-        if emp_seg[3] == "94"
-          employer = Employer.find_for_carrier_and_group_id(carrier_id, emp_seg[4])
+
+        if employer_loop.specified_as_group?
+          employer = Employer.find_for_carrier_and_group_id(carrier_id, employer_loop.group_id)
         end
         if employer.nil?
           new_employer = Employer.new(
-            :name => emp_seg[2],
-            :fein => emp_seg[4]
+            :name => employer_loop.name,
+            :fein => employer_loop.fein
           )
           employer = Employer.find_or_create_employer_by_fein(new_employer)
         end
         begin
           employer._id
         rescue
-          raise("Unknown employer ID: #{emp_seg[3]} #{emp_seg[4]}")
+          raise("Unknown employer ID: #{employer_loop.id_qualifer} #{employer_loop.fein}")
         end
       end
 
@@ -342,21 +348,10 @@ module Parsers
         result.nil? ? "active" : result
       end
 
-      def subscriber_loop(etf_loop)
-        etf_loop["L2000s"].detect do |l2000|
-          l2000["INS"][2].strip == "18"
-        end
-      end
-
       def is_carrier_maintenance?(etf_loop, edi_transmission)
         val = ((edi_transmission.isa06.strip != ExchangeInformation.receiver_id)  &&
           (determine_transaction_set_kind(etf_loop) == "maintenance"))
         val
-      end
-
-      def is_shop?(etf_loop)
-        emp_seg = etf_loop["L1000A"]["N1"]
-        !(emp_seg[2] == "DC0")
       end
 
       def incomplete_isa?
