@@ -96,16 +96,18 @@ module Parsers
           )
           return nil
         end
-        etf = Parsers::Edi::Etf.new(etf_loop)
+        etf = Etf::EtfLoop.new(etf_loop)
         carrier = Carrier.for_fein(etf.carrier_fein)
         carrier ||= @carrier
         carrier_id = carrier._id
-        eg_id = (subscriber_loop(etf_loop)["L2300s"].first["REFs"].detect do |r|
+
+        eg_id = (etf.subscriber_loop["L2300s"].first["REFs"].detect do |r|
           r[1] == "1L"
         end)[2]
-        hios_id = (subscriber_loop(etf_loop)["L2300s"].first["REFs"].detect do |r|
+        hios_id = (etf.subscriber_loop["L2300s"].first["REFs"].detect do |r|
           r[1] == "CE"
         end)[2]
+
         employer_id = persist_employer_get_id(etf_loop, carrier_id)
         if is_shop?(etf_loop) && is_carrier_maintenance?(etf_loop, edi_transmission)
           persist_screened_834(etf_loop, carrier_id, eg_id, hios_id, employer_id, edi_transmission)
@@ -148,8 +150,10 @@ module Parsers
 
       # FIXME: pull sep reason
       def persist_policy(etf_loop, carrier_id, hios_id, eg_id, employer_id, rp_id)
+        etf = Etf::EtfLoop.new(etf_loop)
+
         broker_id = persist_broker_get_id(etf_loop)
-        s_loop = subscriber_loop(etf_loop)
+        s_loop = etf.subscriber_loop
         trans_kind = determine_transaction_set_kind(etf_loop)
         carrier_to_bill = s_loop["L2700s"].any? do |lth|
           lth["L2750"]["N1"][2] == "CARRIER TO BILL"
@@ -303,10 +307,6 @@ module Parsers
             persist_834(l834, edi_transmission)
           end
         end
-      end
-
-      def subscriber_loop(etf_loop)
-        Parsers::Edi::Etf::EtfLoop.new(etf_loop).subscriber_loop
       end
 
       private
