@@ -296,6 +296,10 @@ class Person
     ([self._id] + other_ids).uniq
   end
 
+  def application_groups
+    query_proxy.application_groups
+  end
+
   private
   def initialize_authority_member
     self.authority_member = members.first.hbx_member_id if members.count == 1
