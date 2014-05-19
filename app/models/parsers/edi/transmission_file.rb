@@ -96,8 +96,8 @@ module Parsers
           )
           return nil
         end
-        carrier_fein = etf_loop["L1000B"]["N1"][4]
-        carrier = Carrier.for_fein(carrier_fein)
+        etf = Parsers::Edi::Etf.new(etf_loop)
+        carrier = Carrier.for_fein(etf.carrier_fein)
         carrier ||= @carrier
         carrier_id = carrier._id
         eg_id = (subscriber_loop(etf_loop)["L2300s"].first["REFs"].detect do |r|
@@ -305,6 +305,10 @@ module Parsers
         end
       end
 
+      def subscriber_loop(etf_loop)
+        Parsers::Edi::Etf::EtfLoop.new(etf_loop).subscriber_loop
+      end
+
       private
 
       def map_employment_status_code(es_code, p_action)
@@ -340,12 +344,6 @@ module Parsers
         }
         result = benefit_codes[b_code]
         result.nil? ? "active" : result
-      end
-
-      def subscriber_loop(etf_loop)
-        etf_loop["L2000s"].detect do |l2000|
-          l2000["INS"][2].strip == "18"
-        end
       end
 
       def is_carrier_maintenance?(etf_loop, edi_transmission)

@@ -28,4 +28,13 @@ describe Parsers::Edi::TransmissionFile do
       end
     end
   end
+
+  describe '#subscriber_loop' do
+    let(:not_subscriber) { { "INS" => ['','','']} }
+    let(:subscriber) { { "INS" => ['','','18']} }
+    let(:etf_loop) { {"L2000s" => [ not_subscriber, subscriber]} }
+    it 'returns subscriber person loop' do
+      expect(transmission_file.subscriber_loop(etf_loop)).to eq subscriber
+    end
+  end
 end
