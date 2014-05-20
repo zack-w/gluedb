@@ -2,6 +2,8 @@ module Parsers
   module Edi
     class TransmissionFile
       attr_reader :result
+      attr_accessor :transmission_kind
+      
       def initialize(path, t_kind, r_data)
         @raw = r_data
         @result = Oj.load(r_data)
@@ -12,18 +14,21 @@ module Parsers
       def determine_transaction_set_kind(l834)
         assigned_transmission_kind = @transmission_kind
         if @transmission_kind == "effectuation"
-          found_inses = l834["L2000s"].any? do |l2000|
-            if !l2000["INS"].blank?
-              ['024'].include?(l2000["INS"][3].strip)
-            else
-              false
-            end
-          end
-          if found_inses
+          if cancellation_or_termination?(l834)
             assigned_transmission_kind = "maintenance"
           end
         end
         assigned_transmission_kind
+      end
+
+      def cancellation_or_termination?(l834)
+        l834["L2000s"].any? do |l2000|
+          if !l2000["INS"].blank?
+            ['024'].include?(l2000["INS"][3].strip)
+          else
+            false
+          end
+        end
       end
 
       def persist_edi_transactions(

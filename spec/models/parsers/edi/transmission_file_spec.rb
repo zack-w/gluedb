@@ -28,4 +28,37 @@ describe Parsers::Edi::TransmissionFile do
       end
     end
   end
+
+  describe '#cancellation_or_termination?' do
+    context 'given no member level detail(INS)' do
+      let(:etf_loop) { {'L2000s' => [ { "INS" => [] } ]}} #'', '', '', ''
+      it 'returns false' do 
+        expect(transmission_file.cancellation_or_termination?(etf_loop)).to eq false
+      end
+    end
+
+    context 'given member level detail stating cancellation or termination' do
+      let(:etf_loop) { {'L2000s' => [ { "INS" => ['', '', '', '024'] } ]}}
+      it 'returns true' do 
+        expect(transmission_file.cancellation_or_termination?(etf_loop)).to eq true
+      end
+    end
+
+    context 'given some other maintainance type code' do
+      let(:etf_loop) { {'L2000s' => [ { "INS" => ['', '', '', '666'] } ]}}
+      it 'returns false' do 
+        expect(transmission_file.cancellation_or_termination?(etf_loop)).to eq false
+      end
+    end
+  end
+
+  describe '#determine_transaction_set_kind' do
+    context 'effectuation that contains a cancellation or term' do
+      let(:etf_loop) { {'L2000s' => [ { "INS" => ['', '', '', '024'] } ]}}
+      before { transmission_file.transmission_kind = 'effectuation' }
+      its 'a maintainace' do 
+        expect(transmission_file.determine_transaction_set_kind(etf_loop)).to eq 'maintenance'
+      end
+    end
+  end
 end
