@@ -102,6 +102,7 @@ module Parsers
           return nil
         end
         etf = Etf::EtfLoop.new(etf_loop)
+
         carrier = Carrier.for_fein(etf.carrier_fein)
         carrier ||= @carrier
         carrier_id = carrier._id
@@ -109,34 +110,31 @@ module Parsers
         coverage_loop = Parsers::Edi::Etf::CoverageLoop.new(etf.subscriber_loop["L2300s"].first)
 
         employer_id = persist_employer_get_id(etf_loop, carrier_id)
+
+        policy = nil
+
         if etf.is_shop? && is_carrier_maintenance?(etf_loop, edi_transmission)
-          persist_screened_834(etf_loop, carrier_id, coverage_loop.eg_id, coverage_loop.hios_id, employer_id, edi_transmission)
-          return nil
+          policy = find_policy(coverage_loop.eg_id, carrier_id, coverage_loop.hios_id)
+          
+          if policy
+            edi_transmission.save!
+          end
+        else
+          responsible_party_id = persist_responsible_party_get_id(etf_loop)
+          
+          policy = persist_policy(etf_loop, carrier_id, coverage_loop.hios_id, coverage_loop.eg_id, employer_id, responsible_party_id)
+          
+          if policy
+            edi_transmission.save!
+            
+            persist_people(etf_loop, employer_id)
+            persist_application_group(etf_loop)
+          end
         end
-        persist_unscreened_834(etf_loop, carrier_id, coverage_loop.eg_id, coverage_loop.hios_id, employer_id, edi_transmission)
-      end
 
-      def persist_screened_834(etf_loop, carrier_id, eg_id, hios_id, employer_id, edi_transmission)
-        policy = find_policy(eg_id, carrier_id, hios_id,)
-        unless policy
-          persist_edi_transactions(etf_loop, nil, carrier_id, employer_id, edi_transmission)
-          return nil
-        end
-        persist_edi_transactions(etf_loop, policy._id, carrier_id, employer_id, edi_transmission) 
-        edi_transmission.save!
-      end
-
-      def persist_unscreened_834(etf_loop, carrier_id, eg_id, hios_id, employer_id, edi_transmission)
-        responsible_party_id = persist_responsible_party_get_id(etf_loop)
-        policy = persist_policy(etf_loop, carrier_id, hios_id, eg_id, employer_id, responsible_party_id)
-        unless policy
-          persist_edi_transactions(etf_loop, nil, carrier_id, employer_id, edi_transmission)
-          return nil
-        end
-        persist_edi_transactions(etf_loop, policy._id, carrier_id, employer_id, edi_transmission)
-        edi_transmission.save!
-        persist_people(etf_loop, employer_id)
-        persist_application_group(etf_loop)
+        #persist transaction
+        policy_id = (policy.nil?) ? nil : policy._id
+        persist_edi_transactions(etf_loop, policy_id, carrier_id, employer_id, edi_transmission)
       end
 
       def find_policy(eg_id, carrier_id, hios_id)
@@ -249,7 +247,6 @@ module Parsers
         employer_loop = Etf::EmployerLoop.new(etf.employer_loop)
 
         return(nil) if !etf.is_shop?
-        new_employer = nil
         employer = nil
 
         if employer_loop.specified_as_group?
