@@ -149,26 +149,23 @@ module Parsers
         broker_id = persist_broker_get_id(etf_loop)
         s_loop = etf.subscriber_loop
         trans_kind = determine_transaction_set_kind(etf_loop)
-        carrier_to_bill = s_loop["L2700s"].any? do |lth|
-          lth["L2750"]["N1"][2] == "CARRIER TO BILL"
-        end
-        pre_amt_tot = l2700val(s_loop,"PRE AMT TOT")
-        tot_res_amt = l2700val(s_loop,"TOT RES AMT")
-        applied_aptc = opt_l2700val(s_loop,"APTC AMT",0.00)
-        tot_emp_res_amt = opt_l2700val(s_loop,"TOT EMP RES AMT",0.00)
+        
         plan = Plan.find_by_hios_id(hios_id)
         unless plan
           return nil
         end
+
+        reporting_categories = Etf::ReportingCatergories.new(s_loop["L2700s"])
+
         new_policy = Policy.new(
           :plan_id => plan._id,
           :enrollment_group_id => eg_id,
           :carrier_id => carrier_id,
-          :tot_res_amt => tot_res_amt,
-          :pre_amt_tot => pre_amt_tot,
-          :applied_aptc => applied_aptc,
-          :tot_emp_res_amt => tot_emp_res_amt,
-          :carrier_to_bill => carrier_to_bill,
+          :tot_res_amt => reporting_categories.tot_res_amt,
+          :pre_amt_tot => reporting_categories.pre_amt_tot,
+          :applied_aptc => reporting_categories.applied_aptc,
+          :tot_emp_res_amt => reporting_categories.tot_emp_res_amt,
+          :carrier_to_bill => reporting_categories.carrier_to_bill?,
           :employer_id => employer_id,
           :broker_id => broker_id,
           :responsible_party_id => rp_id,
@@ -182,19 +179,6 @@ module Parsers
         policy
       end
 
-      def opt_l2700val(l2000, tag, default = nil)
-          node = (l2000["L2700s"].detect do |lth|
-            lth["L2750"]["N1"][2] == tag
-          end)
-          (node.blank?) ? default : node["L2750"]["REF"][2]
-      end
-
-      def l2700val(l2000, tag)
-          (l2000["L2700s"].detect do |lth|
-            lth["L2750"]["N1"][2] == tag
-          end)["L2750"]["REF"][2]
-      end
-
       def persist_application_group(etf_loop)
         Etf::ApplicationGroupParser.new(etf_loop).persist!
       end
@@ -203,7 +187,9 @@ module Parsers
         etf_loop["L2000s"].each do |l2000|
           person_loop = Etf::PersonLoop.new(l2000)
           member_id = person_loop.member_id
-          pre_amt = l2700val(l2000, "PRE AMT 1")
+
+        
+          pre_amt = Etf::ReportingCatergories.new(l2700s).pre_amt
           c_member_id = person_loop.carrier_member_id
 
           policy_loop = person_loop.policy_loops.first
