@@ -147,7 +147,6 @@ module Parsers
         etf = Etf::EtfLoop.new(etf_loop)
 
         broker_id = persist_broker_get_id(etf_loop)
-        s_loop = etf.subscriber_loop
         trans_kind = determine_transaction_set_kind(etf_loop)
         
         plan = Plan.find_by_hios_id(hios_id)
@@ -155,7 +154,7 @@ module Parsers
           return nil
         end
 
-        reporting_categories = Etf::ReportingCatergories.new(s_loop["L2700s"])
+        reporting_categories = Etf::ReportingCatergories.new(etf.subscriber_loop["L2700s"])
 
         new_policy = Policy.new(
           :plan_id => plan._id,
@@ -189,7 +188,7 @@ module Parsers
           member_id = person_loop.member_id
 
         
-          pre_amt = Etf::ReportingCatergories.new(l2700s).pre_amt
+          pre_amt = Etf::ReportingCatergories.new(l2000["L2700s"]).pre_amt
           c_member_id = person_loop.carrier_member_id
 
           policy_loop = person_loop.policy_loops.first
