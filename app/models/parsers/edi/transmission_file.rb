@@ -211,17 +211,20 @@ module Parsers
       end
 
       def persist_responsible_party_get_id(etf_loop)
-        all_l2000s = etf_loop["L2000s"]
-        l2100Fs = all_l2000s.map { |l| l["L2100F"] }.compact
-        l2100Gs = all_l2000s.map { |l| l["L2100G"] }.compact
-        rp_loops = l2100Fs + l2100Gs
-        rp_loop = rp_loops.first
+        rp_loop = responsible_party_loop(etf_loop["L2000s"])
         return(nil) if rp_loop.blank?
 #        begin
           Etf::ResponsiblePartyParser.parse_persist_and_return_id(rp_loop)
 #        rescue
 #         raise rp_loop.to_s
 #        end
+      end
+
+      def responsible_party_loop(all_l2000s)
+        l2100Fs = all_l2000s.map { |l| l["L2100F"] }.compact
+        l2100Gs = all_l2000s.map { |l| l["L2100G"] }.compact
+        rp_loops = l2100Fs + l2100Gs
+        rp_loops.first
       end
 
       def persist_broker_get_id(etf_loop)
@@ -242,11 +245,13 @@ module Parsers
         employer_loop = Etf::EmployerLoop.new(etf.employer_loop)
 
         return(nil) if !etf.is_shop?
+        
         employer = nil
 
         if employer_loop.specified_as_group?
           employer = Employer.find_for_carrier_and_group_id(carrier_id, employer_loop.group_id)
         end
+        
         if employer.nil?
           new_employer = Employer.new(
             :name => employer_loop.name,
@@ -254,6 +259,7 @@ module Parsers
           )
           employer = Employer.find_or_create_employer_by_fein(new_employer)
         end
+
         begin
           employer._id
         rescue
