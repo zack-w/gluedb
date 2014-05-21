@@ -53,11 +53,48 @@ describe Parsers::Edi::TransmissionFile do
   end
 
   describe '#determine_transaction_set_kind' do
-    context 'effectuation that contains a cancellation or term' do
-      let(:etf_loop) { {'L2000s' => [ { "INS" => ['', '', '', '024'] } ]}}
-      before { transmission_file.transmission_kind = 'effectuation' }
-      its 'a maintainace' do 
-        expect(transmission_file.determine_transaction_set_kind(etf_loop)).to eq 'maintenance'
+    context 'transmission is not an effectuation' do
+      it 'returns the kind unchanged' do
+        kind = 'something'
+        etf_loop = {'L2000s' => [ { "INS" => ['', '', '', ''] } ]}
+        transmission_file.transmission_kind = kind
+        expect(transmission_file.determine_transaction_set_kind(etf_loop)).to eq kind
+      end
+    end
+
+    context 'transmission_kind is an effectuation' do
+      let(:kind) { 'effectuation' }
+      before { transmission_file.transmission_kind = kind }
+      context 'cancellation or term' do
+        it 'returns maintenance' do
+          etf_loop = {'L2000s' => [ { "INS" => ['', '', '', '024'] } ]}
+          expect(transmission_file.determine_transaction_set_kind(etf_loop)).to eq 'maintenance'
+        end
+      end
+
+      context 'not a cancellation or term' do
+        it 'returns the kind unchanged' do
+          etf_loop = {'L2000s' => [ { "INS" => ['', '', '', 'xxx'] } ]}
+          expect(transmission_file.determine_transaction_set_kind(etf_loop)).to eq kind
+        end
+      end  
+    end
+  end
+
+  describe '#responsible_party_loop' do
+    let(:data) { 'the_data'}
+
+    context 'when data is in Custodial Parent (2100f)' do
+      let(:person_loops) { [ { 'L2100F' => data } ]  }
+      it 'returns the loop data' do
+        expect(transmission_file.responsible_party_loop(person_loops)).to eq data
+      end
+    end
+
+    context 'when data is in Responsible Person(2100g)' do
+      let(:person_loops) { [ { 'L2100G' => data } ] }
+      it 'returns the loop data' do
+        expect(transmission_file.responsible_party_loop(person_loops)).to eq data
       end
     end
   end
