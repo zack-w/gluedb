@@ -22,13 +22,8 @@ module Parsers
       end
 
       def cancellation_or_termination?(l834)
-        l834["L2000s"].any? do |l2000|
-          if !l2000["INS"].blank?
-            ['024'].include?(l2000["INS"][3].strip)
-          else
-            false
-          end
-        end
+        etf = Etf::EtfLoop.new(l834)
+        etf.people.any? { |p| p.cancellation_or_termination? }
       end
 
       def persist_edi_transactions(

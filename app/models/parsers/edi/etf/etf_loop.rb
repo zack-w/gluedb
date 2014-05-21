@@ -23,6 +23,10 @@ module Parsers
         def is_shop?
           !(@loop["L1000A"]["N1"][2] == "DC0")
         end
+
+        def people
+          @loop['L2000s'].map { |p| PersonLoop.new(p) }
+        end
       end
     end
   end

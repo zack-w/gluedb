@@ -36,6 +36,14 @@ module Parsers
           @emp_stat ||= @loop["INS"][8]
         end
 
+        def cancellation_or_termination?
+          if !@loop["INS"].blank?
+            ['024'].include?(@loop["INS"][3].strip)
+          else
+            false
+          end
+        end
+
         def subscriber?
           @subscriber ||= (@loop["INS"][2].strip == "18")
         end
