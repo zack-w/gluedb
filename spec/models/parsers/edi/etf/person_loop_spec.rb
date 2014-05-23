@@ -127,4 +127,31 @@ describe Parsers::Edi::Etf::PersonLoop do
       expect(person_loop.policy_loops.count).to eq(raw_loop['L2300s'].count)
     end
   end
+
+  describe '#street1' do
+    it 'exposes the street first line' do
+      street1 = 'something'
+      raw_loop = { 'L2100A' => { "N3" => ['', street1, '', ''] } }
+      person_loop = Parsers::Edi::Etf::PersonLoop.new(raw_loop)
+      expect(person_loop.street1).to eq street1
+    end
+  end
+
+  describe '#city' do
+    it 'exposes the city' do
+      city = 'Atlanta'
+      raw_loop = { 'L2100A' => { 'N4' => ['', city, '', ''] } }
+      person_loop = Parsers::Edi::Etf::PersonLoop.new(raw_loop)
+      expect(person_loop.city).to eq city
+    end
+  end
+
+  describe '#state' do
+    it 'exposes the state' do
+      city = 'Atlanta'
+      raw_loop = { 'L2100A' => { 'N4' => ['', city, '', ''] } }
+      person_loop = Parsers::Edi::Etf::PersonLoop.new(raw_loop)
+      expect(person_loop.city).to eq city
+    end
+  end
 end

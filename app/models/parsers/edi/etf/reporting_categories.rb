@@ -20,17 +20,25 @@ module Parsers
         end
 
         def applied_aptc
-          result = category_by_name('APTC AMT').value
-          (result.blank?) ? 0.00 : result
+          result = category_by_name('APTC AMT')
+          if result.blank?
+            return 0.00
+          else
+            result.value
+          end
         end
 
         def tot_emp_res_amt
-          result = category_by_name('TOT EMP RES AMT').value
-          (result.blank?) ? 0.00 : result
+          result = category_by_name('TOT EMP RES AMT')
+          if result.blank?
+            return 0.00
+          else
+            result.value
+          end
         end
 
         def carrier_to_bill?
-          category_by_name('CARRIER_TO_BILL').present?
+          category_by_name('CARRIER TO BILL').present?
         end
 
         private 

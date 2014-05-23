@@ -34,7 +34,7 @@ describe Parsers::Edi::Etf::ReportingCatergories do
       expect(reporting.applied_aptc).to eq applied_aptc
     end
     context 'when absent' do
-      let(:applied_aptc) { ' ' }
+    let(:raw_loops) { [{'L2750' => {'N1' => ['', '', '']}}] }
       it 'returns zero' do
         expect(reporting.applied_aptc).to eq 0.00
       end
@@ -48,6 +48,8 @@ describe Parsers::Edi::Etf::ReportingCatergories do
       expect(reporting.tot_emp_res_amt).to eq tot_emp_res_amt
     end
     context 'when absent' do
+      let(:raw_loops) { [{'L2750' => {'N1' => ['', '', '']}}] }
+
       let(:tot_emp_res_amt) { ' ' }
       it 'returns zero' do
         expect(reporting.tot_emp_res_amt).to eq 0.00
@@ -57,7 +59,7 @@ describe Parsers::Edi::Etf::ReportingCatergories do
 
   describe '#carrier_to_bill?' do
     context 'when category is present' do
-      let(:raw_loops) { [{'L2750' => {'N1' => ['', '', 'CARRIER_TO_BILL'] }}] }
+      let(:raw_loops) { [{'L2750' => {'N1' => ['', '', 'CARRIER TO BILL'] }}] }
 
       it 'returns true' do
         expect(reporting.carrier_to_bill?).to eq true

@@ -45,7 +45,7 @@ module Parsers
         end
 
         def subscriber?
-          @subscriber ||= (@loop["INS"][2].strip == "18")
+          @loop["INS"][2].strip == "18"
         end
 
         def policy_loops
@@ -70,6 +70,18 @@ module Parsers
 
         def responsible_party?
           @responsible_party ||= !(@loop["L2100F"].blank? && @loop["L2100G"].blank?) 
+        end
+
+        def street1
+          @loop["L2100A"]["N3"][1]
+        end
+
+        def city
+          @loop["L2100A"]["N4"][1]
+        end
+
+        def state
+          @loop["L2100A"]["N4"][2]
         end
 
         def map_relationship_code(r_code)
