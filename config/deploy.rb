@@ -9,6 +9,7 @@ set :branch,      "development"
 set :rails_env,       "production"
 set :deploy_to,       "/var/www/deployments/gluedb"
 set :deploy_via, :copy
+set :bundle_without, [:test]
 # set :normalize_asset_timestamps, false
 
 ## rbenv settings
