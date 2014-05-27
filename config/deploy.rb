@@ -38,8 +38,14 @@ role :db,  "10.83.85.127", :primary => true        # This is where Rails migrati
 
 default_run_options[:pty] = true  # prompt for sudo password, if needed
 after "deploy:restart", "deploy:cleanup"  # keep only last 5 releases
+before 'deploy:assets:precompile', 'deploy:ensure_gems_correct'
 
 namespace :deploy do
+
+  desc "Ensure the lockfile isn't messed up."
+  task :ensure_gems_correct do
+    run "cp #{deploy_to}/shared/Gemfile.lock #{release_path}/Gemfile.lock"
+  end
 
   desc "create symbolic links to project nginx, unicorn and database.yml config and init files"
   task :finalize_update do
