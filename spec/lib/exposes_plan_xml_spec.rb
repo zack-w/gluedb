@@ -1,0 +1,70 @@
+require 'open-uri'
+require 'nokogiri'
+
+require './lib/exposes_plan_xml'
+
+describe ExposesPlanXml do
+  it 'exposes qhp id' do
+    qhp_id = '666'
+    parser = Nokogiri::XML("<plan><qhp_id>#{qhp_id}</qhp_id></plan>")
+    plan = ExposesPlanXml.new(parser)
+    expect(plan.qhp_id).to eq qhp_id
+  end
+
+  it 'exposes plan exchange id' do
+    plan_exchange_id = '666'
+    parser = Nokogiri::XML("<plan><plan_exchange_id>#{plan_exchange_id}</plan_exchange_id></plan>")
+    plan = ExposesPlanXml.new(parser)
+    expect(plan.plan_exchange_id).to eq plan_exchange_id
+  end
+
+  it 'exposes carrier id' do
+    carrier_id = '1234'
+    parser = Nokogiri::XML("<plan><carrier_id>#{carrier_id}</carrier_id></plan>")
+    plan = ExposesPlanXml.new(parser)
+    expect(plan.carrier_id).to eq carrier_id
+  end
+
+  it 'exposes carrier_name' do
+    carrier_name = 'Carrier of the Wayward Sun'
+    parser = Nokogiri::XML("<plan><carrier_name>#{carrier_name}</carrier_name></plan>")
+    plan = ExposesPlanXml.new(parser)
+    expect(plan.carrier_name).to eq carrier_name
+  end
+
+  it 'exposes plan name' do
+    plan_name = 'Super Awesome Plan'
+    parser = Nokogiri::XML("<plan><plan_name>#{plan_name}</plan_name></plan>")
+    plan = ExposesPlanXml.new(parser)
+    expect(plan.name).to eq plan_name
+  end
+
+  it 'exposes coverage type' do
+    coverage_type = 'Total Coverage'
+    parser = Nokogiri::XML("<plan><coverage_type>#{coverage_type}</coverage_type></plan>")
+    plan = ExposesPlanXml.new(parser)
+    expect(plan.coverage_type).to eq coverage_type
+  end
+
+  it 'exposes the original effective date' do
+    original_effective_date = '1980-02-01'
+    parser = Nokogiri::XML("<plan><original_effective_date>#{original_effective_date}</original_effective_date></plan>")
+    plan = ExposesPlanXml.new(parser)
+    expect(plan.original_effective_date).to eq original_effective_date
+  end
+
+  it 'exposes the group id' do
+    group_id = '777'
+    parser = Nokogiri::XML("<plan><group_id>#{group_id}</group_id></plan>")
+    plan = ExposesPlanXml.new(parser)
+    expect(plan.group_id).to eq group_id
+  end
+
+  it 'exposes the metal level code' do
+    metal_level_code = 'silver'
+    parser = Nokogiri::XML("<plan><metal_level_code>#{metal_level_code}</metal_level_code></plan>")
+    plan = ExposesPlanXml.new(parser)
+    expect(plan.metal_level_code).to eq metal_level_code
+  end
+
+end
