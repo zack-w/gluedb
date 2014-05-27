@@ -5,11 +5,9 @@
 require File.expand_path('../config/application', __FILE__)
 
 Gluedb::Application.load_tasks
-=begin
 desc "Run tests as default task"
 task :default do 
   Bundler.require(:test)
   load 'rspec/rails/tasks/rspec.rake'
   Rake::Task["spec"].invoke
 end
-=end

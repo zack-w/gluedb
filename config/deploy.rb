@@ -1,10 +1,3 @@
-# set :bundle_bins, ["rake"]
-# set :bundle_flags, ""  # Add gem executables to <app>/bin
-# set :bundle_without, [:test]
-# set :bundle_dir, ""
-
-# require "bundler/capistrano"
-
 set :application, "DCHBX GlueDB"
 # set :deploy_via, :remote_cache
 # set :sudo, "sudo -u nginx"
@@ -14,15 +7,6 @@ set :branch,      "development"
 set :rails_env,       "production"
 set :deploy_to,       "/var/www/deployments/gluedb"
 set :deploy_via, :copy
-# set :rake, lambda { "#{fetch(:bundle_cmd, "bundle")} exec rake" }
-# set :normalize_asset_timestamps, false
-
-## rbenv settings
-# set :default_environment, {
-#  'PATH' => "$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH",
-#  'RBENV_VERSION' => "1.9.3-p484",
-#  'RBENV_GEMSETS' => "gluedb"
-#}
 
 
 set :user, "nginx"
