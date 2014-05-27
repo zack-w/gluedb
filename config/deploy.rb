@@ -1,4 +1,4 @@
-# require "bundler/capistrano"
+#require "bundler/capistrano"
 
 set :application, "DCHBX GlueDB"
 # set :deploy_via, :remote_cache
