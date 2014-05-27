@@ -1,4 +1,4 @@
-#require "bundler/capistrano"
+# require "bundler/capistrano"
 
 set :application, "DCHBX GlueDB"
 # set :deploy_via, :remote_cache
@@ -9,7 +9,6 @@ set :branch,      "development"
 set :rails_env,       "production"
 set :deploy_to,       "/var/www/deployments/gluedb"
 set :deploy_via, :copy
-set :bundle_without, [:test]
 # set :normalize_asset_timestamps, false
 
 ## rbenv settings
@@ -42,9 +41,11 @@ before 'deploy:assets:precompile', 'deploy:ensure_gems_correct'
 
 namespace :deploy do
 
-  desc "Ensure the lockfile isn't messed up."
+  desc "Make sure bundler doesn't try to load test gems."
   task :ensure_gems_correct do
-    run "cp #{deploy_to}/shared/Gemfile.lock #{release_path}/Gemfile.lock"
+    run "cp -f #{deploy_to}/shared/Gemfile.lock #{release_path}/Gemfile.lock"
+    run "mkdir -p #{release_path}/.bundle"
+    run "cp -f #{deploy_to}/shared/.bundle/config #{release_path}/.bundle/config"
   end
 
   desc "create symbolic links to project nginx, unicorn and database.yml config and init files"
