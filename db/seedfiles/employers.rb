@@ -1,6 +1,7 @@
 puts "Loading Employers"
 
-Employer.collection.drop
+# Employer.collection.drop
+require 'csv'
 
 glob_pat = File.join(File.dirname(__FILE__), "employer_groups", "*.xml")
 
