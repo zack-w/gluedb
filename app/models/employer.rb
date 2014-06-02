@@ -125,6 +125,10 @@ class Employer
     Person.where("jobs.employer_id" => self._id).map(&:members).flatten
   end
 
+  def get_employees
+    Person.where("jobs.employer_id" => self._id)
+  end
+
   def self.default_search_order
     [[:name, 1]]
   end
