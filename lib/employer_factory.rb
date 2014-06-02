@@ -37,7 +37,10 @@ class EmployerFactory
     )
 
     employer.addresses << create_address(employer_data.contact)
-    employer.phones << create_phone(employer_data.contact)
+    
+    if employer_data.contact.phone_number.blank?
+      employer.phones << create_phone(employer_data.contact)
+    end
 
     employer_data.plans.each do |plan_data|
       employer.elected_plans << create_elected_plan(plan_data)
