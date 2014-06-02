@@ -14,7 +14,7 @@ class EmployersController < ApplicationController
 
   def show
 		@employer = Employer.find(params[:id])
-		@employees = @employer.employees
+		@employees = @employer.get_employees
 
 	  respond_to do |format|
 		  format.html # index.html.erb

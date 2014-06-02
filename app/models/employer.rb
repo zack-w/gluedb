@@ -3,6 +3,7 @@ class Employer
   include Mongoid::Timestamps
   include Mongoid::Versioning
   include Mongoid::Paranoia
+  include MergingModel
 
   extend Mongorder
 
@@ -11,6 +12,7 @@ class Employer
   field :name, type: String
   field :hbx_id, as: :hbx_organization_id, type: String
   field :fein, type: String
+  field :sic_code, type: String
   field :open_enrollment_start, type: Date
   field :open_enrollment_end, type: Date
   field :plan_year_start, type: Date
@@ -19,6 +21,13 @@ class Employer
   field :fte_count, type: Integer
   field :pte_count, type: Integer
   field :msp_count, as: :medicare_secondary_payer_count, type: Integer
+  field :notes, type: String
+
+  field :contact_name_pfx, type: String, default: ""
+  field :contact_name_first, type: String
+  field :contact_name_middle, type: String, default: ""
+  field :contact_name_last, type: String
+  field :contact_name_sfx, type: String, default: ""
 
 	index({ hbx_id: 1 })
 	index({ fein: 1 })
@@ -34,7 +43,7 @@ class Employer
   embeds_many :elected_plans
   index({"elected_plans.carrier_employer_group_id" => 1})
   accepts_nested_attributes_for :elected_plans, reject_if: :all_blank, allow_destroy: true
-  
+
   embeds_many :addresses, :inverse_of => :employer
   accepts_nested_attributes_for :addresses, reject_if: :all_blank, allow_destroy: true
 
@@ -116,6 +125,10 @@ class Employer
     Person.where("jobs.employer_id" => self._id).map(&:members).flatten
   end
 
+  def get_employees
+    Person.where("jobs.employer_id" => self._id)
+  end
+
   def self.default_search_order
     [[:name, 1]]
   end
@@ -152,8 +165,47 @@ class Employer
     if found_employer.nil?
       m_employer.save!
     else
+      self.merge_without_blanking(m_employer, 
+        :name,
+        :hbx_id,
+        :fein,
+        :sic_code,
+        :open_enrollment_start,
+        :open_enrollment_end,
+        :plan_year_start,
+        :plan_year_end,
+        :aasm_state,
+        :fte_count,
+        :pte_count,
+        :msp_count,
+        :notes
+        )
+
+      m_employer.addresses.each { |a| found_employer.merge_address(a) }
+      m_employer.emails.each { |e| found_employer.merge_email(e) }
+      m_employer.phones.each { |p| found_employer.merge_phone(p) }
+
       found_employer.merge_elected_plans(m_employer)
+
       found_employer.save!
+    end
+  end
+
+  def merge_address(m_address)
+    unless (self.addresses.any? { |p| p.match(m_address) })
+      self.addresses << m_address
+    end
+  end
+
+  def merge_email(m_email)
+    unless (self.emails.any? { |p| p.match(m_email) })
+      self.emails << m_email
+    end
+  end
+
+  def merge_phone(m_phone)
+    unless (self.phones.any? { |p| p.match(m_phone) })
+      self.phones << m_phone
     end
   end
 

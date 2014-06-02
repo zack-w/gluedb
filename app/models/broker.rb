@@ -37,6 +37,10 @@ class Broker
     m_broker
   end
 
+  def self.find_by_npn(number)
+    Broker.where({npn: number}).first
+  end
+
 private
 
   def generate_name
