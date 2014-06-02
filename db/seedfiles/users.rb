@@ -120,3 +120,7 @@ end
     "heather.parker@dc.gov",
     "$2a$10$w1n6u5XErDHiblHZCi7wqOIfVnD3Q5rVqRdvvsy26roVUmp0BwwE."
   )
+  add_a_user(
+    "camille.gray@dc.gov",
+    "$2a$10$9gR/KrlVqNWY1tJugHLhiubWj2uYfBbm699o3PY/BK89.fmuAHduq"
+  )
