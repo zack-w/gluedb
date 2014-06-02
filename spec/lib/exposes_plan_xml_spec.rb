@@ -53,12 +53,21 @@ describe ExposesPlanXml do
     expect(plan.original_effective_date).to eq original_effective_date
   end
 
-  it 'exposes the group id' do
-    group_id = '777'
-    parser = Nokogiri::XML("<plan><group_id>#{group_id}</group_id></plan>")
-    plan = ExposesPlanXml.new(parser)
-    expect(plan.group_id).to eq group_id
+  describe 'group id' do
+    it 'exposes the group id when present' do
+      group_id = '777'
+      parser = Nokogiri::XML("<plan><group_id>#{group_id}</group_id></plan>")
+      plan = ExposesPlanXml.new(parser)
+      expect(plan.group_id).to eq group_id
+    end
+
+    it 'returns blank when absent' do
+      parser = Nokogiri::XML("<plan></plan>")
+      plan = ExposesPlanXml.new(parser)
+      expect(plan.group_id).to eq ''
+    end
   end
+  
 
   it 'exposes the metal level code' do
     metal_level_code = 'silver'
@@ -67,4 +76,19 @@ describe ExposesPlanXml do
     expect(plan.metal_level_code).to eq metal_level_code
   end
 
+  describe 'carrier assigned policy number' do
+    it 'exposes number when present' do
+      policy_number = '1234'
+      parser = Nokogiri::XML("<plan><policy_number>#{policy_number}</policy_number></plan>")
+      plan = ExposesPlanXml.new(parser)
+      expect(plan.policy_number).to eq policy_number
+    end
+
+    it 'returns blank when absent' do
+      parser = Nokogiri::XML("<plan></plan>")
+      plan = ExposesPlanXml.new(parser)
+      expect(plan.policy_number).to eq ''
+    end
+  end
+  
 end

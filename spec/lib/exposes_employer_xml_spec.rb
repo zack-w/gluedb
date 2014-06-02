@@ -24,12 +24,21 @@ describe ExposesEmployerXml do
     expect(employer.employer_exchange_id).to eq employer_exchange_id
   end
 
-  it 'exposes sic code' do
-    sic_code = '4321'
-    parser = Nokogiri::XML("<employer><sic_code>#{sic_code}</sic_code></employer>")
-    employer = ExposesEmployerXml.new(parser)
-    expect(employer.sic_code).to eq sic_code
+  describe 'sic code' do 
+    it 'returns code when present' do
+      sic_code = '4321'
+      parser = Nokogiri::XML("<employer><sic_code>#{sic_code}</sic_code></employer>")
+      employer = ExposesEmployerXml.new(parser)
+      expect(employer.sic_code).to eq sic_code
+    end
+
+    it 'returns blank when absent' do
+      parser = Nokogiri::XML("<employer></employer>")
+      employer = ExposesEmployerXml.new(parser)
+      expect(employer.sic_code).to eq ''
+    end
   end
+  
 
   it 'exposes fte_count' do
     fte_count = '1'
@@ -45,12 +54,21 @@ describe ExposesEmployerXml do
     expect(employer.pte_count).to eq pte_count
   end
 
-  it 'exposes broker npn id' do
-    broker_npn_id = '6543'
-    parser = Nokogiri::XML("<employer><broker><npn_id>#{broker_npn_id}</npn_id></broker></employer>")
-    employer = ExposesEmployerXml.new(parser)
-    expect(employer.broker_npn_id).to eq broker_npn_id
+  describe 'broker npn id' do
+    it 'exposes broker npn id' do
+      broker_npn_id = '6543'
+      parser = Nokogiri::XML("<employer><broker><npn_id>#{broker_npn_id}</npn_id></broker></employer>")
+      employer = ExposesEmployerXml.new(parser)
+      expect(employer.broker_npn_id).to eq broker_npn_id
+    end
+
+    it 'is optional sent' do
+      parser = Nokogiri::XML("<employer></employer>")
+      employer = ExposesEmployerXml.new(parser)
+      expect(employer.broker_npn_id).to eq ''
+    end
   end
+
 
   it 'exposes open_enrollment_start' do
     open_enrollment_start = '2010-02-01'
@@ -73,12 +91,21 @@ describe ExposesEmployerXml do
     expect(employer.plan_year_start).to eq plan_year_start
   end
 
-  it 'exposes plan_year_end' do
-    plan_year_end = '2010-02-01'
-    parser = Nokogiri::XML("<employer><plan_year_end>#{plan_year_end}</plan_year_end></employer>")
-    employer = ExposesEmployerXml.new(parser)
-    expect(employer.plan_year_end).to eq plan_year_end 
+  describe 'plan_year_end' do
+    it 'returns date when present' do
+      plan_year_end = '2010-02-01'
+      parser = Nokogiri::XML("<employer><plan_year_end>#{plan_year_end}</plan_year_end></employer>")
+      employer = ExposesEmployerXml.new(parser)
+      expect(employer.plan_year_end).to eq plan_year_end 
+    end
+
+    it 'returns blank when absent' do
+      parser = Nokogiri::XML("<employer></employer>")
+      employer = ExposesEmployerXml.new(parser)
+      expect(employer.plan_year_end).to eq ''   
+    end
   end
+  
 
   it 'exposes plans' do
     parser = Nokogiri::XML("<employer><plans><plan>yoo</plan></plans></employer>")
@@ -111,12 +138,21 @@ describe ExposesEmployerXml do
     expect(employer.exchange_version).to eq exchange_version
   end
 
-  it 'exposes notes' do
-    notes = "This is something that should be noted."
-    parser = Nokogiri::XML("<employer><notes>#{notes}</notes></employer>")
-    employer = ExposesEmployerXml.new(parser)
-    expect(employer.notes).to eq notes
+  describe 'notes' do
+    it 'exposes notes when present' do
+      notes = "This is something that should be noted."
+      parser = Nokogiri::XML("<employer><notes>#{notes}</notes></employer>")
+      employer = ExposesEmployerXml.new(parser)
+      expect(employer.notes).to eq notes
+    end
+
+    it 'returns blank when absent' do
+      parser = Nokogiri::XML("<employer></employer>")
+      employer = ExposesEmployerXml.new(parser)
+      expect(employer.notes).to eq ''
+    end
   end
+  
 
   it 'TODO: handle optionals!'
 end

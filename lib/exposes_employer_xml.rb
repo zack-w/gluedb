@@ -19,7 +19,8 @@ class ExposesEmployerXml
   end
 
   def sic_code
-    @parser.at_css('sic_code').text
+    node = @parser.at_css('sic_code')
+    (node.nil?)? '' : node.text
   end
 
   def fte_count
@@ -31,7 +32,8 @@ class ExposesEmployerXml
   end
 
   def broker_npn_id
-    @parser.at_css('broker npn_id').text
+    node = @parser.at_css('broker npn_id')
+    (node.nil?)? '' : node.text
   end
 
   def open_enrollment_start
@@ -47,7 +49,8 @@ class ExposesEmployerXml
   end
 
   def plan_year_end
-    @parser.at_css('plan_year_end').text
+    node = @parser.at_css('plan_year_end')
+    (node.nil?)? '' : node.text
   end
 
   def plans
@@ -71,10 +74,11 @@ class ExposesEmployerXml
   end
 
   def notes
-    @parser.at_css('notes').text
+    node = @parser.at_css('notes')
+    (node.nil?) ? '' : node.text
   end
 
   def contact
-    ExposesContactXml.new(@parser.at_css('vcard'))
+    ExposesContactXml.new(@parser.at_css('ns2|vcard', ns2: "urn:ietf:params:xml:ns:vcard-4.0"))
   end
 end
