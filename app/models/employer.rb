@@ -151,7 +151,7 @@ class Employer
     if found_employer.nil?
       m_employer.save!
     else
-      self.merge_without_blanking(m_employer, 
+      found_employer.merge_without_blanking(m_employer, 
         :name,
         :hbx_id,
         :fein,
