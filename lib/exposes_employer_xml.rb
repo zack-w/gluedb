@@ -79,6 +79,11 @@ class ExposesEmployerXml
   end
 
   def contact
-    ExposesContactXml.new(@parser.at_css('ns2|vcard', ns2: "urn:ietf:params:xml:ns:vcard-4.0"))
+    node = @parser.at_css('ns2|vcard', ns2: "urn:ietf:params:xml:ns:vcard-4.0")
+    if(node.nil?)
+      NullExposesContactXml.new
+    else
+      ExposesContactXml.new(node)
+    end
   end
 end
