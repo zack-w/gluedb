@@ -28,7 +28,7 @@
     <% @employers.each do |employer| %>
       <tr>
         <td><%= link_to employer.name, employer_path(employer) %></td>
-        <td><%= number_with_delimiter(employer.employees.count) %></td>
+        <td><%= number_with_delimiter(employer.members.count) %></td>
         <td><%= employer.premium_payments.last.paid_at unless 
                 employer.premium_payments.last.nil? %></td>
         <td><%= employer.premium_payments.last.end_date unless 

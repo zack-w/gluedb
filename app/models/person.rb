@@ -49,6 +49,11 @@ class Person
   embeds_many :responsible_parties
 #  accepts_nested_attributes_for :responsible_parties, reject_if: :all_blank, allow_destroy: true
 
+  embeds_many :jobs
+  index({"jobs.employer_id" => 1})
+  index({"jobs.m_id" => 1})
+  index({"responsible_parties._id" => 1})
+
   scope :all_under_age_twenty_six, ->{ gt(:'members.dob' => (Date.today - 26.years))}
   scope :all_over_age_twenty_six,  ->{lte(:'members.dob' => (Date.today - 26.years))}
 
@@ -178,6 +183,15 @@ class Person
 
   def assign_authority_member_id
     self.authority_member_id = (self.members.length > 1) ? nil : self.members.first.hbx_member_id
+  end
+
+  def merge_job(m_job)
+    found_job = self.jobs.detect { |j| j.m_id == m_job.m_id }
+    if found_job
+      found_job.merge_data(m_job)
+    else
+      self.jobs << m_job
+    end
   end
 
   def merge_address(m_address)

@@ -57,6 +57,11 @@ class Employer
 
   before_save :invalidate_find_caches
 
+  def associate_employees
+    members.each { |m| self.employees << m.person }
+    self.save!
+  end
+
   def associate_all_carriers_and_plans_and_brokers
     self.policies.each { |pol| self.carriers << pol.carrier; self.brokers << pol.broker; self.plans << pol.plan }
     save!
@@ -81,6 +86,7 @@ class Employer
     return if val.blank?
     write_attribute(:fein, val.to_s.gsub(/[^0-9]/i, ''))
   end
+
 
   def invalidate_find_caches
     Rails.cache.delete("Employer/find/fein.#{fein}")
@@ -113,6 +119,14 @@ class Employer
       acc + BigDecimal.new(item)
     }
     "%.2f" % value
+  end
+
+  def members
+    Person.where("jobs.employer_id" => self._id).map(&:members).flatten
+  end
+
+  def get_employees
+    Person.where("jobs.employer_id" => self._id)
   end
 
   def self.default_search_order
