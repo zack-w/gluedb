@@ -93,7 +93,7 @@ class EmployerFactory
       :metal_level => plan.metal_level,
       :hbx_plan_id => plan.hbx_plan_id,
       :original_effective_date => plan_data.original_effective_date,
-      :plan_name => plan_data.name,
+      :plan_name => plan.name,
       :carrier_policy_number => plan_data.policy_number,
       :carrier_employer_group_id => plan_data.group_id
       )
