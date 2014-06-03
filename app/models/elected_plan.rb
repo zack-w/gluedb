@@ -3,6 +3,7 @@ class ElectedPlan
   include Mongoid::Timestamps
   include Mongoid::Paranoia
 
+  include MergingModel
   embedded_in :employer
 
   field :carrier_employer_group_id, type: String
