@@ -36,9 +36,11 @@ class EmployerFactory
       :notes => employer_data.notes
     )
 
-    employer.addresses << create_address(employer_data.contact)
+    if !employer_data.contact.street1.blank?
+      employer.addresses << create_address(employer_data.contact)
+    end
     
-    if employer_data.contact.phone_number.blank?
+    if !employer_data.contact.phone_number.blank?
       employer.phones << create_phone(employer_data.contact)
     end
 
