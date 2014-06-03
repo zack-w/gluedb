@@ -23,16 +23,6 @@
           <dd><%= @employer.hbx_id %></dd>
           <dt><%= model_class.human_attribute_name(:fein) %></dt>
           <dd><%= number_to_fein(@employer.fein) %></dd>
-          <dt><%= "Carrier(s)" %></dt>
-          <% @employer.carriers.each do |c| %>
-            <dd><%= link_to c.name, carrier_path(c) %></dd>
-          <% end %>
-          <dt><%= "Plan(s)" %></dt>
-          <% @employer.plans.each do |p| %>
-            <dd><%= link_to p.name, carrier_path(p.carrier) %></dd>
-          <% end %>
-          <dt><%= model_class.human_attribute_name(:broker) %></dt>
-          <dd><% @employer.broker %></dd>
         </dl>
       </div>
     </div>
