@@ -152,7 +152,4 @@ describe ExposesEmployerXml do
       expect(employer.notes).to eq ''
     end
   end
-  
-
-  it 'TODO: handle optionals!'
 end

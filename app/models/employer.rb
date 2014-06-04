@@ -187,6 +187,8 @@ class Employer
 
       EmployerElectedPlansMerger.merge(found_employer, m_employer)
 
+      found_employer.carriers = (found_employer.carriers + m_employer.carriers).uniq
+
       found_employer.save!
     end
   end
@@ -235,6 +237,5 @@ class Employer
     end
 
   end
-
 
 end

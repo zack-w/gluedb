@@ -50,17 +50,13 @@ class EmployerFactory
 
     employer.broker = Broker.find_by_npn(employer_data.broker_npn_id)
 
-    employer.carrier_ids = uniq_carrier_ids(employer.elected_plans)
-
+    employer.carriers = carriers_for_plans(elected_plans)
+    
     employer
   end
 
-  def uniq_carrier_ids(elected_plans)
-    array = elected_plans.uniq do |p|
-      p.carrier_id
-    end
-
-    array.map { |p| p.carrier_id }
+  def carriers_for_plans(elected_plans)
+    elected_plans.collect { |p| p.carrier }.uniq
   end
 
   def create_address(contact_data)
@@ -87,7 +83,7 @@ class EmployerFactory
     raise self.hios_id.inspect if plan.nil?
 
     ElectedPlan.new(
-      :carrier => plan.carrier, #or plan_data.carrier_id
+      :carrier => plan.carrier,
       :qhp_id => plan_data.qhp_id,
       :coverage_type => plan_data.coverage_type,
       :metal_level => plan.metal_level,
