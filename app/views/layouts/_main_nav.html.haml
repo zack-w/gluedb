@@ -13,6 +13,7 @@
         != active_menu_item("Employers", employers_path, :employers)
         != active_menu_item("Brokers", brokers_path, :brokers)
         != active_menu_item("Carriers", carriers_path, :carriers)
+        != active_menu_item("Plans", plans_path, :plans)
         - if current_user 
           %li.dropdown
             %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}

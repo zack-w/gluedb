@@ -3,8 +3,9 @@ class Plan
   include Mongoid::Timestamps
   include Mongoid::Versioning
   include Mongoid::Paranoia
-
   
+  extend Mongorder
+
   field :name, type: String
   field :abbrev, as: :abbreviation, type: String
   field :hbx_plan_id, type: String  # internal ID for plan
@@ -49,5 +50,15 @@ class Plan
     age = Ager.new(birth_date).age_as_of(benefit_begin_date)
     premiums = Collections::Premiums.new(self.premium_tables).for_date(rate_period_date).for_age(age)
     premiums.to_a.first.amount
+  end
+
+  def self.default_search_order
+    [
+      ["name", 1],
+    ]
+  end
+
+  def self.search_hash(s_str)
+    Hash.new
   end
 end

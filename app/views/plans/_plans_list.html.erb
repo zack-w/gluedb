@@ -1,0 +1,19 @@
+<table class="table table-condensed">
+  <thead>
+    <tr>
+    	<th>Name</th>
+      <th>Coverage Type</th>
+      <th>Metal level</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= table_empty_to_human if plans.count < 1 %>
+    <% plans.each do |p| %>
+      <tr>
+        <td><%= link_to p.name, '#' %></td>
+        <td><%= p.coverage_type.capitalize %></td>
+        <td><%= p.metal_level %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
