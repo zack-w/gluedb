@@ -59,6 +59,11 @@ class Plan
   end
 
   def self.search_hash(s_str)
-    Hash.new
+    search_rex = Regexp.compile(Regexp.escape(s_str), true)
+    {
+      "$or" => [
+        {"name" => search_rex}
+      ]
+    }
   end
 end
