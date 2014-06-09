@@ -58,3 +58,5 @@
     <%= link_to t('.back', :default => t("helpers.links.back")), people_path, :class => 'btn btn-primary'  %>
   </div>
 </div>
+
+<%= render 'authority_id_dialog', person: @person %>

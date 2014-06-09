@@ -2,7 +2,7 @@
 <% if @person.can_edit_family_address? %>
   <li><%= link_to "Change Address", edit_enrollment_address_path(@person, {:id => @person._id}) %></li>
 <% end %>
-<li><a href="#">Set Authority</a></li>
+<li><a id='setAuthorityLink' href='#'>Set Authority</a></li>
 <li><%= link_to "Edit", edit_person_path(@person) %>
 <li><%= link_to "Add Dependent", new_person_path %>
 <li><%= link_to "Drop Dependent", new_person_path %>
