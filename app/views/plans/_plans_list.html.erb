@@ -10,7 +10,7 @@
     <%= table_empty_to_human if plans.count < 1 %>
     <% plans.each do |p| %>
       <tr>
-        <td><%= link_to p.name, '#' %></td>
+        <td><%= link_to p.name, plan_path(p.id) %></td>
         <td><%= p.coverage_type.capitalize %></td>
         <td><%= p.metal_level %></td>
       </tr>

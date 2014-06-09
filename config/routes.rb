@@ -78,7 +78,11 @@ Gluedb::Application.routes.draw do
     resources :plans
   end
 
-  resources :plans, only: [:index]
+  resources :plans, only: [:index, :show] do
+    member do
+      get :calculate_premium
+    end
+  end
 
 
   # The priority is based upon order of creation:
