@@ -7,7 +7,7 @@ dates_by_sheet = [
   Date.new(2014, 4, 1)..Date.new(2014, 6, 30)
 ]
 
-spreadsheet = Roo::Spreadsheet.open('./script/importers/premium_table/file.xlsx')
+spreadsheet = Roo::Spreadsheet.open('./db/seedfiles/premium_table.xlsx')
 
 (0...3).each do |sheet_index|
   current_sheet = spreadsheet.sheet(sheet_index)
