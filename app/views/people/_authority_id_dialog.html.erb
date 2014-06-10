@@ -9,7 +9,16 @@
           <%= form_tag(assign_authority_id_person_path(person.id), method: :put, id: 'select_authority_id')  do %>
             <% person.members.each do |m| %>
               <%= radio_button("radio", "authority_id", "#{m.hbx_member_id}") %>
-              <%= m.hbx_member_id %><br>
+              HBX Member ID:<%= m.hbx_member_id %>
+                <% m.policies.each do |policy|%>
+                  <dl class="dl-horizontal">
+                    <dt>Plan</dt>
+                    <dd><%= policy.carrier.name %> | <%= truncate(policy.plan.name, length: 50) %></dd>
+                    <dt>Status</dt>
+                    <dd><%= policy.aasm_state.capitalize %></dd>
+                  </dl>
+                <% end %>
+              <br>
             <% end %>
           <% end %>
         </div>
