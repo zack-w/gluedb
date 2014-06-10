@@ -54,6 +54,7 @@ Gluedb::Application.routes.draw do
     member do
       put :compare
       put :persist_and_transmit
+      put :assign_authority_id
     end
   end
 

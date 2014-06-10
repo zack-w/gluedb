@@ -22,3 +22,6 @@ jQuery ->
   update_delete_buttons()
   $('#setAuthorityLink').click ->
     $('#authorityIDModal').modal({})
+
+  $('#save-authority-button').click ->
+    $('#select_authority_id').submit()
