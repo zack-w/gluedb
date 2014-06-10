@@ -31,7 +31,7 @@ class Broker
   before_save :generate_name
 
   def self.find_or_create_broker(m_broker)
-    found_broker = self.where( :npn => m_broker.npn ).first
+    found_broker = Broker.find_by_npn(m_broker.npn)
     return found_broker unless found_broker.nil?
     m_broker.save!
     m_broker
@@ -44,9 +44,9 @@ class Broker
 private
 
   def generate_name
-    return if self.name.blank?
-    self.name_first = self.name.split.first.capitalize
-    self.name_last  = self.name.split.last.capitalize
+    return if self.name_full.blank?
+    self.name_first = self.name_full.split.first.capitalize
+    self.name_last  = self.name_full.split.last.capitalize
   end
 
 end
