@@ -55,4 +55,5 @@ group :production do
   gem 'unicorn'
 end
 
+gem 'rabl'
 gem 'oj'
