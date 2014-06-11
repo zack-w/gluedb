@@ -6,4 +6,5 @@
 require File.join(File.dirname(__FILE__),'seedfiles', 'carriers')
 require File.join(File.dirname(__FILE__),'seedfiles', 'users')
 require File.join(File.dirname(__FILE__),'seedfiles', 'plans')
+require File.join(File.dirname(__FILE__),'seedfiles', 'premiums')
 require File.join(File.dirname(__FILE__),'seedfiles', 'employers')

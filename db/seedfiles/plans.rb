@@ -19,6 +19,3 @@ CSV.foreach(File.open(csv_loc), headers: true) do |row|
 end
 
 Plan.create!(plans)
-
-#load plan premiums by age
-load './script/importers/premium_table/import.rb'
