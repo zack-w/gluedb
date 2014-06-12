@@ -60,7 +60,7 @@
     <div class="row">
       <div class="col-md-12">
         <h4>Employees</h4>
-        <%= render "people/people_list", people: @employees %>
+        <%= render "people/people_list", people: @employer.employees %>
 
         <h4>Elected Plans</h4>
         <%= render "elected_plans_table", elected_plans: @employer.elected_plans %>

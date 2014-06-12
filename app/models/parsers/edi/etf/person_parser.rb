@@ -224,18 +224,6 @@ module Parsers
         def merge_method(m_type)
           (@change_type == "change") ? "update_#{m_type}".to_sym : "merge_#{m_type}".to_sym
         end
-
-        def map_employment_status_code(es_code)
-          employment_status_codes = {
-            "AC" => "active",
-            "FT" => "full-time",
-            "RT" => "retired",
-            "PT" => "part-time",
-            "TE" => "terminated"
-          }
-          result = employment_status_codes[es_code]
-          result.nil? ? "active" : result
-        end
       end
     end
   end

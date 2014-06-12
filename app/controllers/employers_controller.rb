@@ -13,13 +13,11 @@ class EmployersController < ApplicationController
   end
 
   def show
-		@employer = Employer.find(params[:id])
-		@employees = @employer.get_employees
+    @employer = Employer.find(params[:id])
 
 	  respond_to do |format|
 		  format.html # index.html.erb
 		  format.json { render json: @employer }
-      format.xml
 		end
   end
 
