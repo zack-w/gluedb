@@ -28,6 +28,7 @@ class Employer
   field :name_middle, type: String, default: ""
   field :name_last, type: String
   field :name_sfx, type: String, default: ""
+  field :name_full, type: String
 
 	index({ hbx_id: 1 })
 	index({ fein: 1 })
@@ -55,6 +56,7 @@ class Employer
 
   validates_length_of :fein, allow_blank: true, allow_nil: true, minimum: 9, maximum: 9
 
+  before_save :initialize_name_full
   before_save :invalidate_find_caches
 
   def associate_all_carriers_and_plans_and_brokers
@@ -206,6 +208,14 @@ class Employer
     end
   end
 
+  def full_name
+    [name_pfx, name_first, name_middle, name_last, name_sfx].reject(&:blank?).join(' ').downcase.gsub(/\b\w/) {|first| first.upcase }
+  end
+
+  def initialize_name_full
+    self.name_full = full_name
+  end
+
   class << self
 
     def find_or_create_employer(m_employer)
@@ -223,7 +233,5 @@ class Employer
       m_employer.save!
       m_employer
     end
-
   end
-
 end
