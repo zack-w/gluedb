@@ -54,6 +54,7 @@ Gluedb::Application.routes.draw do
     member do
       put :compare
       put :persist_and_transmit
+      put :assign_authority_id
     end
   end
 
@@ -76,6 +77,12 @@ Gluedb::Application.routes.draw do
 
   resources :carriers do
     resources :plans
+  end
+
+  resources :plans, only: [:index, :show] do
+    member do
+      get :calculate_premium
+    end
   end
 
 

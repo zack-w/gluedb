@@ -104,6 +104,16 @@ class PeopleController < ApplicationController
     end
   end
 
+  def assign_authority_id
+    person = Person.find(params[:id])
+    person.authority_member = params[:radio][:authority_id]
+    person.save!
+
+    respond_to do |format|
+      format.html { redirect_to person, notice: "Person's Authority Member ID updated." }
+    end
+  end
+
   def destroy
     @person = Person.find(params[:id])
     @person.destroy

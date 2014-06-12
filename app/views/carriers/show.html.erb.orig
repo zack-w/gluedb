@@ -31,7 +31,10 @@
 <tbody>
   <% @plans.each do |plan| %>
   <tr>
+<<<<<<< HEAD
     <td><%= link_to plan.name, plan_path(plan) %></td>
+=======
+    <td><%= link_to plan.name, plans_path(plan) %></td>
     <td><%= plan.hios_plan_id %></td>
     <td><%= plan.coverage_type.capitalize %></td>
     <td><%= plan.metal_level.capitalize %></td>

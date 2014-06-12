@@ -185,7 +185,9 @@ class Employer
       m_employer.emails.each { |e| found_employer.merge_email(e) }
       m_employer.phones.each { |p| found_employer.merge_phone(p) }
 
-      found_employer.merge_elected_plans(m_employer)
+      EmployerElectedPlansMerger.merge(found_employer, m_employer)
+
+      found_employer.carriers = (found_employer.carriers + m_employer.carriers).uniq
 
       found_employer.save!
     end
@@ -207,13 +209,6 @@ class Employer
     unless (self.phones.any? { |p| p.match(m_phone) })
       self.phones << m_phone
     end
-  end
-
-  def merge_elected_plans(m_employer)
-    current_eps = self.elected_plans
-    m_eps = m_employer.elected_plans
-    all_eps = (current_eps + m_eps).uniq { |ep| ep.compare_value }
-    self.elected_plans = all_eps
   end
 
   def update_elected_plans(carrier, g_id)
@@ -242,6 +237,5 @@ class Employer
     end
 
   end
-
 
 end

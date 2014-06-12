@@ -1,3 +1,5 @@
+require 'csv'
+
 puts "Loading: Plans"
 Plan.collection.drop
 

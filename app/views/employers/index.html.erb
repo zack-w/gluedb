@@ -20,6 +20,8 @@
     <tr>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:employee_count) %></th>
+      <th><%= model_class.human_attribute_name(:open_enrollment_start) %></th>
+      <th><%= model_class.human_attribute_name(:plan_year_start) %></th>
       <th><%= model_class.human_attribute_name(:last_820_date) %></th>
       <th><%= model_class.human_attribute_name(:coverage_through) %></th>
     </tr>
@@ -29,6 +31,8 @@
       <tr>
         <td><%= link_to employer.name, employer_path(employer) %></td>
         <td><%= number_with_delimiter(employer.members.count) %></td>
+        <td><%= employer.open_enrollment_start %></td>
+        <td><%= employer.plan_year_start %></td>
         <td><%= employer.premium_payments.last.paid_at unless 
                 employer.premium_payments.last.nil? %></td>
         <td><%= employer.premium_payments.last.end_date unless 
