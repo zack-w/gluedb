@@ -152,12 +152,9 @@ module Parsers
           end
           if subscriber?
             if !@employer_id.blank?
-              new_job = Job.new(
-                :m_id => @member_id,
-                :employer_id => @employer_id,
-                :emp_stat => map_employment_status_code(parse_employment_status)
-              )
-              new_person.merge_job(new_job)
+              employer = Employer.find(@employer_id)
+              employer.employees << new_person
+              employer.save
             end
           end 
           begin
