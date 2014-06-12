@@ -50,7 +50,7 @@ class EmployerFactory
 
     employer.broker = Broker.find_by_npn(employer_data.broker_npn_id)
 
-    employer.carriers = carriers_for_plans(elected_plans)
+    employer.carriers = carriers_for_plans(employer.elected_plans)
     
     employer
   end
