@@ -3,13 +3,13 @@
 <div class="page-header">
   <ul class="breadcrumb">
     <li><%= link_to model_class.model_name.human.titleize.pluralize, brokers_path %></li>
-    <li class="active"><%= @broker.name %></li>
+    <li class="active"><%= @broker.name_full %></li>
   </ul>
 </div>
 
 <dl class="dl-horizontal">
   <dt><%= model_class.human_attribute_name(:name) %></dt>
-  <dd><%= @broker.name %></dd>
+  <dd><%= @broker.name_full %></dd>
   <dt><%= model_class.human_attribute_name(:type) %></dt>
   <dd><%= @broker.b_type.humanize %></dd>
   <dt><%= model_class.human_attribute_name(:npn) %></dt>

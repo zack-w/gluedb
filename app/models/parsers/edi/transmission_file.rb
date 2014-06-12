@@ -232,7 +232,7 @@ module Parsers
         return nil if !broker_loop.valid?
 
         new_broker = Broker.new(
-          :name => broker_loop.name,
+          :name_full => broker_loop.name,
           :npn => broker_loop.npn,
           :b_type => "broker"
         )

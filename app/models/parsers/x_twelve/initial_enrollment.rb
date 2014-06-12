@@ -7,7 +7,7 @@ module Parsers
 
       def to_model
         Broker.new(
-          :name => @name,
+          :name_full => @name,
           :npn => @npn,
           :b_type => "broker"
         )

@@ -19,7 +19,7 @@
   <tbody>
     <% @brokers.each do |broker| %>
       <tr>
-        <td><%= link_to mixed_case(broker.name), broker_path(broker) %></td>
+        <td><%= link_to mixed_case(broker.name_full), broker_path(broker) %></td>
         <td><%= broker.b_type.capitalize %></td>
         <td><%= broker.npn %></td>
         <td><%= broker.employers.count %></td>
