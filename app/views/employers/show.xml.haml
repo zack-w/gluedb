@@ -1,39 +1,83 @@
-%ns:employer{"xmlns:ns" => "http://openhbx.org/api/terms/1.0"}
-  %ns:name= @employer.name
-  %ns:fein= @employer.fein
-  %ns:contacts
-    %ns:contact
-  %ns:hbx_uri
-  %ns:hbx_id= @employer.hbx_id
-  %ns:sic_code= @employer.sic_code
-  %ns:fte_count= @employer.fte_count
-  %ns:employees
-    %ns:hbx_employer_id= @employer.hbx_id
-    %ns:hbx_employer_uri
-    %ns:employer_status
-    %ns:eligibility_state_date
-    %ns:eligibility_end_date
-  %ns:plans
+%n1:employer{"xmlns:n1" => "http://openhbx.org/api/terms/1.0", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "http://openhbx.org/api/terms/1.0 employer.xsd"}
+  %n1:name= @employer.name
+  %n1:fein= @employer.fein
+  %n1:contacts
+    %n1:contact
+      %n1:name
+        %n1:name_prefix= @employer.name_pfx
+        %n1:name_first= @employer.name_first
+        %n1:name_middle= @employer.name_middle
+        %n1:name_last= @employer.name_last
+        %n1:name_suffix= @employer.name_sfx
+        %n1:name_full= @employer.name_full
+      %n1:job_title
+      %n1:department
+      %n1:addresses
+        - @employer.addresses.each do |address|
+          %n1:address_type= address.address_type
+          %n1:address_1= address.address_1
+          %n1:address_2= address.address_2
+          %n1:city= address.city
+          %n1:state= address.state
+          %n1:postal_code= address.zip
+          %n1:country_code= 'US'
+          %n1:coordinates
+            %n1:x
+            %n1:y
+            %n1:z
+            %n1:coordinate_system_reference
+      %n1:emails
+        - @employer.emails.each do |email|
+          %n1:email_type= email.email_type
+          %n1:email_address= email.email_address
+      %n1:phones
+        - @employer.phones.each do |phone|
+          %n1:phone_type= phone.phone_type
+          %n1:phone_number= phone.phone_number
+          %n1:extension= phone.extension
+  %n1:hbx_uri
+  %n1:hbx_id= @employer.hbx_id
+  %n1:sic_code= @employer.sic_code
+  %n1:fte_count= @employer.fte_count
+  %n1:pte_count= @employer.pte_count
+  %n1:employee_list
+    - @employer.employees.each do |employee|
+      %n1:employee
+        %n1:name
+          %n1:name_prefix= employee.name_pfx
+          %n1:name_first= employee.name_first
+          %n1:name_middle= employee.name_middle
+          %n1:name_last= employee.name_last
+          %n1:name_suffix= employee.name_sfx
+          %n1:name_full= employee.name_full
+        %n1:identifier
+          %n1:hbx_employer_id= @employer.hbx_id
+          %n1:hbx_employer_uri
+          %n1:hbx_uri
+          %n1:hbx_id
+          %n1:employer_status
+          %n1:eligibility_start_date
+          %n1:eligibility_end_date
+  %n1:plan_list
     - @employer.elected_plans.each do |plan|
-      %ns:plan
-        %ns:name= plan.plan_name
-        %ns:hbx_plan_id= plan.hbx_plan_id
-        %ns:qhp_id= plan.qhp_id
-        %ns:carrier_name
-        %ns:carrier_urn
-        %ns:policy_number= plan.carrier_policy_number
-        %ns:group_id= plan.carrier_employer_group_id
-        %ns:coverage_type= plan.coverage_type
-        %ns:original_effective_date= plan.original_effective_date
-        %ns:metal_level_code= plan.metal_level
-  %ns:pte_count= @employer.pte_count
-  %ns:broker
-    %ns:npn= @employer.broker.npn
-    %ns:tpa_ga_fein
-    %ns:broker_name= @employer.broker.name_full
-    %ns:tpa_name
-  %ns:open_enrollment_start= @employer.open_enrollment_start
-  %ns:open_enrollment_end= @employer.open_enrollment_end
-  %ns:plan_year_start= @employer.plan_year_start
-  %ns:plan_year_end= @employer.plan_year_end
-  %ns:notes= @employer.notes
+      %n1:plan
+        %n1:name= plan.plan_name
+        %n1:hbx_plan_id= plan.hbx_plan_id
+        %n1:qhp_id= plan.qhp_id
+        %n1:carrier_name= plan.carrier.name
+        %n1:carrier_urn
+        %n1:policy_number= plan.carrier_policy_number
+        %n1:group_id= plan.carrier_employer_group_id
+        %n1:coverage_type= plan.coverage_type
+        %n1:original_effective_date= plan.original_effective_date.try(:strftime,"%Y-%m-%d")
+        %n1:metal_level_code= plan.metal_level.downcase
+  %n1:broker
+    %n1:npn= @employer.broker.npn
+    %n1:tpa_ga_fein
+    %n1:broker_name= @employer.broker.name_full
+    %n1:tpa_name
+  %n1:open_enrollment_start= @employer.open_enrollment_start.try(:strftime,"%Y-%m-%d")
+  %n1:open_enrollment_end= @employer.open_enrollment_end.try(:strftime,"%Y-%m-%d")
+  %n1:plan_year_start= @employer.plan_year_start.try(:strftime,"%Y-%m-%d")
+  %n1:plan_year_end= @employer.plan_year_end.try(:strftime,"%Y-%m-%d")
+  %n1:notes= @employer.notes
