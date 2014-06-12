@@ -44,15 +44,25 @@
 
 
           <dt><%= "Carrier(s)" %></dt>
+          <% if @employer.carriers.count == 0 %>
+            <dd></dd>
+          <% end %>
           <% @employer.carriers.each do |c| %>
             <dd><%= link_to c.name, carrier_path(c) %></dd>
           <% end %>
+          
+
           <dt><%= "Plan(s)" %></dt>
+          <% if @employer.plans.count == 0 %>
+            <dd></dd>
+          <% end %>
           <% @employer.plans.each do |p| %>
             <dd><%= link_to p.name, carrier_path(p.carrier) %></dd>
           <% end %>
-          <dt><%= model_class.human_attribute_name(:broker) %></dt>
-          <dd><% @employer.broker %></dd>
+
+          <dt>Broker</dt>
+          <dd><%= link_to(@employer.broker.name, @employer.broker) %></dd>
+          
         </dl>
       </div>
     </div>
