@@ -1,0 +1,39 @@
+%ns:employer{"xmlns:ns" => "http://openhbx.org/api/terms/1.0"}
+  %ns:name= @employer.name
+  %ns:fein= @employer.fein
+  %ns:contacts
+    %ns:contact
+  %ns:hbx_uri
+  %ns:hbx_id= @employer.hbx_id
+  %ns:sic_code= @employer.sic_code
+  %ns:fte_count= @employer.fte_count
+  %ns:employees
+    %ns:hbx_employer_id= @employer.hbx_id
+    %ns:hbx_employer_uri
+    %ns:employer_status
+    %ns:eligibility_state_date
+    %ns:eligibility_end_date
+  %ns:plans
+    - @employer.elected_plans.each do |plan|
+      %ns:plan
+        %ns:name= plan.plan_name
+        %ns:hbx_plan_id= plan.hbx_plan_id
+        %ns:qhp_id= plan.qhp_id
+        %ns:carrier_name
+        %ns:carrier_urn
+        %ns:policy_number= plan.carrier_policy_number
+        %ns:group_id= plan.carrier_employer_group_id
+        %ns:coverage_type= plan.coverage_type
+        %ns:original_effective_date= plan.original_effective_date
+        %ns:metal_level_code= plan.metal_level
+  %ns:pte_count= @employer.pte_count
+  %ns:broker
+    %ns:npn= @employer.broker.npn
+    %ns:tpa_ga_fein
+    %ns:broker_name= @employer.broker.name_full
+    %ns:tpa_name
+  %ns:open_enrollment_start= @employer.open_enrollment_start
+  %ns:open_enrollment_end= @employer.open_enrollment_end
+  %ns:plan_year_start= @employer.plan_year_start
+  %ns:plan_year_end= @employer.plan_year_end
+  %ns:notes= @employer.notes

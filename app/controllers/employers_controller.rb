@@ -18,7 +18,8 @@ class EmployersController < ApplicationController
 	  respond_to do |format|
 		  format.html # index.html.erb
 		  format.json { render json: @employer }
-		end
+		  format.xml
+    end
   end
 
   def new
