@@ -23,11 +23,11 @@ class Employer
   field :msp_count, as: :medicare_secondary_payer_count, type: Integer
   field :notes, type: String
 
-  field :contact_name_pfx, type: String, default: ""
-  field :contact_name_first, type: String
-  field :contact_name_middle, type: String, default: ""
-  field :contact_name_last, type: String
-  field :contact_name_sfx, type: String, default: ""
+  field :name_pfx, type: String, default: ""
+  field :name_first, type: String
+  field :name_middle, type: String, default: ""
+  field :name_last, type: String
+  field :name_sfx, type: String, default: ""
 
 	index({ hbx_id: 1 })
 	index({ fein: 1 })

@@ -26,11 +26,11 @@ class EmployerFactory
       :open_enrollment_end => employer_data.open_enrollment_end,
       :plan_year_start => employer_data.plan_year_start, #todo dates importing correctly?
       :plan_year_end => employer_data.plan_year_end, #todo dates importing correctly?
-      :contact_name_pfx => employer_data.contact.prefix,
-      :contact_name_first => employer_data.contact.first_name,
-      :contact_name_middle_initial => employer_data.contact.middle_initial,
-      :contact_name_last => employer_data.contact.last_name,
-      :contact_name_sfx => employer_data.contact.suffix,
+      :name_pfx => employer_data.contact.prefix,
+      :name_first => employer_data.contact.first_name,
+      :name_middle_initial => employer_data.contact.middle_initial,
+      :name_last => employer_data.contact.last_name,
+      :name_sfx => employer_data.contact.suffix,
       #exchange_status?
       #exchange_version?
       :notes => employer_data.notes
