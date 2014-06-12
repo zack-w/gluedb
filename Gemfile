@@ -14,6 +14,7 @@ gem 'jquery-ui-rails'
 group :development do
   gem 'capistrano', '2.15.4'
   gem 'ruby-progressbar'
+  gem 'jazz_hands'
 end
 
 group :development, :assets do
