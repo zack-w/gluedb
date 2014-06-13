@@ -10,70 +10,76 @@
     %name_full= @person.name_full
     %job_title 
     %department 
-      %addresses
-      %address_type 
-      %address_1 
-      %address_2 
-      %city 
-      %state 
-      %postal_code 
-      %country_code 
-      %coordinates
-        %x
-        %y
-        %z
-        %coordinate_system_reference http://www.any.com/verrantque/temperat
-      %emails
-      %email_type work
-      %email_address 
-      %phones
-      %phone_type extension
-      %phone_number 
-      %extension 
+    %addresses
+      - @person.addresses.each do |address|
+        %address_type= address.address_type
+        %address_1= address.address_1
+        %address_2= address.address_2
+        %city= address.city
+        %state= address.state
+        %postal_code= address.zip
+        %country_code= 'US'
+        %coordinates
+          %x
+          %y
+          %z
+          %coordinate_system_reference
+    %emails
+      - @person.emails.each do |email|
+        %email_type= email.email_type
+        %email_address= email.email_address
+    %phones
+      - @person.phones.each do |phone|
+        %phone_type= phone.phone_type
+        %phone_number= phone.phone_number
+        %extension= phone.extension
   %member_roles
-    %gender 
-    %dob 
-    %ssn 
-    %tobacco_user unknown
+    %gender= @person.authority_member.gender
+    %dob= @person.authority_member.dob.try(:strftime,"%Y-%m-%d")
+    %ssn= @person.authority_member.ssn 
+    %tobacco_user 
     %language 
-    %hbx_uri http://www.test.com/foedere/ferant
-    %hbx_id 
+    %hbx_uri 
+    %hbx_id= @person.authority_member.hbx_member_id 
     %person
-      %name_prefix 
-      %name_first 
-      %name_middle 
-      %name_last 
-      %name_suffix 
-      %name_full 
+      %name_prefix= @person.name_pfx
+      %name_first= @person.name_first
+      %name_middle= @person.name_middle
+      %name_last= @person.name_last
+      %name_suffix= @person.name_sfx
+      %name_full= @person.name_full 
       %job_title 
       %department 
-        %addresses
-        %address_type 
-        %address_1 
-        %address_2 
-        %city 
-        %state 
-        %postal_code 
-        %country_code 
-        %coordinates
-          %x 
-          %y 
-          %z 
-          %coordinate_system_reference http://www.corp.com/turbine/iovis
-          %emails
-        %email_type 
-        %email_address 
-          %phones
-        %phone_type 
-        %phone_number 
-        %extension 
+      %addresses
+        - @person.addresses.each do |address|
+          %address_type= address.address_type
+          %address_1= address.address_1
+          %address_2= address.address_2
+          %city= address.city
+          %state= address.state
+          %postal_code= address.zip
+          %country_code= 'US'
+          %coordinates
+            %x
+            %y
+            %z
+            %coordinate_system_reference
+      %emails
+        - @person.emails.each do |email|
+          %email_type= email.email_type
+          %email_address= email.email_address
+      %phones
+        - @person.phones.each do |phone|
+          %phone_type= phone.phone_type
+          %phone_number= phone.phone_number
+          %extension= phone.extension
     %relationship 
   %employee_roles
-    %hbx_employer_id 
-    %hbx_employer_uri http://www.my.com/flammas/ac
-    %employment_status urn:dc0:terms:employment_status#part_time
-    %eligibility_start_date 
-    %eligibility_end_date 
+    %hbx_employer_id
+    %hbx_employer_uri
+    %employment_status
+    %eligibility_start_date
+    %eligibility_end_date
   %responsible_party_roles
-    %entity_identifier urn:dc0:terms:entity#ex_spouse
-    %hbx_organization_uri http://www.any.gov/speluncis/circum
+    %entity_identifier
+    %hbx_organization_uri
