@@ -18,17 +18,17 @@ class EmployerFactory
     employer = Employer.new(
       :name => employer_data.name,
       :fein => employer_data.fein,
-      :hbx_id => employer_data.employer_exchange_id, # same as exchange_id
+      :hbx_id => employer_data.employer_exchange_id,
       :sic_code => employer_data.sic_code,
       :fte_count => employer_data.fte_count,
       :pte_count => employer_data.pte_count,
       :open_enrollment_start => employer_data.open_enrollment_start,
       :open_enrollment_end => employer_data.open_enrollment_end,
-      :plan_year_start => employer_data.plan_year_start, #todo dates importing correctly?
-      :plan_year_end => employer_data.plan_year_end, #todo dates importing correctly?
+      :plan_year_start => employer_data.plan_year_start,
+      :plan_year_end => employer_data.plan_year_end,
       :name_pfx => employer_data.contact.prefix,
       :name_first => employer_data.contact.first_name,
-      :name_middle_initial => employer_data.contact.middle_initial,
+      :name_middle => employer_data.contact.middle_initial,
       :name_last => employer_data.contact.last_name,
       :name_sfx => employer_data.contact.suffix,
       #exchange_status?
@@ -42,6 +42,10 @@ class EmployerFactory
     
     if !employer_data.contact.phone_number.blank?
       employer.phones << create_phone(employer_data.contact)
+    end
+
+    if !employer_data.contact.email_address.blank?
+      employer.emails << create_emails(employer_data.contact)
     end
 
     employer_data.plans.each do |plan_data|
@@ -74,7 +78,13 @@ class EmployerFactory
     Phone.new(
     :phone_type => 'work',
     :phone_number => contact_data.phone_number.gsub(/[^0-9]/,""),
-    :phone_extension => ''
+    )
+  end
+
+  def create_emails(contact_data)
+    Email.new(
+      :email_type => contact_data.email_type.downcase,
+      :email_address => contact_data.email_address,
     )
   end
 

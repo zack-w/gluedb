@@ -43,4 +43,10 @@ class NullExposesContactXml
 
   def phone_number
   end
+
+  def email_type
+  end
+
+  def email_address
+  end
 end

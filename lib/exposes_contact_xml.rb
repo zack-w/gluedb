@@ -1,7 +1,7 @@
 class ExposesContactXml
-  def initialize(parser)
+  def initialize(parser, namespace)
     @parser = parser
-    @ns2 = "urn:ietf:params:xml:ns:vcard-4.0"
+    @ns2 = namespace
   end
 
   def first_name
@@ -13,15 +13,18 @@ class ExposesContactXml
   end
 
   def middle_initial
-    @parser.at_css('ns2|n ns2|additional', ns2: @ns2).text
+    node = @parser.at_css('ns2|n ns2|additional', ns2: @ns2)
+    (node.nil?) ? '' : node.text
   end
 
   def prefix
-    @parser.at_css('ns2|n ns2|prefix', ns2: @ns2).text
+    node = @parser.at_css('ns2|n ns2|prefix', ns2: @ns2)
+    (node.nil?) ? '' : node.text
   end
 
   def suffix
-    @parser.at_css('ns2|n ns2|suffix', ns2: @ns2).text
+    node = @parser.at_css('ns2|n ns2|suffix', ns2: @ns2)
+    (node.nil?) ? '' : node.text
   end
 
   def organization
@@ -59,5 +62,13 @@ class ExposesContactXml
 
   def phone_number
     @parser.at_css('ns2|tel ns2|uri', ns2: @ns2).text
+  end
+
+  def email_type
+    @parser.at_css('ns2|email ns2|parameters ns2|type ns2|text', ns2: @ns2).text
+  end
+
+  def email_address
+    @parser.at_xpath('//ns2:email/ns2:text', ns2: @ns2).text
   end
 end

@@ -236,7 +236,7 @@ module Parsers
           :npn => broker_loop.npn,
           :b_type => "broker"
         )
-        broker = Broker.find_or_create_broker(new_broker)
+        broker = Broker.find_or_create(new_broker)
         broker._id
       end
 

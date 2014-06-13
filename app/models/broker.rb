@@ -3,11 +3,15 @@ class Broker
   include Mongoid::Timestamps
   include Mongoid::Versioning
   include Mongoid::Paranoia
+  include MergingModel
 
   field :b_type, type: String
-  field :name_full, type: String
+  field :name_pfx, type: String, default: ""
   field :name_first, type: String
+  field :name_middle, type: String, default: ""
   field :name_last, type: String
+  field :name_sfx, type: String, default: ""
+  field :name_full, type: String
   field :npn, type: String
 
   has_many :policies, order: {name_last: 1, name_first: 1}
@@ -28,25 +32,73 @@ class Broker
 
   index({:name => 1})
 
-  before_save :generate_name
+  before_save :initialize_name_full
 
-  def self.find_or_create_broker(m_broker)
+  def self.find_or_create(m_broker)
     found_broker = Broker.find_by_npn(m_broker.npn)
-    return found_broker unless found_broker.nil?
-    m_broker.save!
-    m_broker
+    if found_broker.nil?
+      begin
+        m_broker.save!
+      rescue => e
+        raise m_broker.inspect
+      end
+      return m_broker
+    else
+      found_broker.merge_without_blanking(m_broker, 
+        :b_type,
+        :name_pfx,
+        :name_first,
+        :name_middle,
+        :name_last,
+        :name_sfx,
+        :name_full,
+        :npn
+        )
+
+      m_broker.addresses.each { |a| found_broker.merge_address(a) }
+      m_broker.emails.each { |e| found_broker.merge_email(e) }
+      m_broker.phones.each { |p| found_broker.merge_phone(p) }
+
+      begin
+        found_broker.save!
+      rescue => e
+        raise found_broker.phones.inspect
+      end
+      return found_broker
+      
+    end
   end
 
   def self.find_by_npn(number)
     Broker.where({npn: number}).first
   end
 
+  def merge_address(m_address)
+    unless (self.addresses.any? { |a| a.match(m_address) })
+      self.addresses << m_address
+    end
+  end
+
+  def merge_email(m_email)
+    unless (self.emails.any? { |e| e.match(m_email) })
+      self.emails << m_email
+    end
+  end
+
+  def merge_phone(m_phone)
+    unless (self.phones.any? { |p| p.match(m_phone) })
+      self.phones << m_phone
+    end
+  end
+
+  def full_name
+    [name_pfx, name_first, name_middle, name_last, name_sfx].reject(&:blank?).join(' ').downcase.gsub(/\b\w/) {|first| first.upcase }
+  end
+
 private
 
-  def generate_name
-    return if self.name_full.blank?
-    self.name_first = self.name_full.split.first.capitalize
-    self.name_last  = self.name_full.split.last.capitalize
+  def initialize_name_full
+    self.name_full = full_name
   end
 
 end
