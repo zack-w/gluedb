@@ -61,7 +61,11 @@
           <% end %>
 
           <dt>Broker</dt>
-          <dd><%= link_to(@employer.broker.name_full, @employer.broker) %></dd>
+          <% if @employer.broker.nil? %>
+            <dd></dd>
+          <% else %>
+            <dd><%= link_to(@employer.broker.name_full, @employer.broker) %></dd>
+          <% end %>
           
         </dl>
       </div>
