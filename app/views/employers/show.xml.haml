@@ -9,12 +9,12 @@
   %n1:sic_code= @employer.sic_code
   %n1:fte_count= @employer.fte_count
   %n1:pte_count= @employer.pte_count
-  %n1:employee
+  %n1:employees
     - @employer.employees.each do |employee|
       %n1:employee
         %n1:name
           = render 'shared/name', object: employee
-        %n1:identifier
+        %n1:employee_role
           %n1:hbx_employer_id= @employer.hbx_id
           %n1:hbx_employer_uri= employer_url(@employer, format: :xml)
           %n1:hbx_uri= person_url(employee, format: :xml)
