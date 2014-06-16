@@ -8,6 +8,7 @@ def add_a_user(login, e_pass)
   new_user.save!(validate: false)
 end
 
+
   add_a_user(
     "trey.evans@dc.gov",
     "$2a$10$6reqq1aLphmF9i9Rlf1s5.Qq4x5abQf/gmKzgWa9njJNZk.LyEC7e"
