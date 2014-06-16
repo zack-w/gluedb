@@ -9,7 +9,7 @@
       %person
         = render 'shared/person', person: @person
       %relationship 
-  %employee_roles
+  %employee_role
     = render 'shared/employee', employee: @person
   %responsible_party_roles
     - @person.responsible_parties.each do |party|
