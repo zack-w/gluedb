@@ -25,16 +25,7 @@
       /make member partial so that member query isnt done everytime.
       - member = e.member
       %n1:member
-        %n1:gender= member.gender
-        %n1:dob= member.dob
-        %n1:ssn= member.ssn
-        %n1:tobacco_user= member.hlh
-        %n1:language= member.lui
-        %n1:hbx_uri
-        %n1:hbx_id= member.hbx_id
-        %n1:person
-          = render 'shared/person', member.person
-        %n1:relationship
+        = render 'shared/member', member: member
   %n1:premium_amount_total= @policy.pre_amt_tot
   %n1:total_employer_responsible_amount= @policy.tot_emp_res_amt
   %n1:carrier_to_bill= @policy.carrier_to_bill

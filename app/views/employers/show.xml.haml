@@ -15,13 +15,7 @@
         %n1:name
           = render 'shared/name', object: employee
         %n1:employee_role
-          %n1:hbx_employer_id= @employer.hbx_id
-          %n1:hbx_employer_uri= employer_url(@employer, format: :xml)
-          %n1:hbx_uri= person_url(employee, format: :xml)
-          %n1:hbx_id= employee.authority_member.hbx_member_id # ?
-          %n1:employment_status= 'urn:dc0:term:employment_status#active' # ?
-          %n1:eligibility_start_date= @employer.open_enrollment_start.try(:strftime,"%Y-%m-%d")
-          %n1:eligibility_end_date= @employer.open_enrollment_end.try(:strftime,"%Y-%m-%d")
+          = render 'shared/employee', employee: employee
   %n1:plans
     - @employer.elected_plans.each do |plan|
       %n1:plan
