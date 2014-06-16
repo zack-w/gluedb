@@ -9,4 +9,6 @@ class PremiumTable
 	embedded_in :plan
 
   index({ age: 1 })
+  index({ rate_start_date: 1 })
+  index({ rate_end_date: 1 })
 end

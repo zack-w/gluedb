@@ -31,6 +31,7 @@ class Broker
   validates_inclusion_of :b_type, in: ["broker", "tpa"]
 
   index({:name => 1})
+  index({:npn => 1})
 
   before_save :initialize_name_full
 

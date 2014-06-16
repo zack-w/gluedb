@@ -43,6 +43,8 @@ class Employer
 
   embeds_many :elected_plans
   index({"elected_plans.carrier_employer_group_id" => 1})
+  index({"elected_plans.hbx_plan_id" => 1})
+  index({"elected_plans.qhp_id" => 1})
   accepts_nested_attributes_for :elected_plans, reject_if: :all_blank, allow_destroy: true
 
   embeds_many :addresses, :inverse_of => :employer
