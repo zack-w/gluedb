@@ -1,71 +1,29 @@
 %n1:employer{"xmlns:n1" => "http://openhbx.org/api/terms/1.0", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "http://openhbx.org/api/terms/1.0 employer.xsd"}
   %n1:name= @employer.name
+  %n1:hbx_uri= employer_url(@employer, format: :xml)
+  %n1:hbx_id= @employer.hbx_id
   %n1:fein= @employer.fein
   %n1:contacts
     %n1:contact
-      %n1:name
-        %n1:name_prefix= @employer.name_pfx
-        %n1:name_first= @employer.name_first
-        %n1:name_middle= @employer.name_middle
-        %n1:name_last= @employer.name_last
-        %n1:name_suffix= @employer.name_sfx
-        %n1:name_full= @employer.name_full
-      %n1:job_title
-      %n1:department
-      %n1:addresses
-        - @employer.addresses.each do |address|
-          %n1:address_type= address.address_type
-          %n1:address_1= address.address_1
-          %n1:address_2= address.address_2
-          %n1:city= address.city
-          %n1:state= address.state
-          %n1:postal_code= address.zip
-          %n1:country_code= 'US'
-          %n1:coordinates
-            %n1:x
-            %n1:y
-            %n1:z
-            %n1:coordinate_system_reference
-      %n1:emails
-        - @employer.emails.each do |email|
-          %n1:email_type= email.email_type
-          %n1:email_address= email.email_address
-      %n1:phones
-        - @employer.phones.each do |phone|
-          %n1:phone_type= phone.phone_type
-          %n1:phone_number= phone.phone_number
-          %n1:extension= phone.extension
-  %n1:hbx_uri
-  %n1:hbx_id= @employer.hbx_id
+      = render 'shared/person', person: @employer
   %n1:sic_code= @employer.sic_code
   %n1:fte_count= @employer.fte_count
   %n1:pte_count= @employer.pte_count
-  %n1:employee_list
+  %n1:employees
     - @employer.employees.each do |employee|
       %n1:employee
         %n1:name
-          %n1:name_prefix= employee.name_pfx
-          %n1:name_first= employee.name_first
-          %n1:name_middle= employee.name_middle
-          %n1:name_last= employee.name_last
-          %n1:name_suffix= employee.name_sfx
-          %n1:name_full= employee.name_full
-        %n1:identifier
-          %n1:hbx_employer_id= @employer.hbx_id
-          %n1:hbx_employer_uri
-          %n1:hbx_uri
-          %n1:hbx_id
-          %n1:employer_status
-          %n1:eligibility_start_date
-          %n1:eligibility_end_date
-  %n1:plan_list
+          = render 'shared/name', object: employee
+        %n1:employee_role
+          = render 'shared/employee', employee: employee
+  %n1:plans
     - @employer.elected_plans.each do |plan|
       %n1:plan
         %n1:name= plan.plan_name
         %n1:hbx_plan_id= plan.hbx_plan_id
         %n1:qhp_id= plan.qhp_id
         %n1:carrier_name= plan.carrier.name
-        %n1:carrier_urn
+        %n1:carrier_urn= # ?
         %n1:policy_number= plan.carrier_policy_number
         %n1:group_id= plan.carrier_employer_group_id
         %n1:coverage_type= plan.coverage_type
