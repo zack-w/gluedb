@@ -134,9 +134,6 @@ module Parsers
 
       def find_policy(eg_id, carrier_id, hios_id)
         plan = Plan.find_by_hios_id(hios_id)
-        unless plan
-          return nil
-        end
         Policy.find_by_subkeys(eg_id, carrier_id, plan._id)
       end
 

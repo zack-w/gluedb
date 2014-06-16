@@ -8,7 +8,6 @@ def add_a_user(login, e_pass)
   new_user.save!(validate: false)
 end
 
-
   add_a_user(
     "trey.evans@dc.gov",
     "$2a$10$6reqq1aLphmF9i9Rlf1s5.Qq4x5abQf/gmKzgWa9njJNZk.LyEC7e"
@@ -124,4 +123,8 @@ end
   add_a_user(
     "camille.gray@dc.gov",
     "$2a$10$9gR/KrlVqNWY1tJugHLhiubWj2uYfBbm699o3PY/BK89.fmuAHduq"
+  )
+  add_a_user(
+    "velvia.worrell@dc.gov",
+    "$2a$10$SXJBADmcnzSRLPTrcHLhqeD7yCaMWedunykQ8lodxPo4exKJfzTme"
   )

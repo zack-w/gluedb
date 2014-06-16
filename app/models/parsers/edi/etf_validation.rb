@@ -12,6 +12,8 @@ module Parsers
       validate :subscriber_refs_match
       validate :has_eg_id
       validate :has_valid_employer
+      validate :plan_exists
+      validate :no_bogus_broker
 
       def initialize(f_name, mt, el)
         @file_name = f_name
@@ -86,6 +88,27 @@ module Parsers
           log_error(:etf_loop, "has too many subscribers")
         elsif subscriber_count < 1
           log_error(:etf_loop, "has no subscriber")
+        end
+      end
+
+      def plan_exists
+        s_loop = subscriber_loop
+        if !s_loop.blank?
+          pol_loop = Parsers::Edi::Etf::CoverageLoop.new(s_loop["L2300s"].first)
+
+          plan = Plan.find_by_hios_id(pol_loop.hios_id)
+          if plan.blank?
+            log_error(:etf_loop, "has no valid plan")
+          end
+        end
+      end
+
+      def no_bogus_broker
+        broker_loop = Etf::BrokerLoop.new(etf_loop["L1000C"])
+        return true if !broker.valid?
+        found_broker = Broker.find_by_npn(broker_loop.npn)
+        if found_broker.nil?
+          log_error(:etf_loop, "has an invalid broker")
         end
       end
 
