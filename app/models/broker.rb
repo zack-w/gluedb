@@ -37,12 +37,7 @@ class Broker
   def self.find_or_create(m_broker)
     found_broker = Broker.find_by_npn(m_broker.npn)
     if found_broker.nil?
-      begin
-        m_broker.save!
-      rescue => e
-        raise m_broker.inspect
-      end
-      return m_broker
+      m_broker.save!
     else
       found_broker.merge_without_blanking(m_broker, 
         :b_type,
@@ -59,18 +54,18 @@ class Broker
       m_broker.emails.each { |e| found_broker.merge_email(e) }
       m_broker.phones.each { |p| found_broker.merge_phone(p) }
 
-      begin
-        found_broker.save!
-      rescue => e
-        raise found_broker.phones.inspect
-      end
-      return found_broker
+      found_broker.save!
       
+      found_broker
     end
   end
 
   def self.find_by_npn(number)
-    Broker.where({npn: number}).first
+    if(number.blank?)
+      return nil
+    else
+      Broker.where({npn: number}).first
+    end
   end
 
   def merge_address(m_address)
