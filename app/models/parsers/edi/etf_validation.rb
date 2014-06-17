@@ -95,10 +95,13 @@ module Parsers
         s_loop = subscriber_loop
         if !s_loop.blank?
           pol_loop = Parsers::Edi::Etf::CoverageLoop.new(s_loop["L2300s"].first)
-
-          plan = Plan.find_by_hios_id(pol_loop.hios_id)
-          if plan.blank?
+          if pol_loop.empty?
             log_error(:etf_loop, "has no valid plan")
+          else
+            plan = Plan.find_by_hios_id(pol_loop.hios_id)
+            if plan.blank?
+              log_error(:etf_loop, "has no valid plan")
+            end
           end
         end
       end
@@ -138,7 +141,7 @@ module Parsers
 
       def log_error(attr, msg)
         errors.add(attr, msg)
-#        ParserLog.log(@file_name, @message_type, attr.to_s + " " + msg, @etf_loop.to_s)
+        #        ParserLog.log(@file_name, @message_type, attr.to_s + " " + msg, @etf_loop.to_s)
       end
     end
   end
