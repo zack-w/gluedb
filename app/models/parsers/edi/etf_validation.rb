@@ -105,7 +105,7 @@ module Parsers
 
       def no_bogus_broker
         broker_loop = Etf::BrokerLoop.new(etf_loop["L1000C"])
-        return true if !broker.valid?
+        return true if !broker_loop.valid?
         found_broker = Broker.find_by_npn(broker_loop.npn)
         if found_broker.nil?
           log_error(:etf_loop, "has an invalid broker")

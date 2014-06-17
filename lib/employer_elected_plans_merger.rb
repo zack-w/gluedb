@@ -1,7 +1,11 @@
 module EmployerElectedPlansMerger
   def self.merge(existing, incoming)
+    existing_hash = existing.elected_plans.inject({}) do |acc, val|
+      acc[val.qhp_id] = val
+      acc
+    end
     incoming.elected_plans.each do |plan|
-      exisiting_plan = existing.elected_plans.detect { |p| p.qhp_id == plan.qhp_id}
+      exisiting_plan = existing_hash[plan.qhp_id]
       if !exisiting_plan.nil?
         exisiting_plan.merge_without_blanking(plan, 
           :carrier_employer_group_id,
