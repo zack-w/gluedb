@@ -2,6 +2,13 @@ Gluedb::Application.routes.draw do
 
   devise_for :users
 
+  root :to => 'dashboards#index'
+
+  get "dashboards/index"
+  get "welcome/index"
+  get "tools/premium_calc"
+  get "flatuipro_demo/index"
+
   namespace :admin do
     namespace :settings do
       resources :hbx_policies
@@ -23,15 +30,8 @@ Gluedb::Application.routes.draw do
     end
   end
 
-  get "flatuipro_demo/index"
-
   resources :edi_transaction_sets
   resources :edi_transmissions
-
-  get "dashboards/index"
-  root :to => 'dashboards#index'
-
-  get "welcome/index"
 
   resources :enrollments do
     member do
@@ -43,7 +43,6 @@ Gluedb::Application.routes.draw do
     get 'page/:page', :action => :index, :on => :collection
   end
     resources :households
-
 
   resources :users
   resources :policies
@@ -77,6 +76,8 @@ Gluedb::Application.routes.draw do
 
   resources :carriers do
     resources :plans
+    get :show_plans
+    post :calculate_premium, on: :collection  
   end
 
   resources :plans, only: [:index, :show] do
