@@ -69,7 +69,7 @@ class ExposesContactXml
   end
 
   def email_address
-    node = @parser.at_xpath('//ns2:email/ns2:text', ns2: @ns2)
+    node = @parser.at_xpath('./ns2:email/ns2:text', ns2: @ns2)
     (node.nil?) ? nil : node.text
   end
 
