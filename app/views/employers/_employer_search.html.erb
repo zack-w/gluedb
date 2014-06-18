@@ -1,6 +1,6 @@
 <%= form_tag employers_path, { method: :get, class: "form form-inline"} do %>
   <div class="form-group">
-    <%= text_field_tag :q, @q, { :class => "form-control input-medium"} %>
+    <%= text_field_tag :q, @q, { placeholder: "Name", class: "form-control input-medium"} %>
     <%= submit_tag "Search", { :class => "btn btn-primary" } %>
   </div>
 <% end %>

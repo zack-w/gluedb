@@ -2,11 +2,19 @@
 <%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
 <div class="page-header">
   <ul class="breadcrumb">
-    <li class="active"><%= model_class.model_name.human.titleize.pluralize %> - Total: <%= @brokers.count %></li>
+    <li class="active"><%= model_class.model_name.human.titleize.pluralize %></li>
   </ul>
+
+  <div class="row">
+    <div class="col-md-8">
+      <!-- <% link_to "New", new_broker_path, class: "btn btn-primary" %> -->
+    </div>
+    <div class="col-md-4">
+      <%= render 'broker_search', q: @q %>
+    </div>
+  </div>
 </div>
 
-<div class="col-md-10">
 <table class="table table-condensed">
   <thead>
     <tr>
@@ -27,4 +35,13 @@
     <% end %>
   </tbody>
 </table>
+ 
+<div class="row">
+  <div class="col-md-8">
+    <%= paginate @brokers, theme: "twitter-bootstrap", pagination_class: "pagination-plain" %>
+  </div>
+  <div class="rol-md-4">
+    <p><%= "#{number_with_delimiter(@brokers.count)} / #{number_with_delimiter(Broker.count)} " %><small>(brokers selected / total)</small></p>
+  </div>
 </div>
+ 

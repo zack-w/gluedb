@@ -5,6 +5,8 @@ class Broker
   include Mongoid::Paranoia
   include MergingModel
 
+  extend Mongorder
+
   field :b_type, type: String
   field :name_pfx, type: String, default: ""
   field :name_first, type: String
@@ -34,6 +36,33 @@ class Broker
   index({:npn => 1})
 
   before_save :initialize_name_full
+
+  def self.default_search_order
+    [
+      ["name_last", 1],
+      ["name_first", 1]
+    ]
+  end
+
+  def self.search_hash(s_str)
+    clean_str = s_str.strip
+    s_rex = Regexp.new(Regexp.escape(clean_str), true)
+    additional_exprs = []
+    if clean_str.include?(" ")
+      parts = clean_str.split(" ").compact
+      first_re = Regexp.new(Regexp.escape(parts.first), true)
+      last_re = Regexp.new(Regexp.escape(parts.last), true)
+      additional_exprs << {:name_first => first_re, :name_last => last_re}
+    end
+    {
+      "$or" => ([
+        {"name_first" => s_rex},
+        {"name_middle" => s_rex},
+        {"name_last" => s_rex},
+        {"npn" => s_rex}
+      ] + additional_exprs)
+    }
+  end
 
   def self.find_or_create(m_broker)
     found_broker = Broker.find_by_npn(m_broker.npn)
