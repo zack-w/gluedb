@@ -10,7 +10,7 @@ class VocabUploadsController < ApplicationController
     if @vocab_upload.save
       redirect_to new_vocab_upload_path, :flash => { :success => "Upload successful" }
     else
-      flash[:error] = 'Upload failed!'
+      flash[:error] = '!!!!!! Upload failed !!!!!!!!'
       render :new
     end
   end
