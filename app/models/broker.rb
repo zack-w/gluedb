@@ -68,6 +68,7 @@ class Broker
     found_broker = Broker.find_by_npn(m_broker.npn)
     if found_broker.nil?
       m_broker.save!
+      return m_broker
     else
       found_broker.merge_without_blanking(m_broker, 
         :b_type,
@@ -86,7 +87,7 @@ class Broker
 
       found_broker.save!
       
-      found_broker
+      return found_broker
     end
   end
 
