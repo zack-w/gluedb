@@ -265,7 +265,7 @@ class Policy
     )
   end
 
-  def self.find_active_and_unterminated_for_members_in_range(m_ids, start_d, end_d)
+  def self.find_active_and_unterminated_for_members_in_range(m_ids, start_d, end_d, other_params = {})
     Policy.where(self.active_as_of_expression(end_d).merge(
       {"enrollees" => {
         "$elemMatch" => {
@@ -278,17 +278,17 @@ class Policy
           ]
         }
       } }
-    ))
+    ).merge(other_params))
   end
 
-  def self.find_active_and_unterminated_in_range(start_d, end_d)
+  def self.find_active_and_unterminated_in_range(start_d, end_d, other_params = {})
     Policy.where(
-      self.active_as_of_expression(end_d)
+      self.active_as_of_expression(end_d).merge(other_params)
     )
   end
 
-  def self.find_terminated_in_range(start_d, end_d)
-    Policy.where(
+  def self.find_terminated_in_range(start_d, end_d, other_params = {})
+    Policy.where({
       :aasm_state => { "$ne" => "canceled" },
       :enrollees => { "$elemMatch" => {
           :rel_code => "self",
@@ -296,11 +296,12 @@ class Policy
           :coverage_end => {"$lte" => end_d, "$gte" => start_d}
       }
       }
+    }.merge(other_params)
     )
   end
 
-  def self.process_audits(active_start, active_end, term_start, term_end, out_directory)
-    ProcessAudits.execute(active_start, active_end, term_start, term_end, out_directory)
+  def self.process_audits(active_start, active_end, term_start, term_end, other_params, out_directory)
+    ProcessAudits.execute(active_start, active_end, term_start, term_end, other_params, out_directory)
   end
 
   def can_edit_address?
