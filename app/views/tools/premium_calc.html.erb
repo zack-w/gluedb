@@ -20,14 +20,14 @@
               <%= label_tag "Select Carrier" %>
             </div>
             <div class="col-md-6">
-              <%= select_tag "Carriers", options_from_collection_for_select(@carriers, "id", "name") =%>
+              <%= select_tag "Carriers", options_from_collection_for_select(@carriers, "id", "name"), prompt: "Nothing Selected" =%>
             </div>
           </div>
 
           <div class="row">
 
             <div class="col-md-2 text-center">
-              <%= label_tag "Select Plan" %>
+              <%= label_tag "Select Plan"%>
             </div>
             <div class="col-md-6">
               <%= select_tag "Plans" =%>

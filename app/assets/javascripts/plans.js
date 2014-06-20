@@ -1,5 +1,8 @@
 $(document).ready(function() {
+  $('.btn#Plans').prop('disabled', true);
   $('#Carriers').change(function(e) {
+    $('.btn#Plans').prop('disabled', false);
+    $( "option[value|='']" ).remove()
     $(".btn[value='Calculate']").attr('class','btn btn-primary');
     var id = $(e.target).val()
     $.getJSON('/carriers/'+id+'/show_plans', function(data) {
