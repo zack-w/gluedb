@@ -13,17 +13,15 @@ class VocabUpload
   validates_presence_of :submitted_by
   validates_presence_of :vocab
   
-  def initialize(options={}, listener)
+  def initialize(options={})
     options.each_pair do |k,v|
       if ALLOWED_ATTRIBUTES.include?(k.to_sym)
         self.send("#{k}=", v)
       end
     end
-
-    @listener = listener
   end
 
-  def save
+  def save(listener)
     return(false) unless self.valid?
     file_data = vocab.read
     file_name = vocab.original_filename
@@ -38,9 +36,9 @@ class VocabUpload
     # enrollment_group = Parsers::Xml::Enrollment::EnrollmentGroupFactory.from_xml(file_data)
     # plan = Plan.find_by_hios_id(enrollment_group.hios_plan_id)
     
-    # validate = ValidatePremiums.new(enrollment_group, plan, @listener)
+    # validate = ValidatePremiums.new(enrollment_group, plan, listener)
     # if(validate.run)
-    #   submit_cv(kind, file_name, file_data)
+      # submit_cv(kind, file_name, file_data)
     #   return true
     # else
     #   return false

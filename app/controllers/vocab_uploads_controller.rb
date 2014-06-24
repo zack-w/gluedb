@@ -5,9 +5,9 @@ class VocabUploadsController < ApplicationController
   end
 
   def create
-    @vocab_upload = VocabUpload.new(params[:vocab_upload], self)
+    @vocab_upload = VocabUpload.new(params[:vocab_upload])
 
-    if @vocab_upload.save
+    if @vocab_upload.save(self)
       redirect_to new_vocab_upload_path, :flash => { :success => "Upload successful" }
     else
       flash[:error] = 'Upload failed'
