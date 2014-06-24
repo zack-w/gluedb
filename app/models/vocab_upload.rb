@@ -25,7 +25,9 @@ class VocabUpload
     return(false) unless self.valid?
     file_data = vocab.read
     file_name = vocab.original_filename
-  
+
+    doc = Nokogiri::XML(file_data)
+
     # To activate Premium validation
     # 1) Remove below
     
@@ -33,12 +35,12 @@ class VocabUpload
     return true
 
     # 2) Insert
-    # enrollment_group = Parsers::Xml::Enrollment::EnrollmentGroupFactory.from_xml(file_data)
+    # enrollment_group = Parsers::Xml::Enrollment::EnrollmentGroupFactory.from_xml(doc)
     # plan = Plan.find_by_hios_id(enrollment_group.hios_plan_id)
     
     # validate = ValidatePremiums.new(enrollment_group, plan, listener)
     # if(validate.run)
-      # submit_cv(kind, file_name, file_data)
+      # submit_cv(kind, file_name, doc.to_xml)
     #   return true
     # else
     #   return false

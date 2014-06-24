@@ -16,15 +16,15 @@ class VocabUploadsController < ApplicationController
     end
   end
 
-  def incorrect_member_premium
-    flash_message(:premium_error, 'An individual\'s premium_amount is incorrect')
+  def corrected_member_premium(change)
+    flash_message(:notice, "#{change[:who]}'s premium_amount has been corrected (from $#{change[:from]} to $#{change[:to]})")
   end
 
-  def incorrect_premium_total
-    flash_message(:premium_total_error, 'premium_amount_total is incorrect')
+  def corrected_premium_total(change)
+    flash_message(:notice, "premium_amount_total has been corrected (from $#{change[:from]} to $#{change[:to]})")
   end
 
-  def incorrect_member_responsible_amount
-    flash_message(:responsible_amount_error, 'total_responsible_amount is incorrect')
+  def corrected_member_responsible_amount(change)
+    flash_message(:notice, "total_responsible_amount has been corrected (from $#{change[:from]} to $#{change[:to]})")
   end
 end

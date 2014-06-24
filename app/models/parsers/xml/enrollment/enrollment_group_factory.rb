@@ -1,7 +1,6 @@
 module Parsers::Xml::Enrollment
   class EnrollmentGroupFactory
-    def self.from_xml(file_data)
-      doc = Nokogiri::XML(file_data)
+    def self.from_xml(doc)
       payload = doc.at_xpath('/proc:Operation/proc:payload', NAMESPACES)
       type = payload.first_element_child.name
 

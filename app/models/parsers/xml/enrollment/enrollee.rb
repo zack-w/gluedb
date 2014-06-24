@@ -21,5 +21,18 @@ module Parsers::Xml::Enrollment
     def premium_amount
       @coverage.at_xpath('./ins:premium_amount', NAMESPACES).text.to_f
     end
+
+    def premium_amount=(amt)
+      node = @coverage.at_xpath('./ins:premium_amount', NAMESPACES)
+      node.content = amt
+    end
+
+    def first_name
+      @parser.at_xpath('./con:person/con:name_first', NAMESPACES).text
+    end
+
+    def last_name
+      @parser.at_xpath('./con:person/con:name_last', NAMESPACES).text
+    end
   end
 end
