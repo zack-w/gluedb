@@ -15,7 +15,7 @@ class SpecialEnrollmentPeriod
   					inclusion: {in: %w( birth death adoption marriage legal_separation divorce retirement employment_termination reenrollment location_change open_enrollment_start )}
 
 
-  embedded_in :household
+  embedded_in :application_group
   before_create :activate_household_sep
   before_save :activate_household_sep
 
