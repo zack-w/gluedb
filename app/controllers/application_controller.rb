@@ -10,4 +10,10 @@ class ApplicationController < ActionController::Base
     end
     authenticate_user!
   end
+
+  def flash_message(type, text)
+    flash[type] ||= []
+    flash[type] << text
+  end
+
 end
