@@ -4,11 +4,12 @@ module Parsers
       attr_reader :result
       attr_accessor :transmission_kind
       
-      def initialize(path, t_kind, r_data)
+      def initialize(path, t_kind, r_data, blist = [])
         @raw = r_data
         @result = Oj.load(r_data)
         @file_name = File.basename(path)
         @transmission_kind = t_kind
+        @bgn_blacklist = blist
       end
 
       def determine_transaction_set_kind(l834)
@@ -274,7 +275,8 @@ module Parsers
         EtfValidation.new(
           @file_name,
           determine_transaction_set_kind(etf_loop),
-          etf_loop
+          etf_loop,
+          blist
         )
       end
 
