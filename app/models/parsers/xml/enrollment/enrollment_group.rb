@@ -39,5 +39,11 @@ module Parsers::Xml::Enrollment
       node = @plan.at_xpath('./ins:total_responsible_amount', NAMESPACES)
       node.content = responsible_amount
     end
+
+    def enrollee_premium_sum
+      sum = 0
+      enrollees.each { |e| sum += e.premium_amount}
+      sum
+    end
   end
 end

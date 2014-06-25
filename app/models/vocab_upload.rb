@@ -28,23 +28,19 @@ class VocabUpload
 
     doc = Nokogiri::XML(file_data)
 
-    # To activate Premium validation
-    # 1) Remove below
+    enrollment_group = Parsers::Xml::Enrollment::EnrollmentGroupFactory.from_xml(doc)
+    plan = Plan.find_by_hios_id(enrollment_group.hios_plan_id)
     
-    submit_cv(kind, file_name, file_data)
-    return true
+    validations = [ 
+      Validators::PremiumValidator.new(enrollment_group, plan, listener),
+      Validators::PremiumTotalValidator.new(enrollment_group, listener),
+      Validators::PremiumResponsibleValidator.new(enrollment_group, listener)
+    ]
 
-    # 2) Insert
-    # enrollment_group = Parsers::Xml::Enrollment::EnrollmentGroupFactory.from_xml(doc)
-    # plan = Plan.find_by_hios_id(enrollment_group.hios_plan_id)
-    
-    # validate = ValidatePremiums.new(enrollment_group, plan, listener)
-    # if(validate.run)
-      # submit_cv(kind, file_name, doc.to_xml)
-    #   return true
-    # else
-    #   return false
-    # end
+    if validations.any? { |v| v.validate == false }
+      return false
+    end
+    true
   end
 
   def submit_cv(cv_kind, name, data)

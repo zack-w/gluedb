@@ -34,5 +34,13 @@ module Parsers::Xml::Enrollment
     def last_name
       @parser.at_xpath('./con:person/con:name_last', NAMESPACES).text
     end
+
+    def name
+      [first_name, last_name].join(' ')
+    end
+
+    def age
+      Ager.new(birth_date).age_as_of(benefit_begin_date)
+    end
   end
 end
