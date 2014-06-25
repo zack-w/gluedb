@@ -1,6 +1,6 @@
 Gluedb::Application.routes.draw do
 
-  devise_for :users
+  devise_for :users, :path => "accounts"
 
   root :to => 'dashboards#index'
 

@@ -82,8 +82,12 @@ module ApplicationHelper
   def render_flash
     rendered = []
     flash.each do |type, messages|
-      messages.each do |m|
-        rendered << render(:partial => 'layouts/flash', :locals => {:type => type, :message => m}) unless m.blank?
+      if messages.respond_to?(:each)
+        messages.each do |m|
+          rendered << render(:partial => 'layouts/flash', :locals => {:type => type, :message => m}) unless m.blank?
+        end
+      else
+        rendered << render(:partial => 'layouts/flash', :locals => {:type => type, :message => messages}) unless messages.blank?
       end
     end
     rendered.join('').html_safe
