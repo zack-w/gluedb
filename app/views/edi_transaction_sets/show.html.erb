@@ -62,8 +62,10 @@
   <div class="col-md-4 col-md-offset-1">
     <div class="form-actions">
       <%= link_to "EDI Transmission", edi_transmission_path(@edi_transaction_set.transmission_id), {class: 'btn btn-info btn-sm'} %>
-      <% if @edi_transaction_set.policy.subscriber %>
-	      <%= link_to "Individual", person_path(@edi_transaction_set.policy.subscriber.person), {class: 'btn btn-info btn-sm'}  %>
+      <% if @edi_transaction_set.policy %>
+        <% if @edi_transaction_set.policy.subscriber %>
+  	  <%= link_to "Individual", person_path(@edi_transaction_set.policy.subscriber.person), {class: 'btn btn-info btn-sm'}  %>
+        <% end %>
       <% end %>
     </div>
   </div>  
