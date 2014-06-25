@@ -8,23 +8,27 @@ class VocabUploadsController < ApplicationController
     @vocab_upload = VocabUpload.new(params[:vocab_upload])
 
     if @vocab_upload.save(self)
-      flash_message(:success, "Upload successful")
+      flash_message(:success, "Upload successful.")
       redirect_to new_vocab_upload_path
     else
-      flash_message(:error, "Upload failed")
+      flash_message(:error, "Upload failed.")
       render :new
     end
   end
 
-  def corrected_member_premium(change)
-    flash_message(:notice, "#{change[:who]}'s premium_amount has been corrected (from $#{change[:from]} to $#{change[:to]})")
+  def group_has_incorrect_responsible_amount(details)
+    flash_message(:error, "total_responsible_amount is incorrect. " + details_text(details))
   end
 
-  def corrected_premium_total(change)
-    flash_message(:notice, "premium_amount_total has been corrected (from $#{change[:from]} to $#{change[:to]})")
+  def group_has_incorrect_premium_total(details)
+    flash_message(:error, "premium_amount_total is incorrect. " + details_text(details))
   end
 
-  def corrected_member_responsible_amount(change)
-    flash_message(:notice, "total_responsible_amount has been corrected (from $#{change[:from]} to $#{change[:to]})")
+  def enrollee_has_incorrect_premium(details)
+    flash_message(:error, "#{details[:name]}'s premium_amount is incorrect. " + details_text(details))
+  end
+
+  def details_text(details)
+    "Expected $#{sprintf "%.2f", details[:expected]} but got $#{sprintf "%.2f", details[:provided]}."
   end
 end

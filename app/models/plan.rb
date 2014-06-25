@@ -51,6 +51,10 @@ class Plan
     premiums.to_a.first
   end
 
+  def premium_for_enrollee(enrollee)
+    rate(enrollee.rate_period_date, enrollee.benefit_begin_date, enrollee.birth_date) 
+  end
+
   def self.default_search_order
     [
       ["name", 1],
