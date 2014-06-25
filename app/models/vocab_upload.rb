@@ -40,6 +40,8 @@ class VocabUpload
     if validations.any? { |v| v.validate == false }
       return false
     end
+    
+    submit_cv(kind, file_name, doc.to_xml)
     true
   end
 
