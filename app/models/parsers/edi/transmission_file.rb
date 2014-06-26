@@ -276,7 +276,7 @@ module Parsers
           @file_name,
           determine_transaction_set_kind(etf_loop),
           etf_loop,
-          blist
+          @bgn_blacklist
         )
       end
 
