@@ -1,0 +1,7 @@
+<%= form_tag employer_path, { method: :get, class: "form form-inline", role: "search", remote: true} do %>
+  <div class="form-group">
+    <%= label_tag :q_person, "Search term", {class: "sr-only"} %>
+    <%= text_field_tag :q_person, @q_person, {placeholder: "Name, HBX ID, SSN", class: "form-control"} %>
+    <%= submit_tag "Search", { class: "btn btn-primary", id: "people_search" } %>
+  </div>
+<% end %>

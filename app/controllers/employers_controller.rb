@@ -4,8 +4,7 @@ class EmployersController < ApplicationController
     @qf = params[:qf]
     @qd = params[:qd]
 
-    @employers = Employer.search(@q, @qf, @qd).page(params[:page]).per(12) #.to_a.group_by { |p| p.name_last[0].upcase }
-
+    @employers = Employer.search(@q, @qf, @qd).page(params[:page]).per(12)
     respond_to do |format|
 	    format.html # index.html.erb
 	    format.json { render json: @employers }
@@ -13,12 +12,27 @@ class EmployersController < ApplicationController
   end
 
   def show
+    @q_person = params[:q_person]
+    @qf_person = params[:qf_person]
+    @qd_person = params[:qd_person]
+
     @employer = Employer.find(params[:id])
+
+    @premium_payments = @employer.premium_payments.all.order_by(paid_at: :desc).page(params[:premium_payments_page]).per(12)
+
+    @elected_plans = @employer.elected_plans.all.order_by(carrier_name: 1, plan_name: 1)
+    
+    if params[:q_person].present?
+      @employees = @employer.employees.search(@q_person, @qf_person, @qd_person).page(params[:employee_page]).per(12)
+    else
+      @employees = @employer.employees.all.order_by(name_last: 1, name_first: 1).page(params[:employee_page]).per(12)
+    end
 
 	  respond_to do |format|
 		  format.html # index.html.erb
 		  format.json { render json: @employer }
 		  format.xml
+      format.js
     end
   end
 
