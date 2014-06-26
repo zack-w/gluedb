@@ -26,26 +26,27 @@ class VocabUpload
     file_data = vocab.read
     file_name = vocab.original_filename
 
-    # doc = Nokogiri::XML(file_data)
+    doc = Nokogiri::XML(file_data)
 
-    # enrollment_group = Parsers::Xml::Enrollment::EnrollmentGroupFactory.from_xml(doc)
-    # plan = Plan.find_by_hios_id(enrollment_group.hios_plan_id)
+    enrollment_group = Parsers::Xml::Enrollment::EnrollmentGroupFactory.from_xml(doc)
+    plan = Plan.find_by_hios_id(enrollment_group.hios_plan_id)
     
-    # validations = [ 
-    #   Validators::PremiumValidator.new(enrollment_group, plan, listener),
-    #   Validators::PremiumTotalValidator.new(enrollment_group, listener),
-    #   Validators::PremiumResponsibleValidator.new(enrollment_group, listener)
-    # ]
+    validations = [ 
+      Validators::PremiumValidator.new(enrollment_group, plan, listener),
+      Validators::PremiumTotalValidator.new(enrollment_group, listener),
+      Validators::PremiumResponsibleValidator.new(enrollment_group, listener)
+    ]
 
-    # if validations.any? { |v| v.validate == false }
-    #   return false
-    # end
+    if validations.any? { |v| v.validate == false }
+      return false
+    end
     
     submit_cv(kind, file_name, file_data)
     true
   end
 
   def submit_cv(cv_kind, name, data)
+    return if Rails.env.test?
     tag = (cv_kind.to_s.downcase == "maintenance") ? "hbx.maintenance_messages" : "hbx.enrollment_messages"
     conn = Bunny.new
     conn.start
