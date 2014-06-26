@@ -1,0 +1,3 @@
+$('#people').html('<%= escape_javascript render("people/people_list", people: @employees) %>');
+$('#people_paginator').html('<%= escape_javascript(paginate(@employees, theme: "twitter-bootstrap", :remote => true, param_name: :employee_page ).to_s) %>');
+$('#people_count').html('<p><%= escape_javascript("#{number_with_delimiter(@employees.count)} / #{number_with_delimiter(@employer.employees.count)} ") %><small>(employees selected / total)</small></p>');

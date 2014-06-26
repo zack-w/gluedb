@@ -1,0 +1,20 @@
+<div class="tab-pane active" id="employees">
+  <div class="row">
+    <div class="col-md-4 pull-right">
+      <%= render "employers/showtabs/people_search", q_person: @q_person %>
+    </div>
+  </div>
+
+  <div id="people">
+    <%= render "people/people_list", people: @employees %>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8" id="people_paginator">
+      <%= paginate @employees, theme: "twitter-bootstrap", :remote => true, param_name: :employee_page %>
+    </div>
+    <div class="rol-md-4" id="people_count">
+      <p><%= "#{number_with_delimiter(@employees.count)} / #{number_with_delimiter(@employer.employees.count)} " %><small>(employees selected / total)</small></p>
+    </div>
+  </div>
+</div>
