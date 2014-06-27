@@ -59,6 +59,7 @@ class Person
   scope :all_under_or_equal_age, ->(age) {gte(:'members.dob' => (Date.today - age.years))}
   scope :all_with_multiple_members, exists({ :'members.1' => true })
 
+  default_scope order_by(name_last: 1, name_first: 1)
   # 
   def update_attributes_with_delta(props = {})
     old_record = self.find(self.id)
