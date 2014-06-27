@@ -6,9 +6,9 @@ class EmployersController < ApplicationController
 
     @employers = Employer.search(@q, @qf, @qd).page(params[:page]).per(12)
     respond_to do |format|
-	    format.html # index.html.erb
-	    format.json { render json: @employers }
-	  end
+      format.html # index.html.erb
+      format.json { render json: @employers }
+    end
   end
 
   def show
@@ -28,10 +28,10 @@ class EmployersController < ApplicationController
       @employees = @employer.employees.all.order_by(name_last: 1, name_first: 1).page(params[:employee_page]).per(12)
     end
 
-	  respond_to do |format|
-		  format.html # index.html.erb
-		  format.json { render json: @employer }
-		  format.xml
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @employer }
+      format.xml
       format.js
     end
   end
@@ -104,7 +104,7 @@ class EmployersController < ApplicationController
     @employer.destroy
 
     respond_to do |format|
-      format.html { redirect_to persons_url }
+      format.html { redirect_to employers_url }
       format.json { head :no_content }
     end
   end

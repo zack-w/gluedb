@@ -150,12 +150,12 @@ describe PeopleController do
   describe 'DELETE destroy' do
     before { @person = create :person }
 
-    it 'deletes the post' do
+    it 'deletes the person' do
       expect { delete :destroy, id: @person.id 
         }.to change(Person, :count).by -1
     end
 
-    it 'redirects to post index' do
+    it 'redirects to person index' do
       delete :destroy, id: @person.id
       expect(response).to redirect_to people_path
     end
