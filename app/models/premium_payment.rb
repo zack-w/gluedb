@@ -22,6 +22,8 @@ class PremiumPayment
 
 	before_create :parse_coverage_period
 
+  default_scope order_by(paid_at: -1) 
+
   def payment_amount_in_dollars=(dollars)
     self.payment_amount_in_cents = Rational(dollars) * Rational(100)
   end

@@ -21,6 +21,13 @@ class ApplicationGroup
 
   embeds_many :person_relationships
 
+  def applicant
+    unless person_relationships.first.subject_person.nil?
+      pid = person_relationships.first.subject_person
+      Person.find(pid)
+    end
+  end
+
   # List of SEPs active for this Household on this or specified date
   def active_seps(day = Date.today)
     special_enrollment_periods.find_all { |sep| (sep.start_date..sep.end_date).include?(day) }

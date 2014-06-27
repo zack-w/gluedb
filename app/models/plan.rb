@@ -31,6 +31,8 @@ class Plan
 
   before_save :invalidate_find_cache
 
+  default_scope order_by(name: 1)
+
   def invalidate_find_cache
     Rails.cache.delete("Plan/find/hios_plan_id.#{self.hios_plan_id}")
     true

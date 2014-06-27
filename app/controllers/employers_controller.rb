@@ -18,14 +18,14 @@ class EmployersController < ApplicationController
 
     @employer = Employer.find(params[:id])
 
-    @premium_payments = @employer.premium_payments.all.order_by(paid_at: :desc).page(params[:premium_payments_page]).per(12)
+    @premium_payments = @employer.premium_payments.all.page(params[:premium_payments_page]).per(12)
 
-    @elected_plans = @employer.elected_plans.all.order_by(carrier_name: 1, plan_name: 1)
+    @elected_plans = @employer.elected_plans.all
     
     if params[:q_person].present?
       @employees = @employer.employees.search(@q_person, @qf_person, @qd_person).page(params[:employee_page]).per(12)
     else
-      @employees = @employer.employees.all.order_by(name_last: 1, name_first: 1).page(params[:employee_page]).per(12)
+      @employees = @employer.employees.all.page(params[:employee_page]).per(12)
     end
 
     respond_to do |format|
@@ -42,9 +42,9 @@ class EmployersController < ApplicationController
     @employer.phones.build
     @employer.emails.build
 
-    @brokers = Broker.all.order_by(name_last: 1, name_first: 1)
-    @carriers = Carrier.all.order_by(name: 1)
-    @plans = Plan.all.order_by(name: 1)
+    @brokers = Broker.all
+    @carriers = Carrier.all
+    @plans = Plan.all
 
     @employer.addresses.first.city = "Washington"
     @employer.addresses.first.state = "DC"
@@ -61,13 +61,13 @@ class EmployersController < ApplicationController
     @employer.phones.build if @employer.phones.empty?
     @employer.emails.build if @employer.emails.empty?
 
-    @brokers = Broker.all.order_by(name_last: 1, name_first: 1)
+    @brokers = Broker.all
     @selected_broker = Broker.find(@employer.broker) if @employer.broker
 
-    @carriers = Carrier.all.order_by(name: 1)
+    @carriers = Carrier.all
     @selected_carriers = Carrier.find(@employer.carriers) if @employer.carriers
 
-    @plans = Plan.all.order_by(name: 1)
+    @plans = Plan.all
     @selected_plans = Plan.find(@employer.plans) if @employer.plans
   end
 

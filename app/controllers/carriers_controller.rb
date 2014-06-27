@@ -1,6 +1,6 @@
 class CarriersController < ApplicationController
   def index
-	  @carriers = Carrier.all.order_by([:name, :asc])
+	  @carriers = Carrier.all
 
     respond_to do |format|
 	    format.html # index.html.erb
