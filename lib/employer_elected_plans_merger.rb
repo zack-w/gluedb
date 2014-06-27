@@ -4,6 +4,7 @@ module EmployerElectedPlansMerger
       acc[val.qhp_id] = val
       acc
     end
+    plans_to_add = []
     incoming.elected_plans.each do |plan|
       exisiting_plan = existing_hash[plan.qhp_id]
       if !exisiting_plan.nil?
@@ -18,8 +19,9 @@ module EmployerElectedPlansMerger
           :original_effective_date,
           :renewal_effective_date)
       else
-        existing.elected_plans << plan
+        plans_to_add << plan
       end
     end
+    existing.elected_plans.concat(plans_to_add)
   end
 end

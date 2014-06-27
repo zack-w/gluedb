@@ -29,6 +29,7 @@ namespace :edi do
         end
       end
       blf.close
+      bgn_list
     end
 
     desc "Import outbound 820s from the exported EDI"
