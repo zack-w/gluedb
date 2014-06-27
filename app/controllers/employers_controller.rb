@@ -12,6 +12,11 @@ class EmployersController < ApplicationController
   end
 
   def show
+    # Note!
+    # Mongoid identity map is enable temporarily for this action only.
+    # This is due to looping over ElectedPlans and getting carrier names through the belongs_to relationship
+    Mongoid.identity_map_enabled = true
+
     @q_person = params[:q_person]
     @qf_person = params[:qf_person]
     @qd_person = params[:qd_person]
@@ -20,8 +25,8 @@ class EmployersController < ApplicationController
 
     @premium_payments = @employer.premium_payments.all.page(params[:premium_payments_page]).per(12)
 
-    @elected_plans = @employer.elected_plans.all
-    
+    @elected_plans = @employer.elected_plans
+
     if params[:q_person].present?
       @employees = @employer.employees.search(@q_person, @qf_person, @qd_person).page(params[:employee_page]).per(12)
     else
@@ -34,6 +39,7 @@ class EmployersController < ApplicationController
       format.xml
       format.js
     end
+    Mongoid.identity_map_enabled = false
   end
 
   def new
