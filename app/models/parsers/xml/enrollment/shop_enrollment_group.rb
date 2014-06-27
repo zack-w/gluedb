@@ -6,7 +6,12 @@ module Parsers::Xml::Enrollment
 
     def enrollees
       enrollees = @parser.xpath('./ins:subscriber | ./ins:member', NAMESPACES)
-      enrollees.collect { |e| ShopEnrollee.new(e) }
+      enrollees.collect { |e| ShopEnrollee.new(e, self.employer) }
+    end
+
+    def employer
+      fein = @parser.xpath('./emp:employer/emp:fein').text
+      Employer.find_for_fein(fein)
     end
   end
 end
