@@ -150,6 +150,7 @@ describe ExposesContactXml do
   it 'exposes email address' do
     email_address= 'superman@example.com'
     parser = Nokogiri::XML("<ns2:vcard xmlns:ns2=\"#{namespace}\"><ns2:email><ns2:text>#{email_address}</ns2:text></ns2:email></ns2:vcard>")
+    parser = parser.root # convert Document to an Element for test
     contact = ExposesContactXml.new(parser, namespace)
     expect(contact.email_address).to eq email_address   
   end

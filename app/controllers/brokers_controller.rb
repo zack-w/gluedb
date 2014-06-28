@@ -3,9 +3,9 @@ class BrokersController < ApplicationController
     @q = params[:q]
 
     if params[:q].present?
-      @brokers = Broker.search(@q).order_by([:name_last, :asc]).page(params[:page]).per(12)
+      @brokers = Broker.search(@q).page(params[:page]).per(12)
     else
-      @brokers = Broker.all.order_by([:name_last, :asc]).page(params[:page]).per(12)
+      @brokers = Broker.all.page(params[:page]).per(12)
     end
     
     respond_to do |format|

@@ -12,6 +12,11 @@ module Parsers::Xml::Enrollment
     def premium_amount_total
       @plan.at_xpath('./ins:premium_amount_total', NAMESPACES).text.to_f
     end
+
+    def premium_amount_total=(total)
+      node = @plan.at_xpath('./ins:premium_amount_total', NAMESPACES)
+      node.content = total
+    end
     
     def enrollees
       enrollees = @parser.xpath('./ins:subscriber | ./ins:member', NAMESPACES)
@@ -28,6 +33,17 @@ module Parsers::Xml::Enrollment
 
     def total_responsible_amount
       @plan.at_xpath('./ins:total_responsible_amount', NAMESPACES).text.to_f
+    end
+
+    def total_responsible_amount=(responsible_amount)
+      node = @plan.at_xpath('./ins:total_responsible_amount', NAMESPACES)
+      node.content = responsible_amount
+    end
+
+    def enrollee_premium_sum
+      sum = 0
+      enrollees.each { |e| sum += e.premium_amount}
+      sum
     end
   end
 end

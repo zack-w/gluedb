@@ -18,8 +18,11 @@
 
 # Ignore vim swapfiles
 *.swp
-
+dump/
 db/data
+db/seedfiles/**/*.xml
+db/seedfiles/**/*.xls
+db/seedfiles/**/*.xlsx
 db/seedfiles/*.csv
 db/seedfiles/*.yml
 config/exchange.yml

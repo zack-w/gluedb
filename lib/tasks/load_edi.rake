@@ -17,6 +17,21 @@ namespace :edi do
       pb.finish
     end
 
+    def import_bgn_blacklist
+      bgn_list = []
+      bl_file = File.join(Rails.root, "db", "data", "bgn_blacklist.csv")
+      return bgn_list unless File.exist?(bl_file)
+      blf = File.open(bl_file, "r")
+      blf.each_line do |line|
+        lval = line.strip
+        if !lval.blank?
+          bgn_list << lval
+        end
+      end
+      blf.close
+      bgn_list
+    end
+
     desc "Import outbound 820s from the exported EDI"
     task :outbound_820 => :environment do
       f = File.join(Rails.root, "db", "data", "b2b_outbound_820.csv")
@@ -30,6 +45,7 @@ namespace :edi do
 
     desc "Import it all from the JSONs"
     task :all => :environment do
+      bgn_blacklist = import_bgn_blacklist
       f = File.join(Rails.root, "db", "data", "all_json.csv")
       with_progress_bar(f, "ie 834s") do |row|
         record = row.to_hash
@@ -46,7 +62,7 @@ namespace :edi do
           p = Parsers::Edi::RemittanceTransmission.new(f_name, record['WIREPAYLOADUNPACKED'])
           p.persist!
         else
-          p = Parsers::Edi::TransmissionFile.new(f_name, trans_kind, record['WIREPAYLOADUNPACKED'])
+          p = Parsers::Edi::TransmissionFile.new(f_name, trans_kind, record['WIREPAYLOADUNPACKED'], bgn_blacklist)
          p.persist!
         end
       end

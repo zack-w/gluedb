@@ -31,6 +31,8 @@ class Plan
 
   before_save :invalidate_find_cache
 
+  default_scope order_by(name: 1)
+
   def invalidate_find_cache
     Rails.cache.delete("Plan/find/hios_plan_id.#{self.hios_plan_id}")
     true
@@ -49,6 +51,10 @@ class Plan
     age = Ager.new(birth_date).age_as_of(benefit_begin_date)
     premiums = Collections::Premiums.new(self.premium_tables).for_date(rate_period_date).for_age(age)
     premiums.to_a.first
+  end
+
+  def premium_for_enrollee(enrollee)
+    rate(enrollee.rate_period_date, enrollee.benefit_begin_date, enrollee.birth_date) 
   end
 
   def self.default_search_order

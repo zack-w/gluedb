@@ -1,0 +1,37 @@
+<div class="tab-pane" id="elected_plans">
+  <div id="plans">
+    <% if @employer.carriers.count <= 0 %>
+      <p> No Elected Plans Found! </p>
+    <% elsif @employer.carriers.count == 1 %>
+      <%= render "employers/showtabs/elected_plans_table", elected_plans: @elected_plans %>
+    <% else %>
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-tabs nav-append-content">
+            <% @employer.carriers.each_with_index do |carrier, index| %>
+              <% if index==0 %>
+                <li class="active"><a href="#<%= carrier.id %>"><%= carrier.name %></a></li>
+              <% else %>
+                <li class=""><a href="#<%= carrier.id %>"><%= carrier.name %></a></li>
+              <% end %>
+            <% end %>
+          </ul>
+          <div class="tab-content">
+            <% @employer.carrier_ids.each_with_index do |id, index| %>
+              <% if index==0 %>
+                <div class="tab-pane active" id="<%= id %>">
+                  <%= render "employers/showtabs/elected_plans_table", elected_plans: @elected_plans.select { |p| p.carrier_id == id } %>
+              </div>
+              <% else %>
+                <div class="tab-pane" id="<%= id %>">
+                  <%= render "employers/showtabs/elected_plans_table", elected_plans: @elected_plans.select { |p| p.carrier_id == id } %>
+              </div>
+              <% end %>
+              
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

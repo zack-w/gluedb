@@ -14,11 +14,20 @@ module Parsers
       validate :has_valid_employer
       validate :plan_exists
       validate :no_bogus_broker
+      validate :on_blacklist
 
-      def initialize(f_name, mt, el)
+      def initialize(f_name, mt, el, blist = [])
         @file_name = f_name
         @message_type = mt
         @etf_loop = el
+        @blacklisted_bgns = blist
+      end
+
+      def on_blacklist
+        bgn_two = @etf_loop["BGN"][2]
+        if @blacklisted_bgns.include?(bgn_two)
+          log_error(:etf_loop, "is blacklisted by BGN02")
+        end
       end
 
       def has_eg_id

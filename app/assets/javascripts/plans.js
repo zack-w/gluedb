@@ -10,6 +10,9 @@ $(document).ready(function() {
       $.each(data, function(key, value) {
         $('#Plans').append($('<option/>').attr("value", value._id).text(value.name));
       });
+      if($('#Plans > option[value!=""]').length == 0) {
+        $('.btn#Plans').prop('disabled', true);
+      }
     });
   });
 
