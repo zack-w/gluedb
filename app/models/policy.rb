@@ -64,8 +64,11 @@ class Policy
     state :effectuated
     state :carrier_rejected
     state :carrier_canceled
-    state :canceled
-    state :terminated
+    state :carrier_terminated
+    state :hbx_invalid
+    state :hbx_rejected
+    state :hbx_canceled
+    state :hbx_terminated
 
     event :effectuate do
       transitions from: :submitted, to: :effectuated
