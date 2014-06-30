@@ -43,5 +43,17 @@ describe Parsers::Edi::Etf::EtfLoop do
         end
       end
     end
+
+    describe '#cancellation_or_termination?' do
+      it 'returns true if any person loop is a cancellation or termination' do
+        etf.stub(:people) { [ double(cancellation_or_termination?: false) ] }
+        expect(etf.cancellation_or_termination?).to eq false
+      end
+
+      it 'returns false if no person loop is a cancellation_or_termination' do
+        etf.stub(:people) { [ double(cancellation_or_termination?: true) ] }
+        expect(etf.cancellation_or_termination?).to eq true
+      end
+    end
   end
 end

@@ -27,6 +27,10 @@ module Parsers
         def people
           @loop['L2000s'].map { |p| PersonLoop.new(p) }
         end
+
+        def cancellation_or_termination?
+          people.any? { |p| p.cancellation_or_termination? }
+        end
       end
     end
   end

@@ -154,4 +154,28 @@ describe Parsers::Edi::Etf::PersonLoop do
       expect(person_loop.city).to eq city
     end
   end
+
+  describe '#cancellation_or_termination?' do
+    let(:person_loop) { Parsers::Edi::Etf::PersonLoop.new(raw_loop) }
+    context 'given no member level detail(INS)' do
+      let(:raw_loop) { { "INS" => [] } }
+      it 'returns false' do 
+        expect(person_loop.cancellation_or_termination?).to eq false
+      end
+    end
+
+    context 'given member level detail stating cancellation or termination' do
+      let(:raw_loop) { { "INS" => ['', '', '', '024'] } }
+      it 'returns true' do 
+        expect(person_loop.cancellation_or_termination?).to eq true
+      end
+    end
+
+    context 'given some other maintainance type code' do
+      let(:raw_loop) { { "INS" => ['', '', '', '666'] } }
+      it 'returns false' do 
+        expect(person_loop.cancellation_or_termination?).to eq false
+      end
+    end
+  end
 end

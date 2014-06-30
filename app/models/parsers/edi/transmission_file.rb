@@ -12,19 +12,13 @@ module Parsers
         @bgn_blacklist = blist
       end
 
-      def determine_transaction_set_kind(l834)
-        assigned_transmission_kind = @transmission_kind
-        if @transmission_kind == "effectuation"
-          if cancellation_or_termination?(l834)
-            assigned_transmission_kind = "maintenance"
-          end
-        end
-        assigned_transmission_kind
-      end
-
-      def cancellation_or_termination?(l834)
+      def transaction_set_kind(l834)
         etf = Etf::EtfLoop.new(l834)
-        etf.people.any? { |p| p.cancellation_or_termination? }
+
+        if(@transmission_kind == "effectuation" && etf.cancellation_or_termination?)
+          @transmission_kind = "maintenance"
+        end
+        @transmission_kind
       end
 
       def persist_edi_transactions(
@@ -54,7 +48,7 @@ module Parsers
           :policy_id => policy_id,
           :error_list => error_list,
           :transmission => edi_transmission,
-          :transaction_kind => determine_transaction_set_kind(l834),
+          :transaction_kind => transaction_set_kind(l834),
           :body => fs
         )
       end
@@ -143,7 +137,7 @@ module Parsers
         etf = Etf::EtfLoop.new(etf_loop)
 
         broker_id = persist_broker_get_id(etf_loop)
-        trans_kind = determine_transaction_set_kind(etf_loop)
+        trans_kind = transaction_set_kind(etf_loop)
         
         plan = Plan.find_by_hios_id(hios_id)
         unless plan
@@ -274,7 +268,7 @@ module Parsers
       def create_etf_validator(etf_loop)
         EtfValidation.new(
           @file_name,
-          determine_transaction_set_kind(etf_loop),
+          transaction_set_kind(etf_loop),
           etf_loop,
           @bgn_blacklist
         )
@@ -331,7 +325,7 @@ module Parsers
 
       def is_carrier_maintenance?(etf_loop, edi_transmission)
         val = ((edi_transmission.isa06.strip != ExchangeInformation.receiver_id)  &&
-          (determine_transaction_set_kind(etf_loop) == "maintenance"))
+          (transaction_set_kind(etf_loop) == "maintenance"))
         val
       end
 

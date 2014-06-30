@@ -63,7 +63,7 @@ namespace :edi do
           p.persist!
         else
           p = Parsers::Edi::TransmissionFile.new(f_name, trans_kind, record['WIREPAYLOADUNPACKED'], bgn_blacklist)
-         p.persist!
+          p.persist!
         end
       end
     end
