@@ -23,6 +23,7 @@ class PremiumPayment
 	before_create :parse_coverage_period
 
   default_scope order_by(paid_at: -1) 
+  scope :by_date, ->(date){ where(paid_at: date) }
 
   def payment_amount_in_dollars=(dollars)
     self.payment_amount_in_cents = Rational(dollars) * Rational(100)
@@ -41,5 +42,3 @@ protected
 	    self.end_date = parts[2].to_date
 		end
 end
-
-

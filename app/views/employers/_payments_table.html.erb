@@ -1,23 +1,20 @@
 <table class="table table-condensed">
   <thead>
     <tr>
+      <th>Carrier</th>
       <th>Paid at</th>
-      <th>Paid to</th>
-      <th>Payment Amt</th>
-      <th>Cov Begin</th>
-      <th>Cov End</th>
-      <th>&nbsp;</th>
+      <th>Total Payment</th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
-    <%= table_empty_to_human if premium_payments.count < 1 %>
-    <% premium_payments.each do |p| %>
+    <%= table_empty_to_human if payments.count < 1 %>
+    <% payments.each do |p| %>
     <tr>
-      <td><span class="fui-credit-card">&nbsp;</span> <%= p.paid_at %></td>
       <td><%= p.carrier.name %></td>
-      <td><%= number_to_currency(p.payment_amount_in_dollars) %></td>
-      <td><%= p.start_date %></td>
-      <td><%= p.end_date %></td>
+      <td><span class="fui-credit-card">&nbsp;</span> <%= p.payment_at %></td> 
+      <td><%= number_to_currency (Rational(premium_payments.by_date(p.payment_at).sum(:pmt_amt)) / Rational(100)).to_f %></td>
+      <td><%= link_to "View detail", edi_transaction_set_payment_path(p._id) %></td>
     </tr>
     <% end %>
   </tbody>

@@ -23,7 +23,8 @@ class EmployersController < ApplicationController
 
     @employer = Employer.find(params[:id])
 
-    @premium_payments = @employer.premium_payments.all.page(params[:premium_payments_page]).per(12)
+    @premium_payments = @employer.premium_payments
+    @payments = Protocols::X12::TransactionSetPremiumPayment.find(@premium_payments.distinct(:transaction_set_premium_payment))
 
     @elected_plans = @employer.elected_plans
 
