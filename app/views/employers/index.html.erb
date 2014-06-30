@@ -8,7 +8,7 @@
       <!-- <% link_to "New", new_employer_path, class: "btn btn-primary" %> -->
     </div>
     <div class="col-md-4">
-      <%= render 'employer_search', q: @q %>
+      <%= render 'shared/search', url: employers_path, q: @q, placeholder: 'Name' %>
     </div>
   </div>
 </div>
@@ -16,12 +16,12 @@
 <table class="table table-condensed">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:employee_count) %></th>
-      <th><%= model_class.human_attribute_name(:open_enrollment_start) %></th>
-      <th><%= model_class.human_attribute_name(:plan_year_start) %></th>
-      <th><%= model_class.human_attribute_name(:last_820_date) %></th>
-      <th><%= model_class.human_attribute_name(:coverage_through) %></th>
+      <th>Name</th>
+      <th>Employee count</th>
+      <th>Open enrollment start</th>
+      <th>Plan year start</th>
+      <th>Last 820 date</th>
+      <th>Coverage through</th>
     </tr>
   </thead>
   <tbody>

@@ -8,7 +8,7 @@
       <!-- <% link_to "New", new_broker_path, class: "btn btn-primary" %> -->
     </div>
     <div class="col-md-4">
-      <%= render 'broker_search', q: @q %>
+      <%= render 'shared/search', url: brokers_path, q: @q, placeholder: 'Name, NPN' %>
     </div>
   </div>
 </div>
