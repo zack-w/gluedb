@@ -1,9 +1,7 @@
 <%- model_class = EnrollmentGroup -%>
 <%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li class="active"><%= model_class.model_name.human.titleize.pluralize %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', text: 'Enrollment Groups' %>
 </div>
 
 <div>

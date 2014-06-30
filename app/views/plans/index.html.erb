@@ -1,7 +1,5 @@
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li class="active"><%= Plan.model_name.human.titleize.pluralize %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', text: 'Plans' %>
 
   <div class="row">
     <div class="col-md-8">

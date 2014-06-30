@@ -1,9 +1,7 @@
 <%- model_class = Household -%>
 <%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li class="active"><%= model_class.model_name.human.titleize.pluralize %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', text: 'Households' %>
 
   <div class="row">
     <div class="col-md-8">

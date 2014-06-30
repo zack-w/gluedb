@@ -1,9 +1,7 @@
 <%- model_class = Protocols::X12::TransactionSetEnrollment -%>
 <%t '.title', :default => model_class.model_name.human.titleize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li class="active"><%= @edi_transaction_set.id %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', text: @edi_transaction_set.id %>
 </div>
 
 <div class="row">
