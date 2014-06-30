@@ -22,36 +22,7 @@
   <% end %>
 </dl>
 
-<h4>Contact</h4>
-<% @broker.emails.each do |email| %> 
-<dl class="dl-horizontal">
-  <dt><%= "#{mixed_case(email.email_type)} 
-   #{model_class.human_attribute_name(:email)}" %></dt>
-   <dd><%= email.email_address %></dd>
- </dl>
- <% end %>
-
- <% @broker.phones.each do |phone| %>
- <dl class="dl-horizontal">
-  <dt><%= "#{mixed_case(phone.phone_type)}
-    #{model_class.human_attribute_name(:phone)}" %></dt>
-    <dd><% if @broker.phones.first.extension.present? %>
-      <%= number_to_phone(phone.phone_number, area_code: true, extension: phone.extension) %>
-      <% else %>
-      <%= number_to_phone(phone.phone_number, area_code: true) %>
-      <% end %>
-    </dd>
-  </dl>
-  <% end %>
-
-  <% @broker.addresses.each do |address| %> 
-  <dl class="dl-horizontal">
-    <dt><%= "#{mixed_case(address.address_type)} 
-     #{model_class.human_attribute_name(:address)}" %></dt>
-     <dd><%= address.formatted_address %></dd>
-   </dl>
-   <% end %>
-
+<%= render 'shared/contact', obj: @broker %>
    
 <p class="text-right"><small><%= "version: #{@broker.version} | updated: #{@broker.updated_at.strftime('%m-%d-%Y') if @broker.updated_at.present?}" %></small></p>
 
