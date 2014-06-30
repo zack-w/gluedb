@@ -1,7 +1,7 @@
 <%- model_class = Carrier -%>
 <%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
 <div class="page-header">
-  <%= render 'shared/breadcrumb', text: 'Carriers' %>
+  <%= render 'shared/breadcrumb', crumbs: ['Carriers'] %>
 </div>
 <table class="table table-condensed">
   <thead>

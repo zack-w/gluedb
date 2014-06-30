@@ -1,7 +1,7 @@
 <%- model_class = Person -%>
 <%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
 <div class="page-header">
-  <%= render 'shared/breadcrumb', text: 'People' %>
+  <%= render 'shared/breadcrumb', crumbs: ['People'] %>
 
   <div class="row">
     <div class="col-md-8">

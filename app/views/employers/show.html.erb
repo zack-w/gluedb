@@ -1,10 +1,11 @@
 <%- model_class = Employer -%>
 <%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, employers_path %></li>
-    <li class="active"><%= @employer.name %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Employers', employers_path),
+      @employer.name
+    ] 
+  %>
 </div>
 
 <div class="row">

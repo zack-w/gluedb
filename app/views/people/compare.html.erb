@@ -1,9 +1,10 @@
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to "People", people_path %></li>
-    <li><%= link_to @person.name_full, people_path(@person) %></li>
-    <li class="active">Compare</li>
-  </ul>
+ <%= render 'shared/breadcrumb', crumbs: [
+      link_to('People', people_path),
+      link_to(@person.name_full, people_path(@person)),
+      'Compare'
+    ] 
+  %>
 </div>
 
 <h4>Person Changes</h4>

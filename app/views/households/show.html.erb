@@ -1,10 +1,11 @@
 <%- model_class = Household -%>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, people_path %></li>
-    <li class="active"><%= @household.subscriber.full_name %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Households', households_path),
+      @household.subscriber.full_name
+    ] 
+  %>
 </div>
 
 <div class="row">

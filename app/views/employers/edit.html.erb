@@ -1,9 +1,10 @@
 <%- model_class = Employer -%>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, employers_path %></li>
-    <li><%= link_to @employer.name, employer_path(@employer) %></li>
-    <li class="active">Edit</li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Employers', employers_path),
+      link_to(@employer.name, employer_path(@employer)),
+      'Edit'
+    ] 
+  %>
 </div>
 <%= render :partial => 'form' %>

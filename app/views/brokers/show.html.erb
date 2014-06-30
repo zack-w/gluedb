@@ -1,10 +1,12 @@
 <%- model_class = Broker -%>
 <%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, brokers_path %></li>
-    <li class="active"><%= @broker.name_full %></li>
-  </ul>
+
+ <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Brokers', brokers_path),
+      @broker.name_full
+    ] 
+  %>
 </div>
 
 <dl class="dl-horizontal">

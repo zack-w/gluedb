@@ -1,7 +1,7 @@
 <%- model_class = Enrollment -%>
 <%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
 <div class="page-header">
-  <%= render 'shared/breadcrumb', text: 'Enrollments' %>
+  <%= render 'shared/breadcrumb', crumbs: ['Enrollments'] %>
 </div>
 <table class="table table-striped">
   <thead>

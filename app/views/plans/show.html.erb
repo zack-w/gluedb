@@ -1,9 +1,10 @@
 <div class="page-header">
   <%t '.title', :default => Plan.model_name.human.titleize.pluralize %>
-  <ul class="breadcrumb">
-    <li><%= link_to Plan.model_name.human.titleize.pluralize, plans_path %></li>
-    <li class="active"><%= @plan.name %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Plans', plans_path),
+      @plan.name
+    ] 
+  %>
 </div>
 
 <div class='col-md-offset-2 col-md-10'>

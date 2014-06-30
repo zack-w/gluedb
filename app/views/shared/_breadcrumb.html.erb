@@ -1,3 +1,8 @@
 <ul class="breadcrumb">
-  <li class="active"><%= text %></li>
+  <% crumbs.each do |crumb| %>
+    <% unless(crumbs.last == crumb) %>
+      <li><%= crumb %></li>
+    <% end %>
+  <% end %>
+  <li class="active"><%= crumbs.last %></li>
 </ul>

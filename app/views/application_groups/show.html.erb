@@ -1,11 +1,12 @@
 <%- model_class = ApplicationGroup -%>
 <%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, application_groups_path %></li>
-    <%- pid = @application_group.person_relationships.first.subject_person -%>
-    <li class="active"><%= Person.find(pid).name_full %></li>
-  </ul>
+  <%- pid = @application_group.person_relationships.first.subject_person -%>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Application Groups', application_groups_path),
+      Person.find(pid).name_full
+    ] 
+  %>
 </div>
 
 <div class='col-md-12'>
