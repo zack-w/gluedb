@@ -178,6 +178,7 @@ module Parsers
           :ben_stat => map_benefit_status_code(person.ben_stat),
           :rel_code => map_relationship_code(person.rel_code),
           :emp_stat => map_employment_status_code(person.emp_stat, policy.action)
+        )
       end
 
       def persist_application_group(etf_loop)
