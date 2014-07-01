@@ -17,14 +17,14 @@
             <% end %>
           </ul>
           <div class="tab-content">
-            <% @employer.carrier_ids.each_with_index do |id, index| %>
+            <% @employer.carriers.each_with_index do |carrier, index| %>
               <% if index==0 %>
-                <div class="tab-pane active" id="<%= id %>">
-                  <%= render "employers/showtabs/elected_plans_table", elected_plans: @elected_plans.select { |p| p.carrier_id == id } %>
+                <div class="tab-pane active" id="<%= carrier.id %>">
+                  <%= render "employers/showtabs/elected_plans_table", elected_plans: @elected_plans.select { |p| p.carrier_id == carrier.id } %>
               </div>
               <% else %>
-                <div class="tab-pane" id="<%= id %>">
-                  <%= render "employers/showtabs/elected_plans_table", elected_plans: @elected_plans.select { |p| p.carrier_id == id } %>
+                <div class="tab-pane" id="<%= carrier.id %>">
+                  <%= render "employers/showtabs/elected_plans_table", elected_plans: @elected_plans.select { |p| p.carrier_id == carrier.id } %>
               </div>
               <% end %>
               
