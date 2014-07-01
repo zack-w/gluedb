@@ -4,10 +4,8 @@ module Parsers
       class ApplicationGroupParser
         attr_reader :member_ids
 
-        def initialize(etf_loop)
-          @people_loops = etf_loop["L2000s"].map { |l2000|
-            PersonLoop.new(l2000)
-          }
+        def initialize(people_loops)
+          @people_loops = people_loops
         end
 
         def persist!

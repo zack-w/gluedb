@@ -33,9 +33,9 @@ describe Parsers::Edi::TransmissionFile do
     context 'transmission is not an effectuation' do
       it 'returns the kind unchanged' do
         kind = 'something'
-        etf_loop = {'L2000s' => [ { "INS" => ['', '', '', ''] } ]}
+        etf = Parsers::Edi::Etf::EtfLoop.new({'L2000s' => [ { "INS" => ['', '', '', ''] } ]})
         transmission_file.transmission_kind = kind
-        expect(transmission_file.transaction_set_kind(etf_loop)).to eq kind
+        expect(transmission_file.transaction_set_kind(etf)).to eq kind
       end
     end
 
@@ -44,15 +44,15 @@ describe Parsers::Edi::TransmissionFile do
       before { transmission_file.transmission_kind = kind }
       context 'cancellation or term' do
         it 'returns maintenance' do
-          etf_loop = {'L2000s' => [ { "INS" => ['', '', '', '024'] } ]}
-          expect(transmission_file.transaction_set_kind(etf_loop)).to eq 'maintenance'
+          etf = Parsers::Edi::Etf::EtfLoop.new({'L2000s' => [ { "INS" => ['', '', '', '024'] } ]})
+          expect(transmission_file.transaction_set_kind(etf)).to eq 'maintenance'
         end
       end
 
       context 'not a cancellation or term' do
         it 'returns the kind unchanged' do
-          etf_loop = {'L2000s' => [ { "INS" => ['', '', '', 'xxx'] } ]}
-          expect(transmission_file.transaction_set_kind(etf_loop)).to eq kind
+          etf = Parsers::Edi::Etf::EtfLoop.new({'L2000s' => [ { "INS" => ['', '', '', 'xxx'] } ]})
+          expect(transmission_file.transaction_set_kind(etf)).to eq kind
         end
       end  
     end

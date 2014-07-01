@@ -12,9 +12,7 @@ module Parsers
         @bgn_blacklist = blist
       end
 
-      def transaction_set_kind(l834)
-        etf = Etf::EtfLoop.new(l834)
-
+      def transaction_set_kind(etf)
         if(@transmission_kind == "effectuation" && etf.cancellation_or_termination?)
           @transmission_kind = "maintenance"
         end
@@ -31,6 +29,7 @@ module Parsers
         st = l834["ST"]
         bgn = l834["BGN"]
         fs = FileString.new(bgn[2] + "_" + @file_name, l834["RAW_CONTENT"])
+        etf = Etf::EtfLoop.new(l834)
         Protocols::X12::TransactionSetEnrollment.create!(
           :st01 => st[1],
           :st02 => st[2],
@@ -48,7 +47,7 @@ module Parsers
           :policy_id => policy_id,
           :error_list => error_list,
           :transmission => edi_transmission,
-          :transaction_kind => transaction_set_kind(l834),
+          :transaction_kind => transaction_set_kind(etf),
           :body => fs
         )
       end
@@ -93,20 +92,25 @@ module Parsers
         end
         etf = Etf::EtfLoop.new(etf_loop)
 
+        # Carrier
         carrier = Carrier.for_fein(etf.carrier_fein)
         carrier ||= @carrier
-        carrier_id = carrier._id
 
+        # Employer
+        employer_id = nil
+        if(etf.is_shop?)
+          employer_loop = Etf::EmployerLoop.new(etf.employer_loop)
+          employer_id = persist_employer_get_id(employer_loop, carrier._id)
+        end
+
+        #Policy
         coverage_loop = Parsers::Edi::Etf::CoverageLoop.new(etf.subscriber_loop["L2300s"].first)
-
-        employer_id = persist_employer_get_id(etf_loop, carrier_id)
-
         plan = Plan.find_by_hios_id(coverage_loop.hios_id)
 
         policy = nil
 
-        if etf.is_shop? && is_carrier_maintenance?(etf_loop, edi_transmission)
-          policy = Policy.find_by_subkeys(coverage_loop.eg_id, carrier_id, plan._id)
+        if etf.is_shop? && is_carrier_maintenance?(etf, edi_transmission)
+          policy = Policy.find_by_subkeys(coverage_loop.eg_id, carrier._id, plan._id)
           
           if policy
             edi_transmission.save!
@@ -116,26 +120,24 @@ module Parsers
           broker_id = persist_broker_get_id(etf_loop)
           
           if(plan)
-            policy = persist_policy(etf_loop, carrier_id, plan._id, coverage_loop.eg_id, employer_id, responsible_party_id, broker_id)
+            policy = persist_policy(etf, carrier._id, plan._id, coverage_loop.eg_id, employer_id, responsible_party_id, broker_id)
             
             if policy
               edi_transmission.save!
               
               persist_people(etf_loop, employer_id)
-              persist_application_group(etf_loop)
+              Etf::ApplicationGroupParser.new(etf.people).persist!
             end
           end
         end
 
         #persist transaction
         policy_id = (policy.nil?) ? nil : policy._id
-        persist_edi_transactions(etf_loop, policy_id, carrier_id, employer_id, edi_transmission)
+        persist_edi_transactions(etf_loop, policy_id, carrier._id, employer_id, edi_transmission)
       end
 
       # FIXME: pull sep reason
-      def persist_policy(etf_loop, carrier_id, plan_id, eg_id, employer_id, rp_id, broker_id)
-        etf = Etf::EtfLoop.new(etf_loop)
-
+      def persist_policy(etf, carrier_id, plan_id, eg_id, employer_id, rp_id, broker_id)
         reporting_categories = Etf::ReportingCatergories.new(etf.subscriber_loop["L2700s"])
 
         new_policy = Policy.new(
@@ -153,13 +155,13 @@ module Parsers
           :enrollees => []
         )
         policy = Policy.find_or_update_policy(new_policy)
-        if transaction_set_kind(etf_loop) == "effectuation"
+        if transaction_set_kind(etf) == "effectuation"
           policy.aasm_state = 'effectuated'
         end
 
         etf.people.each do |person_loop|
           policy_loop = person_loop.policy_loops.first
-          enrollee = create_enrollee(person_loop, policy_loop)
+          enrollee = build_enrollee(person_loop, policy_loop)
           policy.merge_enrollee(enrollee, policy_loop.action)
         end
         policy.unsafe_save!
@@ -167,7 +169,7 @@ module Parsers
         policy
       end
 
-      def create_enrollee(person, policy)
+      def build_enrollee(person, policy)
         Enrollee.new(
           :m_id => person.member_id,
           :pre_amt => person.reporting_catergories.pre_amt,
@@ -179,10 +181,6 @@ module Parsers
           :rel_code => map_relationship_code(person.rel_code),
           :emp_stat => map_employment_status_code(person.emp_stat, policy.action)
         )
-      end
-
-      def persist_application_group(etf_loop)
-        Etf::ApplicationGroupParser.new(etf_loop).persist!
       end
 
       def persist_responsible_party_get_id(etf_loop)
@@ -215,19 +213,12 @@ module Parsers
         broker._id
       end
 
-      def persist_employer_get_id(etf_loop, carrier_id)
-        etf = Etf::EtfLoop.new(etf_loop)
-        employer_loop = Etf::EmployerLoop.new(etf.employer_loop)
-
-        return(nil) if !etf.is_shop?
-        
+      def persist_employer_get_id(employer_loop, carrier_id)        
         employer = nil
 
         if employer_loop.specified_as_group?
           employer = Employer.find_for_carrier_and_group_id(carrier_id, employer_loop.group_id)
-        end
-        
-        if employer.nil?
+        else
           new_employer = Employer.new(
             :name => employer_loop.name,
             :fein => employer_loop.fein
@@ -249,9 +240,10 @@ module Parsers
       end
 
       def create_etf_validator(etf_loop)
+        etf = Etf::EtfLoop.new(etf_loop)
         EtfValidation.new(
           @file_name,
-          transaction_set_kind(etf_loop),
+          transaction_set_kind(etf),
           etf_loop,
           @bgn_blacklist
         )
@@ -306,9 +298,9 @@ module Parsers
         result.nil? ? "active" : result
       end
 
-      def is_carrier_maintenance?(etf_loop, edi_transmission)
+      def is_carrier_maintenance?(etf, edi_transmission)
         val = ((edi_transmission.isa06.strip != ExchangeInformation.receiver_id)  &&
-          (transaction_set_kind(etf_loop) == "maintenance"))
+          (transaction_set_kind(etf) == "maintenance"))
         val
       end
 
