@@ -159,8 +159,8 @@ module Parsers
 
         etf.people.each do |person_loop|
           policy_loop = person_loop.policy_loops.first
-          create_enrollee(person_loop)
-          policy.merge_enrollee(new_member, policy_loop.action)
+          enrollee = create_enrollee(person_loop, policy_loop)
+          policy.merge_enrollee(enrollee, policy_loop.action)
         end
         policy.unsafe_save!
 
@@ -168,7 +168,7 @@ module Parsers
       end
 
       def create_enrollee(person, policy)
-        new_member = Enrollee.new(
+        Enrollee.new(
           :m_id => person.member_id,
           :pre_amt => person.reporting_catergories.pre_amt,
           :c_id => person.carrier_member_id,
