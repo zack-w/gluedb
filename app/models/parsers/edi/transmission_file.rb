@@ -101,24 +101,29 @@ module Parsers
 
         employer_id = persist_employer_get_id(etf_loop, carrier_id)
 
+        plan = Plan.find_by_hios_id(coverage_loop.hios_id)
+
         policy = nil
 
         if etf.is_shop? && is_carrier_maintenance?(etf_loop, edi_transmission)
-          policy = find_policy(coverage_loop.eg_id, carrier_id, coverage_loop.hios_id)
+          policy = Policy.find_by_subkeys(coverage_loop.eg_id, carrier_id, plan._id)
           
           if policy
             edi_transmission.save!
           end
         else
           responsible_party_id = persist_responsible_party_get_id(etf_loop)
+          broker_id = persist_broker_get_id(etf_loop)
           
-          policy = persist_policy(etf_loop, carrier_id, coverage_loop.hios_id, coverage_loop.eg_id, employer_id, responsible_party_id)
-          
-          if policy
-            edi_transmission.save!
+          if(plan)
+            policy = persist_policy(etf_loop, carrier_id, plan._id, coverage_loop.eg_id, employer_id, responsible_party_id, broker_id)
             
-            persist_people(etf_loop, employer_id)
-            persist_application_group(etf_loop)
+            if policy
+              edi_transmission.save!
+              
+              persist_people(etf_loop, employer_id)
+              persist_application_group(etf_loop)
+            end
           end
         end
 
@@ -127,27 +132,14 @@ module Parsers
         persist_edi_transactions(etf_loop, policy_id, carrier_id, employer_id, edi_transmission)
       end
 
-      def find_policy(eg_id, carrier_id, hios_id)
-        plan = Plan.find_by_hios_id(hios_id)
-        Policy.find_by_subkeys(eg_id, carrier_id, plan._id)
-      end
-
       # FIXME: pull sep reason
-      def persist_policy(etf_loop, carrier_id, hios_id, eg_id, employer_id, rp_id)
+      def persist_policy(etf_loop, carrier_id, plan_id, eg_id, employer_id, rp_id, broker_id)
         etf = Etf::EtfLoop.new(etf_loop)
-
-        broker_id = persist_broker_get_id(etf_loop)
-        trans_kind = transaction_set_kind(etf_loop)
-        
-        plan = Plan.find_by_hios_id(hios_id)
-        unless plan
-          return nil
-        end
 
         reporting_categories = Etf::ReportingCatergories.new(etf.subscriber_loop["L2700s"])
 
         new_policy = Policy.new(
-          :plan_id => plan._id,
+          :plan_id => plan_id,
           :enrollment_group_id => eg_id,
           :carrier_id => carrier_id,
           :tot_res_amt => reporting_categories.tot_res_amt,
@@ -161,45 +153,35 @@ module Parsers
           :enrollees => []
         )
         policy = Policy.find_or_update_policy(new_policy)
-        if trans_kind == "effectuation"
+        if transaction_set_kind(etf_loop) == "effectuation"
           policy.aasm_state = 'effectuated'
         end
-        persist_policy_members(etf_loop, policy)
+
+        etf.people.each do |person_loop|
+          policy_loop = person_loop.policy_loops.first
+          create_enrollee(person_loop)
+          policy.merge_enrollee(new_member, policy_loop.action)
+        end
+        policy.unsafe_save!
+
         policy
+      end
+
+      def create_enrollee(person, policy)
+        new_member = Enrollee.new(
+          :m_id => person.member_id,
+          :pre_amt => person.reporting_catergories.pre_amt,
+          :c_id => person.carrier_member_id,
+          :cp_id => policy.id,
+          :coverage_start => policy.coverage_start,
+          :coverage_end => policy.coverage_end,
+          :ben_stat => map_benefit_status_code(person.ben_stat),
+          :rel_code => map_relationship_code(person.rel_code),
+          :emp_stat => map_employment_status_code(person.emp_stat, policy.action)
       end
 
       def persist_application_group(etf_loop)
         Etf::ApplicationGroupParser.new(etf_loop).persist!
-      end
-
-      def persist_policy_members(etf_loop, policy)
-        etf_loop["L2000s"].each do |l2000|
-          person_loop = Etf::PersonLoop.new(l2000)
-          member_id = person_loop.member_id
-
-        
-          pre_amt = Etf::ReportingCatergories.new(l2000["L2700s"]).pre_amt
-          c_member_id = person_loop.carrier_member_id
-
-          policy_loop = person_loop.policy_loops.first
-
-          ben_stat = person_loop.ben_stat
-          rel_code = person_loop.rel_code
-          emp_stat = person_loop.emp_stat
-          new_member = Enrollee.new(
-            :m_id => member_id,
-            :pre_amt => pre_amt,
-            :c_id => c_member_id,
-            :cp_id => policy_loop.id,
-            :coverage_start => policy_loop.coverage_start,
-            :coverage_end => policy_loop.coverage_end,
-            :ben_stat => map_benefit_status_code(ben_stat),
-            :rel_code => map_relationship_code(rel_code),
-            :emp_stat => map_employment_status_code(emp_stat, policy_loop.action)
-          )
-          policy.merge_enrollee(new_member, policy_loop.action)
-        end
-        policy.unsafe_save!
       end
 
       def persist_responsible_party_get_id(etf_loop)

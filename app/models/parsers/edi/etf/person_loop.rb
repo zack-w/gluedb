@@ -84,6 +84,10 @@ module Parsers
           @loop["L2100A"]["N4"][2]
         end
 
+        def reporting_catergories
+          Etf::ReportingCatergories.new(@loop["L2700s"])
+        end
+
         def map_relationship_code(r_code)
           relationship_codes = {
             "18" => "self",
