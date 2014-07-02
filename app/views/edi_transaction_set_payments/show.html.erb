@@ -1,5 +1,4 @@
-<%- model_class = Protocols::X12::TransactionSetPremiumPayment -%>
-<%t '.title', :default => model_class.model_name.human.titleize %>
+<%t '.title', :default => Protocols::X12::TransactionSetPremiumPayment.model_name.human.titleize.pluralize %>
 <div class="page-header">
   <%= render 'shared/breadcrumb', crumbs: [@edi_transaction_set_payment.id] %>
 </div>
@@ -7,39 +6,39 @@
 <div class="row">
   <div class="col-md-5">
     <dl class="dl-horizontal">
-      <dt><%= model_class.human_attribute_name(:transaction_type) %>:</dt>
+      <dt>Transaction type</dt>
       <dd><%= @edi_transaction_set_payment.st01 %></dd>
-      <dt><%= model_class.human_attribute_name(:control_number) %>:</dt>
+      <dt>Control number</dt>
       <dd><%= @edi_transaction_set_payment.st02 %></dd>
-      <dt><%= model_class.human_attribute_name(:reference_standard) %>:</dt>
+      <dt>Reference standard</dt>
       <dd><%= @edi_transaction_set_payment.st03 %></dd>
       <% if @edi_transaction_set_payment %>
-        <dt><%= model_class.human_attribute_name(:transaction_handling_code) %>:</dt>
+        <dt>Transaction handling code</dt>
         <dd><%= @edi_transaction_set_payment.bpr01 %></dd>
-        <dt><%= model_class.human_attribute_name(:total_payment_amount) %>:</dt>
+        <dt>Total payment amount</dt>
         <dd><%= @edi_transaction_set_payment.bpr02 %></dd>
-        <dt><%= model_class.human_attribute_name(:credit_or_debit_flag_code) %>:</dt>
+        <dt>Credit or debit flag code</dt>
         <dd><%= @edi_transaction_set_payment.bpr03 %></dd>
-        <dt><%= model_class.human_attribute_name(:payment_method_code) %>:</dt>
+        <dt>Payment method code</dt>
         <dd><%= @edi_transaction_set_payment.bpr04 %></dd>
-        <dt><%= model_class.human_attribute_name(:payment_format_code) %>:</dt>
+        <dt>Payment format code</dt>
         <dd><%= @edi_transaction_set_payment.bpr05 %></dd>
-        <dt><%= model_class.human_attribute_name(:depository_financial_institution_dfi_identifier) %>:</dt>
+        <dt>Depository financial institution dfi identifier</dt>
         <dd><%= @edi_transaction_set_payment.bpr12 %></dd>
-        <dt><%= model_class.human_attribute_name(:recieving_depository_financial_institution_dfi_identifier) %>:</dt>
+        <dt>Recieving depository financial institution dfi identifier</dt>
         <dd><%= @edi_transaction_set_payment.bpr13 %></dd>
-        <dt><%= model_class.human_attribute_name(:account_number_qualifier) %>:</dt>
+        <dt>Account number qualifier</dt>
         <dd><%= @edi_transaction_set_payment.bpr14 %></dd>
-        <dt><%= model_class.human_attribute_name(:reciever_bank_account_number) %>:</dt>
+        <dt>Reciever bank account number</dt>
         <dd><%= @edi_transaction_set_payment.bpr15 %></dd>
-        <dt><%= model_class.human_attribute_name(:check_issue_or_eft_effective_date) %>:</dt>
+        <dt>Check_issue or eft effective date</dt>
         <dd><%= @edi_transaction_set_payment.bpr16 %></dd>
-        <dt><%= model_class.human_attribute_name(:trace_type_code) %>:</dt>
+        <dt>Trace type code</dt>
         <dd><%= @edi_transaction_set_payment.trn01 %></dd>
-        <dt><%= model_class.human_attribute_name(:check_or_eft_trace_number) %>:</dt>
+        <dt>Check or eft trace number</dt>
         <dd><%= @edi_transaction_set_payment.trn02 %></dd>
       <% end %>
-      <dt><%= model_class.human_attribute_name(:transaction_kind) %>:</dt>
+      <dt>Transaction kind</dt>
       <dd><%= @edi_transaction_set_payment.transaction_kind.humanize %></dd>
     </dl>
   </div>
