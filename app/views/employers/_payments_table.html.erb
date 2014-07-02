@@ -13,7 +13,7 @@
     <tr>
       <td><%= p.carrier.name %></td>
       <td><span class="fui-credit-card">&nbsp;</span> <%= p.payment_at %></td> 
-      <td><%= number_to_currency (Rational(premium_payments.by_date(p.payment_at).sum(:pmt_amt)) / Rational(100)).to_f %></td>
+      <td><%= number_to_currency (Rational(premium_payments.by_date(p.payment_at, p.carrier).sum(:pmt_amt)) / Rational(100)).to_f %></td>
       <td><%= link_to "View detail", edi_transaction_set_payment_path(p._id) %></td>
     </tr>
     <% end %>
