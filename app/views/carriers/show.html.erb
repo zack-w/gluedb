@@ -43,9 +43,6 @@
 </tbody>
 </table>
 
-<h4>Payments</h4>
-<%= render 'employers/payments_table', premium_payments: @carrier.premium_payments[0..50] %>
-
 <p class="text-right"><small><%= "version: #{@carrier.version} | updated: #{@carrier.updated_at.strftime('%m-%d-%Y') if @carrier.updated_at.present?}" %></small></p>
 
 <div class="well well-sm default">
