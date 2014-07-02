@@ -1,10 +1,11 @@
 <%- model_class = EnrollmentGroup -%>
 <%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, enrollment_groups_path %></li>
-    <li class="active"><%= @enrollment_group.enrollment_group_id %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Enrollment Groups', enrollment_groups_path),
+      @enrollment_group.enrollment_group_id
+    ] 
+  %>
 </div>
 
 <h4>Enrollment Group</h4>

@@ -49,17 +49,17 @@ class Person
   embeds_many :responsible_parties
 #  accepts_nested_attributes_for :responsible_parties, reject_if: :all_blank, allow_destroy: true
 
-  has_many :special_enrollment_periods, dependent: :delete
-
-  embeds_many :jobs
-  index({"jobs.employer_id" => 1})
-  index({"jobs.m_id" => 1})
-  index({"responsible_parties._id" => 1})
-
   scope :all_under_age_twenty_six, ->{ gt(:'members.dob' => (Date.today - 26.years))}
   scope :all_over_age_twenty_six,  ->{lte(:'members.dob' => (Date.today - 26.years))}
+
+  # TODO: Add scope that accepts age range
+  # scope :all_between_age_range, ->(range) {}
+
+  scope :all_over_or_equal_age, ->(age) {lte(:'members.dob' => (Date.today - age.years))}
+  scope :all_under_or_equal_age, ->(age) {gte(:'members.dob' => (Date.today - age.years))}
   scope :all_with_multiple_members, exists({ :'members.1' => true })
 
+  default_scope order_by(name_last: 1, name_first: 1)
   # 
   def update_attributes_with_delta(props = {})
     old_record = self.find(self.id)
@@ -90,6 +90,9 @@ class Person
     save!
   end
 
+  def self.find_for_members(member_ids)
+    Queries::PersonMemberQuery.new(member_ids).execute
+  end
 
   def self.with_over_age_child_enrollments
     # Return set of People > 26 years old and listed on policies as child relationship code
@@ -112,10 +115,10 @@ class Person
   end
 
   def self.default_search_order
-  [
-    ["name_last", 1],
-    ["name_first", 1]
-  ]
+    [
+      ["name_last", 1],
+      ["name_first", 1]
+    ]
   end
 
   def self.search_hash(s_str)
@@ -139,34 +142,16 @@ class Person
     }
   end
 
-  extend SimpleConverters
-
-  def self.member_sieves(d_of_b, n_f)
-    [ Proc.new { |m|
-        date_string(m.dob) == d_of_b
-      },
-      Proc.new { |m|
-        safe_downcase(m.person.name_first) == safe_downcase(n_f)
-      }
-    ]
-  end
-
   def self.match_for_ssn(m_ssn, nf, nl, d_of_b)
-    ExistingPersonQuery.new(m_ssn, nf, d_of_b).find
+    Queries::ExistingPersonQuery.new(m_ssn, nf, d_of_b).find
   end
 
   def self.find_for_member_id(m_id)
-    #    Rails.cache.fetch("Person/find/members.hbx_member_id.#{m_id}") do
-    Person.where({"members.hbx_member_id" => m_id}).first
-    #    end
+    Queries::PersonByHbxIdQuery.new(m_id).execute
   end
 
   def policies
-    Policy.where(
-      { "enrollees.m_id" =>
-        {"$in" => self.members.map(&:hbx_member_id)}
-      }
-    )
+    query_proxy.policies
   end
 
   def authority_member=(hbx_id)
@@ -188,21 +173,12 @@ class Person
       found_member.merge_member(m_member)
     else
       self.members << m_member
-      if self.members.length < 2
-        self.authority_member_id = m_member.hbx_member_id
-      else
-        self.authority_member_id = nil
-      end
+      assign_authority_member_id
     end
   end
 
-  def merge_job(m_job)
-    found_job = self.jobs.detect { |j| j.m_id == m_job.m_id }
-    if found_job
-      found_job.merge_data(m_job)
-    else
-      self.jobs << m_job
-    end
+  def assign_authority_member_id
+    self.authority_member_id = (self.members.length > 1) ? nil : self.members.first.hbx_member_id
   end
 
   def merge_address(m_address)
@@ -307,9 +283,16 @@ class Person
     ([self._id] + other_ids).uniq
   end
 
-private
+  def application_groups
+    query_proxy.application_groups
+  end
+
+  private
   def initialize_authority_member
     self.authority_member = members.first.hbx_member_id if members.count == 1
   end
 
+  def query_proxy
+    @query_proxy ||= Queries::PersonAssociations.new(self)
+  end
 end

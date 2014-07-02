@@ -1,0 +1,32 @@
+<%- model_class = ApplicationGroup -%>
+<%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
+<div class="page-header">
+  <%= render 'shared/breadcrumb', crumbs: ['Application Groups'] %>
+</div>
+
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Applicant</th>
+      <th>Total People</th>
+    </tr>
+  </thead>
+  <% @application_groups.each do |application_group| %>
+    <tbody>
+      <tr>
+        <td><%= link_to prepend_glyph_to_name(application_group.applicant.name_full), application_group_path(application_group) %></td>
+        <td><%= application_group.person_relationships.count %></td>
+      </tr>
+    </tbody>
+  <% end %>
+  </table>
+
+
+<div class="row">
+  <div class="col-md-8">
+    <%= paginate @application_groups, theme: "twitter-bootstrap", pagination_class: "pagination-plain" %>
+  </div>
+  <div class="rol-md-4">
+    <p><%= "#{number_with_delimiter(@application_groups.count)} / #{number_with_delimiter(ApplicationGroup.count)} " %><small>(Application Groups selected / total)</small></p>
+  </div>
+</div>

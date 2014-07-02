@@ -1,0 +1,18 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Reason</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+    </tr>
+  </thead>
+  <tbody>
+		<% seps.each do |sep| %>
+		  <tr>
+		    <td><%= sep.reason.capitalize %></td>
+		    <td><%= format_date(sep.start_date) %></td>
+		    <td><%= format_date(sep.end_date) %></td>
+		  </tr>
+		<% end %>
+  </tbody>
+</table>

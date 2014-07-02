@@ -14,7 +14,7 @@ end
   )
   add_a_user(
     "dan.thomas@dc.gov",
-    "$2a$10$du.Cf8B8pBSEqBK4uwE9xe3QQILK7aZCyjOUONwPWkURTc6fZiU4."
+    "$2a$10$DzT.gqAI1..R8VCxfcn20.bTDIH7H4OO4b.X5IHdkxNbQw1qrXgoS"
   )
   add_a_user(
     "saadi.mirza@dc.gov",
@@ -99,4 +99,32 @@ end
   add_a_user(
     "john.kisor@dc.gov",
     "$2a$10$wvthMeSh5DfB3IUCA/PEfuq322hXnBxI2eiEUEUoktidN9B5kpU6q"
+  )
+  add_a_user(
+    "micah.kidd@dc.gov",
+    "$2a$10$CGPndVtDB9HlEuog3o9m3uhOTHpAR0eRf2Hq84xwIIhqqDYoG0IRS"
+  )
+  add_a_user(
+    "candice.hammonds@dc.gov",
+    "$2a$10$HjM8G3VcDLEBUlRlDCsGQOuGwtZuzRr/fEBiPOejsBokX2B4OiTTu"
+  )
+  add_a_user(
+    "selamawit.teka@dc.gov",
+    "$2a$10$Fm07ib6e7GM0VrmNQaq6UuwsewwgfD7TIV79btkjEnIgDVTCHwrDO"
+  )
+  add_a_user(
+    "reza.beheshti@dc.gov",
+    "$2a$10$YLyruc3CYpzqjLvOvjJhHuX2/7FYaA50y7yNl4C1uqEM3UsDquu2C"
+  )
+  add_a_user(
+    "heather.parker@dc.gov",
+    "$2a$10$w1n6u5XErDHiblHZCi7wqOIfVnD3Q5rVqRdvvsy26roVUmp0BwwE."
+  )
+  add_a_user(
+    "camille.gray@dc.gov",
+    "$2a$10$9gR/KrlVqNWY1tJugHLhiubWj2uYfBbm699o3PY/BK89.fmuAHduq"
+  )
+  add_a_user(
+    "velvia.worrell@dc.gov",
+    "$2a$10$SXJBADmcnzSRLPTrcHLhqeD7yCaMWedunykQ8lodxPo4exKJfzTme"
   )

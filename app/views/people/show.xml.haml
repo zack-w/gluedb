@@ -1,0 +1,17 @@
+%individual{"xmlns:ns" => "http://openhbx.org/api/terms/1.0"}
+  %authority_hbx_member_uri 
+  %authority_hbx_member_id= @person.authority_member_id
+  %person
+    = render 'shared/person', person: @person
+  %member_roles
+    - @person.members.each do |member|
+      = render 'shared/member', member: member
+      %person
+        = render 'shared/person', person: @person
+      %relationship 
+  %employee_role
+    = render 'shared/employee', employee: @person
+  %responsible_party_roles
+    - @person.responsible_parties.each do |party|
+      %entity_identifier= party.entity_identifier
+      %hbx_organization_uri= party.organization_name #?

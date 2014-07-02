@@ -1,45 +1,49 @@
 <%- model_class = Household -%>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Households', households_path),
+      @household.subscriber.full_name
+    ] 
+  %>
 </div>
 
-  <div class="col-md-3">
+<div class="row">
+  <div class="col-md-2">
     <div class="well sidebar-nav">
       <ul class="nav nav-list">
-        <li class="nav-header">Edit</li>
-        <li><a href="#">Set Authority Member</a></li>
-        <li><%= link_to "Change Member Info", edit_person_path(@person) %>
-        <li><%= link_to "Add Dependent", new_person_path %>
-        <li class="nav-header">Enrollment</li>
-        <li><a href="#">Special Enrollment Period</a></li>
-        <li><a href="#">Enroll in Plan</a></li>
-        <li><a href="#">Change Carrier</a></li>
-        <li><a href="#">Change Plan</a></li>
-        <li><a href="#">Cancel/Term Plan</a></li>
-        <li><a href="#">Transmit Changes</a></li>
+        <li class="nav-header">Individual</li>
+        <li><%= link_to "Edit", edit_household_path(@household) %></li>
       </ul>
     </div>
   </div>
-  <div class="col-md-9">
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:rel) %>:</strong></dt>
-  <dd><%= @household.rel %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:aptc_total) %>:</strong></dt>
-  <dd><%= @household.aptc_total %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:csr_total) %>:</strong></dt>
-  <dd><%= @household.csr_total %></dd>
-</dl>
+  <div class="col-md-10">
+    <h4>Household Members</h4>
+    <% @household.people.each do |person| %>
+      <%= link_to prepend_glyph_to_name(person.full_name), person_path(person) %>
+      <br/> 
+  <!--     <dl class="dl-horizontal">
+        <dt><%#= "Person name" %></dt>
+        <dd><%#= "Person" %></dd>
+      </dl> -->
+    <% end %>
 
-<div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              households_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_household_path(@household), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              household_path(@household),
-              :method => 'delete',
-              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
+    <h4>Special Enrollment Periods</h4>
+    <%= render 'sep_detail', seps: @household.special_enrollment_periods %>
+
+    <h4>Eligibility Determinations</h4>
+    <%= render 'eligibility_detail', eligibilities: @household.eligibilities %>
+
+  </div>
 </div>
+
+  <p class="text-right">
+    <small><%= version_for_record(@household) %></small>
+  </p>
+
+<div class="well well-sm well-default">
+  <div class="form-actions">
+    <%= link_to t('.back', :default => t("helpers.links.back")), households_path, :class => 'btn btn-primary'  %>
+  </div>
 </div>

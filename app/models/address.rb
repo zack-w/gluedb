@@ -4,6 +4,8 @@ class Address
 
   include MergingModel
 
+  TYPES = %W(home work billing)
+
   field :address_type, type: String
   field :address_1, type: String
   field :address_2, type: String, default: ""
@@ -11,11 +13,10 @@ class Address
   field :state, type: String
   field :zip, type: String
 
-  validates_inclusion_of :address_type, in: ["home", "work", "billing"]
-  validates_presence_of :address_1
-  validates_presence_of :city
-  validates_presence_of :state
-  validates_presence_of :zip
+  validates_presence_of  :address_type, message: "Choose a type"
+  validates_inclusion_of :address_type, in: TYPES, message: "Invalid type"
+
+  validates_presence_of :address_1, :city, :state, :zip
 
   embedded_in :person, :inverse_of => :addresses
   embedded_in :employer, :inverse_of => :addresses
@@ -23,28 +24,20 @@ class Address
   before_save :clean_fields
 
   def clean_fields
-    self.address_1 = self.address_1.strip
-    if !self.address_2.blank?
-      self.address_2 = self.address_2.strip
+    attrs_to_clean = [:address_type, :address_1, :address_2, :city, :state, :zip]
+    attrs_to_clean.each do |a|
+      self[a].strip! unless self[a].blank?
     end
-    self.city = self.city.strip
-    self.state = self.state.strip
-    self.zip = self.zip.strip
-  end
-
-
-  def safe_downcase(val)
-    val.nil? ? nil : val.downcase
   end
 
   def match(another_address)
     return(false) if another_address.nil?
-    (safe_downcase(self.address_type) == safe_downcase(another_address.address_type)) &&
-    (safe_downcase(address_1) == safe_downcase(another_address.address_1)) &&
-    (safe_downcase(address_2) == safe_downcase(another_address.address_2)) &&
-    (safe_downcase(city) == safe_downcase(another_address.city)) &&
-    (safe_downcase(state) == safe_downcase(another_address.state)) &&
-    (safe_downcase(zip) == safe_downcase(another_address.zip))
+    attrs_to_match = [:address_type, :address_1, :address_2, :city, :state, :zip]
+    attrs_to_match.all? { |attr| attribute_matches?(attr, another_address) }
+  end
+
+  def attribute_matches?(attribute, other)
+    safe_downcase(self[attribute]) == safe_downcase(other[attribute])
   end
 
   def formatted_address
@@ -58,6 +51,7 @@ class Address
     [address_1, address_2, city_delim, state, zip].reject(&:nil? || empty?).join(' ')
   end
 
+  # NOTE: searching won't help -- dynamically called in PersonParser using send
   def merge_update(m_address)
     merge_with_overwrite(m_address,
       :address_1,
@@ -70,6 +64,12 @@ class Address
 
   def home?
     "home" == self.address_type.downcase
+  end
+  
+  private
+
+  def safe_downcase(val)
+    val.nil? ? nil : val.downcase
   end
 
 end

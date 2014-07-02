@@ -12,11 +12,22 @@ module Parsers
       validate :subscriber_refs_match
       validate :has_eg_id
       validate :has_valid_employer
+      validate :plan_exists
+      validate :no_bogus_broker
+      validate :on_blacklist
 
-      def initialize(f_name, mt, el)
+      def initialize(f_name, mt, el, blist = [])
         @file_name = f_name
         @message_type = mt
         @etf_loop = el
+        @blacklisted_bgns = blist
+      end
+
+      def on_blacklist
+        bgn_two = @etf_loop["BGN"][2]
+        if @blacklisted_bgns.include?(bgn_two)
+          log_error(:etf_loop, "is blacklisted by BGN02")
+        end
       end
 
       def has_eg_id
@@ -89,6 +100,30 @@ module Parsers
         end
       end
 
+      def plan_exists
+        s_loop = subscriber_loop
+        if !s_loop.blank?
+          pol_loop = Parsers::Edi::Etf::CoverageLoop.new(s_loop["L2300s"].first)
+          if pol_loop.empty?
+            log_error(:etf_loop, "has no valid plan")
+          else
+            plan = Plan.find_by_hios_id(pol_loop.hios_id)
+            if plan.blank?
+              log_error(:etf_loop, "has no valid plan")
+            end
+          end
+        end
+      end
+
+      def no_bogus_broker
+        broker_loop = Etf::BrokerLoop.new(etf_loop["L1000C"])
+        return true if !broker_loop.valid?
+        found_broker = Broker.find_by_npn(broker_loop.npn)
+        if found_broker.nil?
+          log_error(:etf_loop, "has an invalid broker")
+        end
+      end
+
       private
 
       def tsf_exists?(target_loop, label)
@@ -115,7 +150,7 @@ module Parsers
 
       def log_error(attr, msg)
         errors.add(attr, msg)
-#        ParserLog.log(@file_name, @message_type, attr.to_s + " " + msg, @etf_loop.to_s)
+        #        ParserLog.log(@file_name, @message_type, attr.to_s + " " + msg, @etf_loop.to_s)
       end
     end
   end

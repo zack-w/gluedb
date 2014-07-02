@@ -153,5 +153,175 @@ describe Person do
     end
   end
 
+  describe 'authority member id assignment' do
+    let(:person) { Person.new }
+    context 'one member' do
+      let(:member) { Member.new(hbx_member_id: 1) }
+      its 'authority member id is the member hbx id' do
+        person.members << member
+        person.assign_authority_member_id
+        expect(person.authority_member_id).to eq member.hbx_member_id
+      end
+    end 
+    context 'more than one member' do
+      its 'authority member id is nil' do
+        2.times { |i| person.members << Member.new(hbx_member_id: i) }
+        person.assign_authority_member_id
+        expect(person.authority_member_id).to be_nil
+      end
+    end
+  end
 
+  describe 'being searched for members' do
+    let(:member_ids) { ["a", "b" "c" ] }
+
+    let(:query) { Queries::PersonMemberQuery.new(member_ids) }
+
+    it "should search for the specified members" do
+      expect(Person).to receive(:where).with(query.query)
+      Person.find_for_members(member_ids)
+    end
+  end
+
+  describe '#full_name' do
+    let(:person) { Person.new(name_pfx: 'Mr', name_first: 'Joe', name_middle: 'X', name_last: 'Dirt', name_sfx: 'Jr') }
+    it 'returns persons full name as string' do
+      expect(person.full_name).to eq 'Mr Joe X Dirt Jr'
+    end
+  end
+
+  describe '#addresses_match?' do
+    context 'unequal count of home addresses' do
+      it 'returns false' do
+        person = Person.new
+        person.addresses << Address.new(address_type: 'home')
+        person.addresses << Address.new(address_type: 'home')
+
+        other_person = Person.new
+        other_person.addresses << Address.new(address_type: 'home')
+
+        expect(person.addresses_match?(other_person)).to be_false
+      end
+    end
+
+    context 'no home addresses match' do
+      it 'returns false' do
+        person = Person.new
+        person.addresses << Address.new(address_type: 'home', city: 'Boston')
+
+        other_person = Person.new
+        other_person.addresses << Address.new(address_type: 'home', city: 'New York')
+
+        expect(person.addresses_match?(other_person)).to be_false
+      end
+    end
+
+    context 'home address count and values match' do
+      it 'returns true' do
+        person = Person.new
+        person.addresses << Address.new(address_type: 'home', city: 'Boston')
+
+        other_person = Person.new
+        other_person.addresses << Address.new(address_type: 'home', city: 'Boston')
+
+        expect(person.addresses_match?(other_person)).to be_true
+      end
+    end
+  end
+
+
+  describe '#home_address' do
+    context 'home address exists' do
+      it 'returns the first home address' do
+        person = Person.new
+        address = Address.new(address_type: 'home')
+        another_address = Address.new(address_type: 'home')
+
+        person.addresses << address
+        person.addresses << another_address
+
+        expect(person.home_address).to eq address
+      end
+    end
+    context 'home address doesnt exist' do
+      it 'returns nil' do
+        person = Person.new
+        person.addresses << Address.new(address_type: 'work')
+        expect(person.home_address).to be_nil
+      end
+    end
+  end
+
+  describe '#home_phone' do
+    context 'home phone exists' do
+      it 'returns the first home phone' do
+        person = Person.new
+        home_phone = Phone.new(phone_type: 'home')
+        other_phone = Phone.new(phone_type: 'home')
+
+        person.phones << home_phone
+        person.phones << other_phone
+
+        expect(person.home_phone).to eq home_phone
+      end
+    end
+    context 'home phone doesnt exist' do
+      it 'returns nil' do
+        person = Person.new
+        person.phones << Phone.new(phone_type: 'work')
+        expect(person.home_phone).to be_nil
+      end
+    end
+  end
+
+  describe '#home_email' do
+    context 'home email exists' do
+      it 'returns the first home email' do
+        person = Person.new
+        home_email = Email.new(email_type: 'home')
+        other_email = Email.new(email_type: 'home')
+
+        person.emails << home_email
+        person.emails << other_email
+
+        expect(person.home_email).to eq home_email
+      end
+    end
+    context 'home email doesnt exist' do
+      it 'returns nil' do
+        person = Person.new
+        person.emails << Email.new(email_type: 'work')
+        expect(person.home_email).to be_nil
+      end
+    end
+  end
+
+  describe '.find_for_member_id' do
+    let(:person) { Person.new(name_first: 'Joe', name_last: 'Dirt') }
+    let(:member) { Member.new(gender: 'male') }
+    let(:lookup_id) { '666' }
+    let(:different_id) { '777'}
+    context 'no person has members with the hbx id' do
+      before do
+        member.hbx_member_id = different_id
+        person.members << member
+        person.save!
+      end
+
+      it 'returns nil' do
+        expect(Person.find_for_member_id(lookup_id)).to eq nil
+      end
+    end
+
+    context 'person has members with the hbx id' do
+      before do
+        member.hbx_member_id = lookup_id
+        person.members << member
+        person.save!
+      end
+      it 'returns the person' do
+        expect(Person.find_for_member_id(lookup_id)).to eq person
+      end
+    end
+  end
 end

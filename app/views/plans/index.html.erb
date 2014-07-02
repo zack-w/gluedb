@@ -1,0 +1,24 @@
+<div class="page-header">
+  <%= render 'shared/breadcrumb', crumbs: ['Plans'] %>
+
+  <div class="row">
+    <div class="col-md-8">
+      <%#= link_to "New", new_plan_path, class: "btn btn-primary" %>
+    </div>
+    <div class="col-md-4">
+      <%= render 'plan_search', q: @q %>
+    </div>
+  </div>
+</div>
+<%= render "plans_list", plans: @plans %>
+<div class="row">
+  <div class="col-md-8">
+    <%= paginate @plans, theme: "twitter-bootstrap", pagination_class: "pagination-plain" %>
+  </div>
+  <div class="rol-md-4">
+    <p><%= "#{number_with_delimiter(@plans.count)} / #{number_with_delimiter(Plan.count)} " %><small>(plans selected / total)</small></p>
+  </div>
+</div>
+
+
+

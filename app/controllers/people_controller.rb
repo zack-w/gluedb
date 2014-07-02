@@ -8,7 +8,7 @@ class PeopleController < ApplicationController
     if params[:q].present?
       @people = Person.search(@q, @qf, @qd).page(params[:page]).per(15)
     else
-      @people = Person.all.order_by(name_last: 1, name_first: 1).page(params[:page]).per(15)
+      @people = Person.all.page(params[:page]).per(15)
     end
 
     respond_to do |format|
@@ -23,6 +23,7 @@ class PeopleController < ApplicationController
 	  respond_to do |format|
 		  format.html # index.html.erb
 		  format.json { render json: @person }
+      format.xml
 		end
   end
 
@@ -73,7 +74,11 @@ class PeopleController < ApplicationController
     render action: "edit" unless @person.valid? && @person.all_embedded_documents_valid?
 
     @updates = params[:person] || {}
+    
     @delta = @person.changes_with_embedded || {}
+    deletion_deltas = DeletionDeltaExtractor.new(params[:person]).extract
+    
+    @delta.deep_merge!(deletion_deltas)
   end
 
   def persist_and_transmit
@@ -97,6 +102,16 @@ class PeopleController < ApplicationController
         format.html { render action: "edit" }
         format.json { render json: @person.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def assign_authority_id
+    person = Person.find(params[:id])
+    person.authority_member = params[:radio][:authority_id]
+    person.save!
+
+    respond_to do |format|
+      format.html { redirect_to person, notice: "Person's Authority Member ID updated." }
     end
   end
 

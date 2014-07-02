@@ -1,10 +1,11 @@
 <%- model_class = Employer -%>
 <%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, employers_path %></li>
-    <li class="active"><%= @employer.name %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Employers', employers_path),
+      @employer.name
+    ] 
+  %>
 </div>
 
 <div class="row">
@@ -15,74 +16,26 @@
   </div>
 
   <div class="col-md-10">
-    <div class="row">
-      <div class="col-md-12">
-        <h4><%= @employer.name %></h4>
-        <dl class="dl-horizontal">
-          <dt>HBX ID</dt>
-          <dd><%= @employer.hbx_id %></dd>
-          <dt><%= model_class.human_attribute_name(:fein) %></dt>
-          <dd><%= number_to_fein(@employer.fein) %></dd>
-          <dt><%= "Carrier(s)" %></dt>
-          <% @employer.carriers.each do |c| %>
-            <dd><%= link_to c.name, carrier_path(c) %></dd>
-          <% end %>
-          <dt><%= "Plan(s)" %></dt>
-          <% @employer.plans.each do |p| %>
-            <dd><%= link_to p.name, carrier_path(p.carrier) %></dd>
-          <% end %>
-          <dt><%= model_class.human_attribute_name(:broker) %></dt>
-          <dd><% @employer.broker %></dd>
-        </dl>
-      </div>
-    </div>
+    <%= render 'description_list', model_class: model_class %>
 
     <div class="row">
       <div class="col-md-12">
-        <h4>Employees</h4>
-        <%= render "people/people_list", people: @employees %>
+        <ul class="nav nav-tabs nav-append-content">
+          <li class="active"><a href="#employees">Employees</a></li>
+          <li class=""><a href="#elected_plans">Elected Plans</a></li>
+          <li class=""><a href="#payments">Payments</a></li>
+        </ul>
+        <div class="tab-content">
+          <%= render "employers/showtabs/employees" %>
 
-        <h4>Elected Plans</h4>
-        <%= render "elected_plans_table", elected_plans: @employer.elected_plans %>
+          <%= render 'employers/showtabs/elected_plans' %>
 
-        <h4>Payments</h4>
-        <%= render 'payments_table', premium_payments: @employer.premium_payments %>
+          <%= render 'employers/showtabs/payments' %>
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-12">
-        <h4>Contact</h4>
-        <% @employer.emails.each do |email| %> 
-          <dl class="dl-horizontal">
-            <dt><%= "#{mixed_case(email.email_type)} 
-             #{model_class.human_attribute_name(:email)}" %></dt>
-            <dd><%= email.email_address %></dd>
-          </dl>
-        <% end %>
-
-        <% @employer.phones.each do |phone| %>
-          <dl class="dl-horizontal">
-            <dt><%= "#{mixed_case(phone.phone_type)}
-              #{model_class.human_attribute_name(:phone)}" %></dt>
-            <dd><% if @employer.phones.first.extension.present? %>
-              <%= number_to_phone(phone.phone_number, area_code: true, extension: phone.extension) %>
-              <% else %>
-              <%= number_to_phone(phone.phone_number, area_code: true) %>
-              <% end %>
-            </dd>
-          </dl>
-        <% end %>
-
-        <% @employer.addresses.each do |address| %> 
-          <dl class="dl-horizontal">
-            <dt><%= "#{mixed_case(address.address_type)} 
-             #{model_class.human_attribute_name(:address)}" %></dt>
-            <dd><%= address.formatted_address %></dd>
-          </dl>
-        <% end %>
-      </div>
-    </div>
+    <%= render 'shared/contact', obj: @employer %>
   </div>
 </div>
 

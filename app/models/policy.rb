@@ -64,8 +64,11 @@ class Policy
     state :effectuated
     state :carrier_rejected
     state :carrier_canceled
-    state :canceled
-    state :terminated
+    state :carrier_terminated
+    state :hbx_invalid
+    state :hbx_rejected
+    state :hbx_canceled
+    state :hbx_terminated
 
     event :effectuate do
       transitions from: :submitted, to: :effectuated
@@ -103,24 +106,16 @@ class Policy
     enrollees.detect { |m| m.relationship_status_code == "self" }
   end
 
-  def members
-    member_ids = enrollees.map(&:m_id).uniq
-    people.map(&:members).flatten.select { |m| member_ids.include?(m.hbx_member_id) }
-  end
-
   def has_responsible_person?
     !self.responsible_party_id.blank?
   end
 
   def responsible_person
-    Person.where("responsible_parties._id" => Moped::BSON::ObjectId.from_string(self.responsible_party_id)).first
+    query_proxy.responsible_person
   end
 
   def people
-    Person.where({
-      "members.hbx_member_id" =>
-      { "$in" => enrollees.map(&:m_id) }
-    })
+    query_proxy.people
   end
 
   def merge_enrollee(m_enrollee, p_action)
@@ -158,10 +153,6 @@ class Policy
     self.plan.coverage_type
   end
 
-  def employer_group
-    Employer.elem_match(employer_groups: {hbx_carrier_id: carrier_id })
-  end
-
   def enrollee_for_member_id(m_id)
     self.enrollees.detect { |en| en.m_id == m_id }
   end
@@ -173,12 +164,6 @@ class Policy
   def self.default_search_order
     [[:eg_id, 1]]
   end
-
-  def self.find_all_enrollees_for_member_id(m_id)
-    Enrollee.where(
-      "m_id" => m_id
-    )
-  end  
 
   def self.find_all_policies_for_member_id(m_id)
     self.where(
@@ -283,7 +268,7 @@ class Policy
     )
   end
 
-  def self.find_active_and_unterminated_for_members_in_range(m_ids, start_d, end_d)
+  def self.find_active_and_unterminated_for_members_in_range(m_ids, start_d, end_d, other_params = {})
     Policy.where(self.active_as_of_expression(end_d).merge(
       {"enrollees" => {
         "$elemMatch" => {
@@ -296,17 +281,17 @@ class Policy
           ]
         }
       } }
-    ))
+    ).merge(other_params))
   end
 
-  def self.find_active_and_unterminated_in_range(start_d, end_d)
+  def self.find_active_and_unterminated_in_range(start_d, end_d, other_params = {})
     Policy.where(
-      self.active_as_of_expression(end_d)
+      self.active_as_of_expression(end_d).merge(other_params)
     )
   end
 
-  def self.find_terminated_in_range(start_d, end_d)
-    Policy.where(
+  def self.find_terminated_in_range(start_d, end_d, other_params = {})
+    Policy.where({
       :aasm_state => { "$ne" => "canceled" },
       :enrollees => { "$elemMatch" => {
           :rel_code => "self",
@@ -314,36 +299,12 @@ class Policy
           :coverage_end => {"$lte" => end_d, "$gte" => start_d}
       }
       }
+    }.merge(other_params)
     )
   end
 
-  def self.process_audits(active_start, active_end, term_start, term_end, out_directory)
-     active_audits = self.find_active_and_unterminated_in_range(active_start, active_end)
-     term_audits = self.find_terminated_in_range(term_start, term_end)
-     active_audits.each do |term|
-       out_f = File.open(File.join(out_directory, "#{term._id}_active.xml"), 'w')
-       ser = CanonicalVocabulary::MaintenanceSerializer.new(
-         term,
-         "audit",
-         "notification_only",
-         term.enrollees.map(&:m_id),
-         { :term_boundry => active_end }
-       )
-       out_f.write(ser.serialize)
-       out_f.close
-     end
-     term_audits.each do |term|
-       out_f = File.open(File.join(out_directory, "#{term._id}_term.xml"), 'w')
-       ser = CanonicalVocabulary::MaintenanceSerializer.new(
-         term,
-         "audit",
-         "notification_only",
-         term.enrollees.map(&:m_id),
-         { :term_boundry => term_end }
-       )
-       out_f.write(ser.serialize)
-       out_f.close
-     end
+  def self.process_audits(active_start, active_end, term_start, term_end, other_params, out_directory)
+    ProcessAudits.execute(active_start, active_end, term_start, term_end, other_params, out_directory)
   end
 
   def can_edit_address?
@@ -402,6 +363,10 @@ private
 
     def filter_non_numbers(str)
       str.to_s.gsub(/\D/,'') if str.present?
+    end
+
+    def query_proxy
+      @query_proxy ||= Queries::PolicyAssociations.new(self)
     end
 
 end

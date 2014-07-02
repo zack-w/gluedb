@@ -1,25 +1,31 @@
 <%- model_class = Broker -%>
 <%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li class="active"><%= model_class.model_name.human.titleize.pluralize %> - Total: <%= @brokers.count %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: ['Brokers'] %>
+
+  <div class="row">
+    <div class="col-md-8">
+      <!-- <% link_to "New", new_broker_path, class: "btn btn-primary" %> -->
+    </div>
+    <div class="col-md-4">
+      <%= render 'shared/search', url: brokers_path, q: @q, placeholder: 'Name, NPN' %>
+    </div>
+  </div>
 </div>
 
-<div class="col-md-10">
 <table class="table table-condensed">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th>Name</th>
       <th>Broker/TPA</th>
-      <th><%= model_class.human_attribute_name(:npn) %></th>
-      <th><%= model_class.human_attribute_name(:employer_count) %></th>
+      <th>NPN</th>
+      <th>Employer Count</th>
     </tr>
   </thead>
   <tbody>
     <% @brokers.each do |broker| %>
       <tr>
-        <td><%= link_to mixed_case(broker.name), broker_path(broker) %></td>
+        <td><%= link_to prepend_glyph_to_name(mixed_case(broker.name_full)), broker_path(broker) %></td>
         <td><%= broker.b_type.capitalize %></td>
         <td><%= broker.npn %></td>
         <td><%= broker.employers.count %></td>
@@ -27,4 +33,13 @@
     <% end %>
   </tbody>
 </table>
+ 
+<div class="row">
+  <div class="col-md-8">
+    <%= paginate @brokers, theme: "twitter-bootstrap", pagination_class: "pagination-plain" %>
+  </div>
+  <div class="rol-md-4">
+    <p><%= "#{number_with_delimiter(@brokers.count)} / #{number_with_delimiter(Broker.count)} " %><small>(brokers selected / total)</small></p>
+  </div>
 </div>
+ 

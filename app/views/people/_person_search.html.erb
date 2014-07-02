@@ -1,7 +1,0 @@
-<%= form_tag people_path, { method: :get, class: "form form-inline", role: "search"} do %>
-  <div class="form-group">
-    <%= label_tag :q, "Search term", {class: "sr-only"} %>
-    <%= text_field_tag :q, @q, {placeholder: "Name, HBX ID, SSN", class: "form-control"} %>
-    <%= submit_tag "Search", { class: "btn btn-primary" } %>
-  </div>
-<% end %>

@@ -1,10 +1,11 @@
 <%- model_class = Person -%>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, people_path %></li>
-    <li><%= link_to @person.full_name, person_path(@person) %></li>
-    <li class="active">Edit</li>
-  </ul>
+ <%= render 'shared/breadcrumb', crumbs: [
+      link_to('People', people_path),
+      link_to(@person.name_full, people_path(@person)),
+      'Edit'
+    ] 
+  %>
 </div>
 
 <%= simple_form_for(@person, url: compare_person_path(@person), :html => {:class => 'form-horizontal' }) do |f| %>
@@ -13,8 +14,14 @@
 
   <div class="well well-sm well-default">
     <div class="form-actions">
-			<%= f.submit "Continue", :class => 'btn btn-primary' %>
-			<%= link_to t('.cancel', :default => t("helpers.links.cancel")), people_path, :class => 'btn btn-default' %>
+      <div class="row">
+        <div class="col-md-1">
+          <%= f.submit "Continue", :class => 'btn btn-primary' %>
+        </div>
+        <div class="col-md-1">
+          <p class='text-center'><%= link_to t('.cancel', :default => t("helpers.links.cancel")), people_path %></p>
+        </div>
+      </div>
 		</div>
 	</div>
 

@@ -1,7 +1,13 @@
 class BrokersController < ApplicationController
   def index
-	  @brokers = Broker.all.order_by([:name, :asc])
+    @q = params[:q]
 
+    if params[:q].present?
+      @brokers = Broker.search(@q).page(params[:page]).per(12)
+    else
+      @brokers = Broker.all.page(params[:page]).per(12)
+    end
+    
     respond_to do |format|
 	    format.html # index.html.erb
 	    format.json { render json: @brokers }

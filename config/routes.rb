@@ -1,6 +1,20 @@
 Gluedb::Application.routes.draw do
 
-  devise_for :users
+  devise_for :users, :path => "accounts"
+
+  root :to => 'dashboards#index'
+
+  get "dashboards/index"
+  get "welcome/index"
+  get "tools/premium_calc"
+  get "flatuipro_demo/index"
+
+  namespace :admin do
+    namespace :settings do
+      resources :hbx_policies
+    end
+    resources :users
+  end
 
   resources :enrollment_addresses
 
@@ -16,15 +30,9 @@ Gluedb::Application.routes.draw do
     end
   end
 
-  get "flatuipro_demo/index"
-
+  resources :edi_transaction_set_payments
   resources :edi_transaction_sets
   resources :edi_transmissions
-
-  get "dashboards/index"
-  root :to => 'dashboards#index'
-
-  get "welcome/index"
 
   resources :enrollments do
     member do
@@ -32,15 +40,21 @@ Gluedb::Application.routes.draw do
     end
   end
 
-  resources :households
+  resources :application_groups do
+    resources :households
+    get 'page/:page', :action => :index, :on => :collection
+  end
+    
   resources :users
   resources :policies
 
+  resources :individuals 
   resources :people do
     get 'page/:page', :action => :index, :on => :collection
     member do
       put :compare
       put :persist_and_transmit
+      put :assign_authority_id
     end
   end
 
@@ -63,8 +77,17 @@ Gluedb::Application.routes.draw do
 
   resources :carriers do
     resources :plans
+    get :show_plans
+    post :calculate_premium, on: :collection  
   end
 
+  resources :plans, only: [:index, :show] do
+    member do
+      get :calculate_premium
+    end
+  end
+
+  resources :policies, only: [:show]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,0 +1,18 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Determination Date</th>
+      <th>Maximum APTC</th>
+      <th>CSR Pct</th>
+    </tr>
+  </thead>
+  <tbody>
+		<% eligibilities.each do |e| %>
+		  <tr>
+		    <td><%= format_date(e.date_determined) %></td>
+		    <td><%= number_to_currency(e.max_aptc) %></td>
+		    <td><%= number_to_percentage(e.csr_percent) %></td>
+		  </tr>
+		<% end %>
+  </tbody>
+</table>

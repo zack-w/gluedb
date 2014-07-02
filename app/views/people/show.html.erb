@@ -2,14 +2,15 @@
 
 <div class="page-header">
   <%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, people_path %></li>
-    <li class="active"><%= @person.full_name %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('People', people_path),
+      @person.full_name
+    ] 
+  %>
 
   <div class="row">
     <div class="col-md-offset-8 col-md-4">
-      <%= render 'person_search', q: @q %>
+      <%= render 'shared/search', url: people_path, q: @q, placeholder: "Name, HBX ID, SSN" %>
     </div>
   </div>
 </div>
@@ -24,28 +25,7 @@
   <div class="col-md-10">
     <h4><%= prepend_glyph_to_name(@person.full_name) %></h4>
     <%= render 'member_detail', person: @person %>
-
-    <h4>Contact</h4>
-    <% @person.emails.each do |email| %> 
-      <dl class="dl-horizontal">
-        <dt><%= "#{mixed_case(email.email_type)} email" %></dt>
-        <dd><address><%= link_to email.email_address, "mailto:#{email.email_address}" %></address></dd>
-      </dl>
-    <% end %>
-
-    <% @person.phones.each do |phone| %> 
-      <dl class="dl-horizontal">
-        <dt><%= "#{mixed_case(phone.phone_type)} phone" %></dt>
-        <dd><%= number_to_phone(phone.phone_number) %></dd>
-      </dl>
-    <% end %>
-
-    <% @person.addresses.each do |address| %> 
-      <dl class="dl-horizontal">
-        <dt><%= "#{mixed_case(address.address_type)} address" %></dt>
-        <dd><address><%= address.formatted_address %></address></dd>
-      </dl>
-    <% end %>
+    <%= render 'shared/contact', obj: @person %>
   </div>
 </div>
 
@@ -58,3 +38,5 @@
     <%= link_to t('.back', :default => t("helpers.links.back")), people_path, :class => 'btn btn-primary'  %>
   </div>
 </div>
+
+<%= render 'authority_id_dialog', person: @person %>

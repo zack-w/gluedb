@@ -7,15 +7,23 @@ module Protocols
       end
 
       def self.exchange
-        "DC0"
+        "dc0"
       end
 
-      def self.event_exchange
-        [:topic, "#{exchange}.E.topic.#{environment}"]
+      def self.event_exchange(resource)
+        [:topic, "#{exchange}.#{environment}.e.topic.#{resource}"]
       end
 
-      def self.event_key(resource, action)
-        "#{exchange}.E.topic.#{environment}.#{resource}.#{action}"
+      def self.event_key(resource, event)
+        "#{resource}.#{event}"
+      end
+
+      def self.transformation_exchange
+        [:direct, "#{exchange}.#{environment}.e.direct.xml"]
+      end
+
+      def self.transformation_key
+        "xml.transform"
       end
     end
   end

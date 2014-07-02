@@ -1,10 +1,11 @@
 <%- model_class = Protocols::X12::Transmission -%>
 <%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, edi_transmissions_path %></li>
-    <li class="active"><%= @edi_transmission.id %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Transmissions', edi_transmissions_path),
+      @edi_transmission.id
+    ] 
+  %>
 </div>
 
 <% @edi_transmission.fg_application_receivers_code == "SHP" ? shop_market = true : shop_market = false %>

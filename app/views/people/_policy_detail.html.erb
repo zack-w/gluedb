@@ -20,10 +20,10 @@
 			<% if (policy_market(p) == "Individual") %>
 			  <dt>Carrier to Bill?</dt>
 			  <dd><%= boolean_to_human(p.carrier_to_bill) %></dd>
-			  <% if p.csr_amt %>
+			  <%# if p.csr_amt %>
 				  <dt>CSR percent</dt>
-				  <dd><%= p.csr_amt %></dd>
-				<% end %>
+				  <dd><%#= p.csr_amt %></dd>
+				<%# end %>
 				<% if (p.has_responsible_person?) %>
 					<dt>Responsible party</dt>
 					<dd><%= link_to p.responsible_person.name_full, person_path(p.responsible_person) %></dd>
@@ -44,6 +44,6 @@
 <%= render 'edi_transaction_table', transactions: t %>
 
 <h6>Premium Payments</h6>
-<%= render 'employers/payments_table', premium_payments: p.premium_payments.order_by([:payment_at, :desc]) %>
+<%= render 'payments_table', premium_payments: p.premium_payments %>
 
 

@@ -29,6 +29,7 @@ GEM
     activesupport (3.2.16)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
+    american_date (1.1.0)
     amq-protocol (1.9.2)
     arel (3.0.3)
     atomic (1.1.15)
@@ -39,7 +40,7 @@ GEM
       kaminari (>= 0.13)
       rails (>= 3.1)
     builder (3.0.4)
-    bunny (1.1.8)
+    bunny (1.3.1)
       amq-protocol (>= 1.9.2)
     capistrano (2.15.4)
       highline
@@ -106,7 +107,7 @@ GEM
     jquery-ui-rails (4.2.0)
       railties (>= 3.2.16)
     json (1.8.1)
-    kaminari (0.15.1)
+    kaminari (0.16.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.9.2)
@@ -138,12 +139,12 @@ GEM
     mongoid_auto_increment (0.1.2)
       mongoid (>= 2.0)
     moped (1.5.2)
-    multi_json (1.9.0)
-    net-scp (1.1.2)
+    multi_json (1.10.1)
+    net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
-    net-ssh (2.8.0)
+    net-ssh (2.9.1)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
     nokogiri (1.6.1)
@@ -152,11 +153,11 @@ GEM
     origin (1.1.0)
     orm_adapter (0.5.0)
     pd_x12 (1.4.7)
-    polyglot (0.3.4)
+    polyglot (0.3.5)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
-    rack-ssl (1.3.3)
+    rack-ssl (1.3.4)
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -176,10 +177,14 @@ GEM
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     raindrops (0.13.0)
-    rake (10.1.1)
+    rake (10.3.2)
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
+    roo (1.13.2)
+      nokogiri
+      rubyzip
+      spreadsheet (> 0.6.4)
     rsec (0.4)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
@@ -197,7 +202,9 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
+    ruby-ole (1.2.11.7)
     ruby-progressbar (1.4.2)
+    rubyzip (1.1.3)
     sass (3.3.2)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -206,6 +213,8 @@ GEM
     simple_form (2.1.1)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
+    spreadsheet (0.9.7)
+      ruby-ole (>= 1.0)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -214,7 +223,7 @@ GEM
     therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
       ref
-    thor (0.18.1)
+    thor (0.19.1)
     thread_safe (0.2.0)
       atomic (>= 1.1.7, < 2)
     tilt (1.4.1)
@@ -239,6 +248,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm (~> 3.0.25)
+  american_date
   bootstrap-kaminari-views
   bunny
   capistrano (= 2.15.4)
@@ -264,6 +274,7 @@ DEPENDENCIES
   origin
   pd_x12
   rails (= 3.2.16)
+  roo
   rsec
   rspec-rails
   ruby-progressbar

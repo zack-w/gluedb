@@ -14,6 +14,7 @@ gem 'jquery-ui-rails'
 group :development do
   gem 'capistrano', '2.15.4'
   gem 'ruby-progressbar'
+#  gem 'jazz_hands'
 end
 
 group :development, :assets do
@@ -29,7 +30,7 @@ group :development, :assets do
 
 end
 
-group :development, :test do
+group :test do
 	gem 'mongoid-rspec'
   gem 'rspec-rails' #, '~> 3.0.0.beta'
   gem 'capybara'
@@ -48,6 +49,8 @@ gem 'devise'
 gem "rsec"
 gem "mongoid_auto_increment"
 gem 'american_date'
+
+gem 'roo'
 
 group :production do
   gem 'unicorn'

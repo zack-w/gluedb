@@ -5,15 +5,10 @@ module Parsers
       ParsedAddress = Struct.new(:street1, :street2, :city, :state, :zip)
 
       class PersonParser
+        attr_accessor :address
         def initialize(l2000, emp_id = nil)
           @person_loop = l2000
           @employer_id = emp_id
-          @change_type = determine_change_type(l2000)
-          parse_member_id
-          parse_name
-          parse_address
-          parse_contact
-          parse_demo
         end
 
         def parse_member_id
@@ -25,16 +20,33 @@ module Parsers
         def parse_address
           info_loop = @person_loop["L2100A"]
           if !info_loop["N3"].blank?
-            street2 = nil
-            street1 = info_loop["N3"][1]
-            if !info_loop["N3"][2].blank?
-              street2 = info_loop["N3"][2]
-            end
-            city = info_loop["N4"][1]
-            state = info_loop["N4"][2]
-            zip = info_loop["N4"][3]
-            @address = ParsedAddress.new(street1, street2, city, state, zip)
+            @address = ParsedAddress.new(get_street1, get_street2, get_city, get_state, get_zip)
           end
+        end
+
+        def get_street2
+          street2 = nil
+          info_loop = @person_loop["L2100A"]
+          if !info_loop["N3"][2].blank?
+            street2 = info_loop["N3"][2]
+          end
+          street2
+        end
+
+        def get_street1
+          PersonLoop.new(@person_loop).street1
+        end
+
+        def get_city
+          PersonLoop.new(@person_loop).city
+        end
+
+        def get_state
+          PersonLoop.new(@person_loop).state
+        end
+
+        def get_zip
+          @person_loop["L2100A"]["N4"][3]
         end
 
         def parse_contact
@@ -140,12 +152,9 @@ module Parsers
           end
           if subscriber?
             if !@employer_id.blank?
-              new_job = Job.new(
-                :m_id => @member_id,
-                :employer_id => @employer_id,
-                :emp_stat => map_employment_status_code(parse_employment_status)
-              )
-              new_person.merge_job(new_job)
+              employer = Employer.find(@employer_id)
+              employer.employees << new_person
+              employer.save
             end
           end 
           begin
@@ -173,7 +182,17 @@ module Parsers
 
         def self.parse_and_persist(p_loop, employer_id = nil)
           @person_parser = PersonParser.new(p_loop, employer_id)
+          @person_parser.parse_all
           @person_parser.persist!
+        end
+
+        def parse_all
+          @change_type = determine_change_type(@person_loop)
+          parse_member_id
+          parse_name
+          parse_address
+          parse_contact
+          parse_demo
         end
 
         private
@@ -204,18 +223,6 @@ module Parsers
 
         def merge_method(m_type)
           (@change_type == "change") ? "update_#{m_type}".to_sym : "merge_#{m_type}".to_sym
-        end
-
-        def map_employment_status_code(es_code)
-          employment_status_codes = {
-            "AC" => "active",
-            "FT" => "full-time",
-            "RT" => "retired",
-            "PT" => "part-time",
-            "TE" => "terminated"
-          }
-          result = employment_status_codes[es_code]
-          result.nil? ? "active" : result
         end
       end
     end

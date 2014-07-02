@@ -1,0 +1,59 @@
+<%- model_class = ApplicationGroup -%>
+<%t '.title', :default => model_class.model_name.human.pluralize.titleize %>
+<div class="page-header">
+  <%- pid = @application_group.person_relationships.first.subject_person -%>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Application Groups', application_groups_path),
+      Person.find(pid).name_full
+    ] 
+  %>
+</div>
+
+<div class='col-md-12'>
+  <dl class="dl-horizontal">
+    <dt><%= model_class.human_attribute_name(:aasm_state) %></dt>
+    <dd><%= @application_group.aasm_state.humanize %></dd>
+    
+    <dt><%= "Household(s)" %></dt>
+    <% if @application_group.households.count == 0 %>
+      <dd></dd>
+    <% end %>
+    <% @application_group.households.each do |household| %>
+      <dd>household</dd>
+    <% end %>
+
+    <dt><%= "Sep(s)" %></dt>
+    <% if @application_group.special_enrollment_periods.count == 0 %>
+      <dd></dd>
+    <% end %>
+    <% @application_group.special_enrollment_periods.each do |sep| %>
+      <dd>sep</dd>
+    <% end %>
+  </dl>
+
+  <div class='panel-body'>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Person</th>
+          <th>Relationship</th>
+        </tr>
+      </thead>
+      <% @application_group.person_relationships.each do |relationship| %>
+        <tbody>
+          <tr>
+            <%- pid = relationship.object_person -%>
+            <td><%= link_to Person.find(pid).name_full, person_path(pid)  %></td>
+            <td><%= relationship.relationship_kind %></td>
+          </tr>
+        </tbody>
+      <% end %>
+    </table>
+  </div>
+
+  <div class="well well-sm default">
+    <div class="form-actions">
+     <%= link_to t('.back', :default => t("helpers.links.back")), application_groups_path, :class => 'btn btn-primary'  %>
+    </div>
+  </div>
+</div>

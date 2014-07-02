@@ -3,6 +3,7 @@ class ElectedPlan
   include Mongoid::Timestamps
   include Mongoid::Paranoia
 
+  include MergingModel
   embedded_in :employer
 
   field :carrier_employer_group_id, type: String
@@ -16,6 +17,8 @@ class ElectedPlan
   field :renewal_effective_date, type: Date
 
   belongs_to :carrier
+
+  default_scope order_by(carrier_name: 1, plan_name: 1)
 
   def compare_value
     [self.carrier_id, self.qhp_id]

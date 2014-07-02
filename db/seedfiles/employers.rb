@@ -1,12 +1,14 @@
 puts "Loading Employers"
 
-Employer.collection.drop
+# Employer.collection.drop
+require 'csv'
 
 glob_pat = File.join(File.dirname(__FILE__), "employer_groups", "*.xml")
 
 Dir.glob(glob_pat).each do |f|
   f_in = File.open(f, 'r')
-  Protocols::Dcas::EmployerGroupFile.new(f_in.read).persist!
+  import = ImportEmployerDemographics.new
+  import.execute(f_in)
   f_in.close
 end
 

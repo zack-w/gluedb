@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Member do
-
   before(:each) do
     @p1 = Person.create!(
           name_pfx: "Mrs",
@@ -65,12 +64,7 @@ describe Member do
 
 end
 
-describe Member, "given:
-  - name_last of \"LaName\"
-  - name_first of \"Exampile\"
-  - dob of 19640229
-  - totally a dude
-" do
+describe Member do
   let(:dob) { "19640229" }
   let(:name_last) { "LaName" }
   let(:name_first) { "Exampile" }
@@ -102,4 +96,130 @@ describe Member, "given:
     subject.should be_valid
   end
 
+  [ :hbx_member_id, 
+    :concern_role_id, 
+    :import_source, 
+    :imported_at, 
+    :dob, 
+    :ssn, 
+    :gender, 
+    :hlh, 
+    :lui, 
+    :person
+  ].each do |attribute|
+    it { should respond_to attribute }
+  end
+
+  describe 'setters' do
+    let(:member) { Member.new }
+    describe 'ssn' do
+      it 'removes all non-numerals' do
+        member.ssn = 'a2a2b2ccc2d2ee2f2gg2h2'
+        expect(member.ssn).to eq '222222222'
+      end
+    end
+
+    describe 'gender' do
+      it 'forces to lowercase' do
+        member.gender = 'fEMaLE'
+        expect(member.gender).to eq 'female'
+      end
+    end
+  end
+
+  describe 'associated lookup by hbx_member_id' do
+    let(:member) { Member.new(gender: 'male') }
+    let(:id_to_lookup) { '666' }
+    let(:different_id) { '777' }
+    let(:enrollee) { Enrollee.new(relationship_status_code: 'self', employment_status_code: 'active', benefit_status_code: 'active') }
+    let(:policy) { Policy.new(eg_id: '1') }
+
+    describe '#policies' do
+      it 'finds policies who has an enrollee with a matching hbx_member_id' do
+        member.hbx_member_id = id_to_lookup
+        enrollee.m_id = id_to_lookup
+        
+        policy.enrollees << enrollee
+        policy.save!
+
+        unrelated_enrollee = Enrollee.new(m_id: different_id, relationship_status_code: 'spouse', employment_status_code: 'active', benefit_status_code: 'active')
+        other_policy = Policy.new(eg_id: '1')
+        other_policy.enrollees << unrelated_enrollee
+        other_policy.save!
+
+        expect(member.policies.to_a).to eq [policy]
+      end
+    end
+
+    describe '#enrollees' do
+      it 'finds enrollees with matching hbx_member_ids' do
+        member.hbx_member_id = id_to_lookup
+        enrollee.m_id = id_to_lookup
+        
+        policy.enrollees << enrollee
+        policy.save!
+
+        unrelated_enrollee = Enrollee.new(m_id: different_id, relationship_status_code: 'spouse', employment_status_code: 'active', benefit_status_code: 'active')
+        other_policy = Policy.new(eg_id: '1')
+        other_policy.enrollees << unrelated_enrollee
+        other_policy.save!
+
+        expect(member.enrollees).to eq [enrollee]
+      end
+    end
+  end
+
+  describe '#authority?' do
+    let(:member) { Member.new(gender: 'male') }
+    let(:person) { Person.new(name_first: 'Joe', name_last: 'Dirt') }
+    before { person.members << member }
+
+    context 'members hbx id equals the person authority member id' do
+      before do 
+        person.authority_member_id = '666'
+        member.hbx_member_id = '666'
+      end
+      it 'returns true' do
+        expect(member.authority?).to eq true
+      end
+    end
+
+    context 'members hbx id NOT equal to the person authority member id' do
+      before do
+        person.authority_member_id = '666'
+        member.hbx_member_id = '7'
+      end
+      it 'returns true' do
+        expect(member.authority?).to eq false
+      end
+    end
+  end 
+
+  describe '.find_for_member_id' do
+    let(:id_to_lookup) { '666' }
+    let(:person) { Person.new(name_first: 'Joe', name_last: 'Dirt') }
+    let(:member) { Member.new(gender: 'male') }
+    
+    context 'a person has a member with matching hbx_member_id' do
+      before do 
+        member.hbx_member_id = id_to_lookup
+        person.members << member
+        person.save!
+      end
+      it 'returns member' do
+        expect(Member.find_for_member_id(id_to_lookup)).to eq member
+      end
+    end
+
+    context 'no person has a member with matching hbx_member_id' do
+      before do 
+        member.hbx_member_id = id_to_lookup.next
+        person.members << member
+        person.save!
+      end
+      it 'returns nil' do
+        expect(Member.find_for_member_id(id_to_lookup)).to eq nil
+      end
+    end
+  end
 end

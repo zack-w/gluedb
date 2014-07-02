@@ -1,0 +1,86 @@
+digraph gluemodel {
+  concentrate=true;
+  ApplicationGroup -> Household;
+  ApplicationGroup -> SpecialEnrollmentPeriod;
+  ApplicationGroup -> PersonRelationship;
+  ApplicationGroup -> Person;
+
+  Broker -> Policy;
+  Broker -> Person;
+  Broker -> Employer;
+//  Broker -> Address;
+//  Broker -> Phone;
+//  Broker -> Email;
+
+  Carrier -> Plan;
+//  Carrier -> Policy;
+//  Carrier -> PremiumPayment;
+//  Carrier -> Broker;
+//  Carrier -> Employer;
+//  Carrier -> TransactionSetPremiumPayment;
+  Carrier -> CarrierProfile;
+
+//  CarrierProfile -> Transmission;
+
+  ElectedPlan -> Employer;
+  ElectedPlan -> Plan;
+
+//  Employer -> PremiumPayment;
+  Employer -> Broker;
+  Employer -> Person;
+  Employer -> Policy;
+  Employer -> ElectedPlan;
+//  Employer -> Address;
+//  Employer -> Phone;
+//  Employer -> Email;
+
+  Enrollee -> Policy;
+  Enrollee -> Member;
+
+  Household -> Eligibility;
+  Household -> Person;
+  Household -> Policy;
+  Household -> PersonRelationship;
+
+  Member -> Person;
+  Member -> Enrollee;
+
+  Person -> ApplicationGroup;
+  Person -> Broker;
+  Person -> Employer;
+  Person -> Household;
+  Person -> Member;
+//  Person -> Address;
+//  Person -> Phone;
+//  Person -> Email;
+  Person -> ResponsibleParty;
+  Person -> PersonRelationship;
+
+  PersonRelationship -> Person;
+
+  Plan -> PremiumTable;
+  Plan -> Policy;
+  Plan -> Carrier;
+
+  Policy -> Enrollee;
+  Policy -> Broker;
+  Policy -> Plan;
+  Policy -> Employer;
+  Policy -> ResponsibleParty;
+//  Policy -> TransactionSetEnrollment;
+  Policy -> PremiumPayment;
+
+  PremiumPayment -> Policy;
+//  PremiumPayment -> TransactionSetPremiumPayment;
+
+/*
+  TransactionSetEnrollment -> Transmission;
+  TransactionSetEnrollment -> Policy;
+
+  TransactionSetPremiumPayment -> Transmission;
+  TransactionSetPremiumPayment -> PremiumPayment;
+  TransactionSetPremiumPayment -> Policy;
+
+  Transmission -> CarrierProfile;
+*/
+}

@@ -1,9 +1,10 @@
 <%- model_class = Dashboard -%>
 <%t '.title', :default => model_class.model_name.human.titleize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize, root_path %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Dashboards', root_path)
+    ] 
+  %>
 </div>
 
 <div class="row">

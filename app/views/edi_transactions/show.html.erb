@@ -1,10 +1,11 @@
 <%- model_class = EdiTransaction -%>
 <%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, edi_transaction_path %></li>
-    <li class="active"><%= @edi_transaction.id %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+    link_to('EDI Transactions', edi_transaction_path),
+    @edi_transaction.id
+    ] 
+  %>
 </div>
 
 <dl class="dl-horizontal">

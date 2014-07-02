@@ -7,7 +7,7 @@ module Parsers
 
       def to_model
         Broker.new(
-          :name => @name,
+          :name_full => @name,
           :npn => @npn,
           :b_type => "broker"
         )
@@ -150,7 +150,7 @@ module Parsers
         end
 
         unless @broker.nil?
-          broker_model = Broker.find_or_create_broker(@broker.to_model)
+          broker_model = Broker.find_or_create(@broker.to_model)
           enrollment_group.broker_id = broker_model._id
         end
         enrollment.save!

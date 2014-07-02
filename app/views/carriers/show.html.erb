@@ -1,10 +1,11 @@
 <%- model_class = Carrier -%>
 <%t '.title', :default => model_class.model_name.human.titleize.pluralize %>
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to model_class.model_name.human.titleize.pluralize, carriers_path %></li>
-    <li class="active"><%= @carrier.name %></li>
-  </ul>
+  <%= render 'shared/breadcrumb', crumbs: [
+      link_to('Carriers', carriers_path),
+      @carrier.name
+    ] 
+  %>
 </div>
 
 <dl class="dl-horizontal">
@@ -31,7 +32,7 @@
 <tbody>
   <% @plans.each do |plan| %>
   <tr>
-    <td><%= plan.name %></td>
+    <td><%= link_to plan.name, plan_path(plan) %></td>
     <td><%= plan.hios_plan_id %></td>
     <td><%= plan.coverage_type.capitalize %></td>
     <td><%= plan.metal_level.capitalize %></td>

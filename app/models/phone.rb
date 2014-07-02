@@ -3,18 +3,27 @@ class Phone
 
   include MergingModel
 
+  TYPES = %W(home work mobile)
+
   field :phone_type, type: String
   field :phone_number, type: String
   field :extension, type: String
 
-  validates :phone_type, presence: true, inclusion: {in: %w( primary secondary home work mobile pager main other )}
+  validates_presence_of  :phone_number
+  validates_presence_of  :phone_type, message: "Choose a type"
+  validates_inclusion_of :phone_type, in: TYPES, message: "Invalid type"
 
   embedded_in :person, :inverse_of => :phones
   embedded_in :employer, :inverse_of => :phones
 
   def match(another_phone)
     return(false) if another_phone.nil?
-    (phone_type == another_phone.phone_type) && (phone_number == another_phone.phone_number)
+    attrs_to_match = [:phone_type, :phone_number]
+    attrs_to_match.all? { |attr| attribute_matches?(attr, another_phone) }
+  end
+
+  def attribute_matches?(attribute, other)
+    self[attribute] == other[attribute]
   end
 
   def phone_number=(value)

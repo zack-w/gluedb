@@ -9,7 +9,7 @@ module PeopleHelper
 	end
 
 	def policy_sponsor(policy)
-		policy_market(policy) == "Individual" ? "Individual" : raw(link_to truncate(policy_market(policy), length: 35), employers_path(policy.employer))
+		policy_market(policy) == "Individual" ? "Individual" : raw(link_to truncate(policy_market(policy), length: 35), employer_path(policy.employer))
 	end
 
 	def policy_status(policy)

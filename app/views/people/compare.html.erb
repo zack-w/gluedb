@@ -1,9 +1,10 @@
 <div class="page-header">
-  <ul class="breadcrumb">
-    <li><%= link_to "People", people_path %></li>
-    <li><%= link_to @person.name_full, people_path(@person) %></li>
-    <li class="active">Compare</li>
-  </ul>
+ <%= render 'shared/breadcrumb', crumbs: [
+      link_to('People', people_path),
+      link_to(@person.name_full, people_path(@person)),
+      'Compare'
+    ] 
+  %>
 </div>
 
 <h4>Person Changes</h4>
@@ -21,7 +22,6 @@
 	</div>
 </div>
 
-
 <%= simple_form_for(@person, url: persist_and_transmit_person_path(@person), html: { class: 'form-horizontal' }) do |f| %>
 	
 	<%= hidden_field_tag(:person, @updates.to_json, id: nil) %>
@@ -29,7 +29,7 @@
   <div class="well well-sm well-default">
     <div class="form-actions">
 			<%= f.submit "Continue", :class => 'btn btn-primary' %>
-			<%= link_to "Back", :back, :class => 'btn btn-default' %>
+			<%= link_to "Back", 'javascript:history.back()', :class => 'btn btn-default' %>
 		</div>
 	</div>
 <% end %>
