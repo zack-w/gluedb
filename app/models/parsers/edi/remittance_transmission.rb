@@ -21,7 +21,7 @@ module Parsers
         st = l820["ST"]
         bpr = l820["BPR"]
         trn = l820["TRN"]
-        fs = FileString.new(st[2] + "_" + @file_name, l820.to_s)
+        fs = FileString.new(st[2] + "_" + @file_name, l820["RAW_CONTENT"])
         Protocols::X12::TransactionSetPremiumPayment.create!(
           :st01 => st[1],
           :st02 => st[2],
