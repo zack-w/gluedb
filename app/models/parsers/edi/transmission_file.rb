@@ -261,7 +261,6 @@ module Parsers
             if @inbound
               etf = Etf::EtfLoop.new(l834)
               incoming = IncomingTransaction.from_etf(etf)
-              puts "Incoming!: #{etf.people.first.member_id}"
               incoming.import 
               persist_edi_transactions(
                 l834,
