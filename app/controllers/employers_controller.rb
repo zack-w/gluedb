@@ -22,7 +22,7 @@ class EmployersController < ApplicationController
     @qd_person = params[:qd_person]
 
     @employer = Employer.find(params[:id])
-    @premium_payments = @employer.payment_transactions
+    @premium_payments = @employer.payment_transactions.group_by{ |p| p["_id"]["paid_at"]}
 
     @elected_plans = @employer.elected_plans
 
