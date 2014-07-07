@@ -51,7 +51,11 @@ class Enrollee
       :emp_stat,
       :ds
     )
-    case p_action
+    apply_policy_action(p_action)
+  end
+
+  def apply_policy_action(action)
+    case action
     when :add
       self.coverage_status = 'active'
       self.coverage_end = nil

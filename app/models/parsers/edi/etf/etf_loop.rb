@@ -7,9 +7,11 @@ module Parsers
         end
 
         def subscriber_loop
-          @loop["L2000s"].detect do |l2000|
+          found = @loop["L2000s"].detect do |l2000|
             l2000["INS"][2].strip == "18"
           end
+
+          PersonLoop.new(found)
         end
 
         def carrier_fein

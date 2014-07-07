@@ -9,6 +9,7 @@ module Parsers
         @result = Oj.load(r_data)
         @file_name = File.basename(path)
         @transmission_kind = t_kind
+        @inbound = (t_kind == "effectuation")
         @bgn_blacklist = blist
       end
 
@@ -78,18 +79,6 @@ module Parsers
       end
 
       def persist_834(etf_loop, edi_transmission)
-        etf_checker = create_etf_validator(etf_loop)
-        if !etf_checker.valid?
-          persist_edi_transactions(
-            etf_loop,
-            nil,
-            nil,
-            nil,
-            edi_transmission,
-            etf_checker.errors.full_messages
-          )
-          return nil
-        end
         etf = Etf::EtfLoop.new(etf_loop)
 
         # Carrier
@@ -104,13 +93,13 @@ module Parsers
         end
 
         #Policy
-        coverage_loop = Parsers::Edi::Etf::CoverageLoop.new(etf.subscriber_loop["L2300s"].first)
-        plan = Plan.find_by_hios_id(coverage_loop.hios_id)
+        policy_loop = etf.subscriber_loop.policy_loops.first
+        plan = Plan.find_by_hios_id(policy_loop.hios_id)
 
         policy = nil
 
         if etf.is_shop? && is_carrier_maintenance?(etf, edi_transmission)
-          policy = Policy.find_by_subkeys(coverage_loop.eg_id, carrier._id, plan._id)
+          policy = Policy.find_by_subkeys(policy_loop.eg_id, carrier._id, plan._id)
           
           if policy
             edi_transmission.save!
@@ -120,7 +109,7 @@ module Parsers
           broker_id = persist_broker_get_id(etf_loop)
           
           if(plan)
-            policy = persist_policy(etf, carrier._id, plan._id, coverage_loop.eg_id, employer_id, responsible_party_id, broker_id)
+            policy = persist_policy(etf, carrier._id, plan._id, policy_loop.eg_id, employer_id, responsible_party_id, broker_id)
             
             if policy
               edi_transmission.save!
@@ -138,7 +127,7 @@ module Parsers
 
       # FIXME: pull sep reason
       def persist_policy(etf, carrier_id, plan_id, eg_id, employer_id, rp_id, broker_id)
-        reporting_categories = Etf::ReportingCatergories.new(etf.subscriber_loop["L2700s"])
+        reporting_categories = etf.subscriber_loop.reporting_catergories
 
         new_policy = Policy.new(
           :plan_id => plan_id,
@@ -256,7 +245,35 @@ module Parsers
         return(nil) if @result["L834s"].first.blank?
         @result["L834s"].each do |l834|
           if !l834["ST"][3].to_s.strip.blank?
-            persist_834(l834, edi_transmission)
+            etf_checker = create_etf_validator(l834)
+            if !etf_checker.valid?
+              persist_edi_transactions(
+                l834,
+                nil,
+                nil,
+                nil,
+                edi_transmission,
+                etf_checker.errors.full_messages
+              )
+              next
+            end
+
+            if @inbound
+              etf = Etf::EtfLoop.new(l834)
+              incoming = IncomingTransaction.from_etf(etf)
+              puts "Incoming!: #{etf.people.first.member_id}"
+              incoming.import 
+              persist_edi_transactions(
+                l834,
+                incoming.policy_id,
+                incoming.carrier_id,
+                incoming.employer_id,
+                edi_transmission,
+                incoming.errors
+              )
+            else
+              persist_834(l834, edi_transmission)
+            end
           end
         end
       end
