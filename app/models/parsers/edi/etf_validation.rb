@@ -103,7 +103,7 @@ module Parsers
       def plan_exists
         s_loop = subscriber_loop
         if !s_loop.blank?
-          pol_loop = Parsers::Edi::Etf::CoverageLoop.new(s_loop["L2300s"].first)
+          pol_loop = Parsers::Edi::Etf::PolicyLoop.new(s_loop["L2300s"].first)
           if pol_loop.empty?
             log_error(:etf_loop, "has no valid plan")
           else

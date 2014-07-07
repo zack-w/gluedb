@@ -102,4 +102,24 @@ describe Parsers::Edi::Etf::PolicyLoop do
     end
     
   end
+
+  describe '#eg_id' do
+    let(:eg_id) { '1234' }
+    let(:raw_loop) { { "REFs" => [['', '1L', eg_id]] } }
+    let(:policy_loop) { Parsers::Edi::Etf::PolicyLoop.new(raw_loop) }
+
+    it 'exposes the eg_id from the health coverage loop (2300)' do
+      expect(policy_loop.eg_id).to eq eg_id
+    end
+  end
+
+  describe '#hios_id' do
+    let(:hios_id) { '1234' }
+    let(:raw_loop) { { "REFs" => [['', 'CE', hios_id]] } }
+    let(:policy_loop) { Parsers::Edi::Etf::PolicyLoop.new(raw_loop) }
+
+    it 'exposes the hios_id from the health coverage loop (2300)' do
+      expect(policy_loop.hios_id).to eq hios_id
+    end
+  end
 end
