@@ -36,8 +36,8 @@ class PremiumPayment
         {"$group" =>{
             "_id" => {
             "carrier" => "$carrier_id",
-            "paid_at" => "$paid_at",
-            "transaction_set_premium_payment" => "$transaction_set_premium_payment_id"},
+            "paid_at" => "$paid_at"},
+            "transaction_set_premium_payment" => {"$addToSet" =>"$transaction_set_premium_payment_id"},
             "payment_amount" => { "$sum" => "$pmt_amt" }
           }}
       ).map do |record|
