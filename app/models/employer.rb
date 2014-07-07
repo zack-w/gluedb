@@ -61,6 +61,10 @@ class Employer
   before_save :initialize_name_full
   before_save :invalidate_find_caches
 
+  def payment_transactions
+    PremiumPayment.payment_transactions_for(self)
+  end
+
   def associate_all_carriers_and_plans_and_brokers
     self.policies.each { |pol| self.carriers << pol.carrier; self.brokers << pol.broker; self.plans << pol.plan }
     save!

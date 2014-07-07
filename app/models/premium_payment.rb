@@ -22,8 +22,30 @@ class PremiumPayment
 
 	before_create :parse_coverage_period
 
-  default_scope order_by(paid_at: -1) 
-  scope :by_date, ->(date, carrier){ where(paid_at: date, carrier: carrier) }
+  default_scope order_by(paid_at: -1)
+
+  def self.payment_transactions_for(employer)
+    c = Carrier.all.inject({}) do |acc, item|
+      acc[item.id] = item
+      acc
+    end
+    self.collection.aggregate(
+        {"$match" =>{
+            :employer_id => employer._id
+          }},
+        {"$group" =>{
+            "_id" => {
+            "carrier" => "$carrier_id",
+            "paid_at" => "$paid_at",
+            "transaction_set_premium_payment" => "$transaction_set_premium_payment_id"},
+            "payment_amount" => { "$sum" => "$pmt_amt" }
+          }}
+      ).map do |record|
+        record.merge("carrier_name" => c[record["_id"]["carrier"]].name)
+      end
+
+
+  end
 
   def payment_amount_in_dollars=(dollars)
     self.payment_amount_in_cents = Rational(dollars) * Rational(100)

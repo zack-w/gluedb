@@ -22,9 +22,7 @@ class EmployersController < ApplicationController
     @qd_person = params[:qd_person]
 
     @employer = Employer.find(params[:id])
-
-    @premium_payments = @employer.premium_payments
-    @payments = Protocols::X12::TransactionSetPremiumPayment.find(@premium_payments.distinct(:transaction_set_premium_payment))
+    @premium_payments = @employer.payment_transactions
 
     @elected_plans = @employer.elected_plans
 
