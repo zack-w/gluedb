@@ -12,9 +12,9 @@ class EmployersController < ApplicationController
   end
 
   def show
-    # Note!
-    # Mongoid identity map is enable temporarily for this action only.
-    # This is due to looping over ElectedPlans and getting carrier names through the belongs_to relationship
+
+    # Mongoid identity map is enable temporarily for this action.
+    # Due to looping over ElectedPlans and getting carrier names through the belongs_to relationship
     Mongoid.identity_map_enabled = true
 
     @q_person = params[:q_person]
