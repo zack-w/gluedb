@@ -229,7 +229,7 @@ module Parsers
         begin
           employer._id
         rescue
-          raise("Unknown employer ID: #{employer_loop.id_qualifer} #{employer_loop.fein}")
+          raise("Unknown employer ID: #{employer_loop.id_qualifier} #{employer_loop.fein}")
         end
       end
 
