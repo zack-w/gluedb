@@ -15,22 +15,22 @@ class ExampleGrouping
     @guid = SecureRandom.hex 
     @depth = d
     @name = n
-    @examples = {}
+    @examples = []
     @groups = []
   end
 
   def add(key, example)
-    if key.length > 1
-     k = key.first
-     rest = key[1..-1]
+    if key.empty?
+      @examples << example
+    else
+     rest = key.dup
+     k = rest.shift
      existing = @groups.detect { |g| g.name == k }
      unless existing
        existing = ExampleGrouping.new(k, @depth + 1)
        @groups << existing
      end
      existing.add(rest, example)
-    else
-      @examples[key.first] = example
     end
   end
 end
@@ -41,7 +41,7 @@ class GlueFormatter < RSpec::Core::Formatters::BaseFormatter
     super
     puts "Running #{example_count} tests"
     @passed_examples = []
-    @example_groupings = ExampleGrouping.new(nil, 0)
+    @example_groupings = ExampleGrouping.new("", -1)
   end
 
   def example_passed(example)
@@ -51,12 +51,13 @@ class GlueFormatter < RSpec::Core::Formatters::BaseFormatter
   def flatten_example(example)
     md = example.metadata
     description_stack = []
-    current_eg = md[:example_group]
+    current_eg = md
     while (current_eg.has_key?(:example_group))
-      description_stack << current_eg[:description_args]
+      current_eg[:example_group][:description_args].reverse.each do |arg|
+        description_stack << arg
+      end
       current_eg = current_eg[:example_group]
     end
-    description_stack << current_eg[:description_args]
     description_stack.reverse.flatten.map(&:to_s)
   end
 
@@ -90,7 +91,9 @@ class GlueFormatter < RSpec::Core::Formatters::BaseFormatter
     end
     ifile.print "</ul>\n</div>"
     @example_groupings.each_group do |grp|
-      div_for_group(ifile, grp)
+      ifile.print "<div class=\"example_groupings\" id=\"example_grouping_#{grp.guid}\" style=\"float: left; width: 70%; display:none;\">\n"
+      div_for_group(ifile, printer, grp)
+      ifile.print "</div>\n"
     end
     ifile.print "</div></body>\n</html>\n"
     ifile.close
@@ -100,17 +103,62 @@ class GlueFormatter < RSpec::Core::Formatters::BaseFormatter
     File.join(File.dirname(__FILE__), "report")
   end
 
-  def div_for_group(f, grp)
-    f.print "<div class=\"example_groupings\" id=\"example_grouping_#{grp.guid}\" style=\"float: left; width: 70%; display:none;\">\n"
-    f.print "</div>\n"
+  def div_for_group(f, printer, grp)
+    printer.flush
+    printer.print_example_group_start(grp.guid, grp.name, grp.depth)
+    grp.examples.each do |example|
+      case example.execution_result[:status]
+      when "passed"
+        printer.print_example_passed(example.description, example.execution_result[:run_time])
+      when "pending"
+        printer.print_example_pending(example.description, example.metadata[:execution_result][:pending_message] )
+      else
+        print_failed_example(printer, example.description, example)
+      end
+    end
+    grp.each_group do |child_group|
+      div_for_group(f, printer, child_group)
+    end
+    printer.print_example_group_end
+    printer.flush
   end
 
-HIDE_SHOW_JS = <<-JSCODE
-<script type="text/javascript">
-// <![CDATA[
-function hideExamples() {
+  def print_failed_example(printer, description, example)
+    exception = example.metadata[:execution_result][:exception]
+    exception_details = if exception
+                          {
+                            :message => exception.message,
+                            :backtrace => format_backtrace(exception.backtrace, example).join("\n")
+                          }
+                        else
+                          false
+                        end
+    extra = extra_failure_content(exception)
+
+    printer.print_example_failed(
+      example.execution_result[:pending_fixed],
+      description,
+      example.execution_result[:run_time],
+      @failed_examples.size,
+      exception_details,
+      (extra == "") ? false : extra,
+      true
+    )
+  end
+
+  def extra_failure_content(exception)
+    require 'rspec/core/formatters/snippet_extractor'
+    backtrace = exception.backtrace.map {|line| backtrace_line(line)}
+    backtrace.compact!
+    @snippet_extractor ||= RSpec::Core::Formatters::SnippetExtractor.new
+    "    <pre class=\"ruby\"><code>#{@snippet_extractor.snippet(backtrace)}</code></pre>"
+  end
+
+  HIDE_SHOW_JS = <<-JSCODE
+  <script type="text/javascript">
+  // <![CDATA[
+    function hideExamples() {
   var elements = document.getElementsByClassName('example_groupings');
-  alert(elements.length);
   for(var i = 0; i<elements.length; i++) {
      elements[i].style.display = "none";
   }
@@ -121,5 +169,5 @@ function showExample(eg_guid) {
 }
 // ]]>
 </script>
-JSCODE
+      JSCODE
 end
