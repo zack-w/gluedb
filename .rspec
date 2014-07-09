@@ -1,1 +1,2 @@
 --color
+--require ./spec/glue_formatter.rb
