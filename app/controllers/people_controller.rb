@@ -8,7 +8,7 @@ class PeopleController < ApplicationController
     if params[:q].present?
       @people = Person.search(@q, @qf, @qd).page(params[:page]).per(15)
     else
-      @people = Person.all.page(params[:page]).per(15)
+      @people = Person.page(params[:page]).per(15)
     end
 
     respond_to do |format|

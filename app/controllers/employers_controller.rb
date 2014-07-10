@@ -29,7 +29,7 @@ class EmployersController < ApplicationController
     if params[:q_person].present?
       @employees = @employer.employees.search(@q_person, @qf_person, @qd_person).page(params[:employee_page]).per(12)
     else
-      @employees = @employer.employees.all.page(params[:employee_page]).per(12)
+      @employees = @employer.employees.page(params[:employee_page]).per(12)
     end
 
     respond_to do |format|
