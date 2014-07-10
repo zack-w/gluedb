@@ -1,6 +1,6 @@
 class ApplicationGroupsController < ApplicationController
   def index
-    @application_groups = ApplicationGroup.all.page(params[:page]).per(15)
+    @application_groups = ApplicationGroup.page(params[:page]).per(15)
     
     respond_to do |format|
       format.html # index.html.erb

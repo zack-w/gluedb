@@ -5,7 +5,7 @@ class BrokersController < ApplicationController
     if params[:q].present?
       @brokers = Broker.search(@q).page(params[:page]).per(12)
     else
-      @brokers = Broker.all.page(params[:page]).per(12)
+      @brokers = Broker.page(params[:page]).per(12)
     end
     
     respond_to do |format|

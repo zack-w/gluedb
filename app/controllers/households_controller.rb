@@ -7,7 +7,7 @@ class HouseholdsController < ApplicationController
     if params[:q].present?
       @households = Household.search(@q, @qf, @qd).page(params[:page]).per(15)
     else
-      @households = Household.all.page(params[:page]).per(15)
+      @households = Household.page(params[:page]).per(15)
     end
 
 
