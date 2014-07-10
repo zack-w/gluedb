@@ -15,7 +15,7 @@ module Parsers
 
       def transaction_set_kind(etf)
         if(@transmission_kind == "effectuation" && etf.cancellation_or_termination?)
-          @transmission_kind = "maintenance"
+          return "maintenance"
         end
         @transmission_kind
       end
