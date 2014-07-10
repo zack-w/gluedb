@@ -10,6 +10,7 @@ class DashboardsController < ApplicationController
   	@last_month = Time.now.months_ago(1).strftime("%B")
   	@this_month = Time.now.strftime("%B")
 
+    #Test
     @transactions = {}
 		@transactions[:lw] = Protocols::X12::TransactionSetEnrollment.where(submitted_at: Time.now.weeks_ago(1).all_week).count
 		@transactions[:lm] = Protocols::X12::TransactionSetHeader.where(submitted_at: Time.now.months_ago(1).all_month).count
