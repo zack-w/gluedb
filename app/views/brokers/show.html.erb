@@ -17,12 +17,22 @@
   <dt><%= model_class.human_attribute_name(:npn) %></dt>
   <dd><%= @broker.npn %></dd>
   <dt><%= model_class.human_attribute_name(:employers) %></dt>
-  <% @employers.each do |e| %>
-    <dd><%= link_to e.name, employer_path(e) %></dd>
-  <% end %>
+  <%
+    # Display the list of emploters if they have any
+    if( 1 > @employers.count)then
+      concat( raw( "<dd><i style='font-weight: normal;'>No employers to display!</i></dd>" ) );
+    else
+      @employers.each do |employerObj|
+        concat( raw( "<dd>" + link_to( employerObj.name, employer_path( employerObj ) ) + "</dd>" ) );
+      end
+    end
+  %>
 </dl>
 
-<%= render 'shared/contact', obj: @broker %>
+<%
+  #Display the broker's contact information
+  concat( raw( render 'shared/contact', obj: @broker ) );
+%>
    
 <p class="text-right"><small><%= "version: #{@broker.version} | updated: #{@broker.updated_at.strftime('%m-%d-%Y') if @broker.updated_at.present?}" %></small></p>
 
