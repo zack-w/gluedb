@@ -24,7 +24,7 @@ class BrokersController < ApplicationController
       render( :file => "#{Rails.root}/public/404.html", :status => 404 );
       return;
     end
-    
+
     # Setup then broker and employers variables for the view
     @broker = @brokerQuery.first;
 		@employers = @broker.employers
